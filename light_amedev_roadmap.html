@@ -1,0 +1,250 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.roadmap { padding: 1.5rem 0; }
+.phase { margin-bottom: 2rem; border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); overflow: hidden; }
+.phase-header { padding: 14px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+.phase-header:hover { background: var(--color-background-secondary); }
+.phase-title { display: flex; align-items: center; gap: 12px; }
+.phase-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.phase-name { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.phase-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.chevron { font-size: 12px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+.phase-body { border-top: 0.5px solid var(--color-border-tertiary); }
+.task { display: flex; align-items: flex-start; gap: 12px; padding: 12px 20px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.task:last-child { border-bottom: none; }
+.task-check { width: 18px; height: 18px; border-radius: 4px; border: 0.5px solid var(--color-border-secondary); flex-shrink: 0; margin-top: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.task-check.done { background: var(--color-background-success); border-color: var(--color-border-success); }
+.task-check.done::after { content: ''; width: 10px; height: 6px; border-left: 1.5px solid var(--color-text-success); border-bottom: 1.5px solid var(--color-text-success); transform: rotate(-45deg) translateY(-1px); display: block; }
+.task-content { flex: 1; }
+.task-name { font-size: 14px; color: var(--color-text-primary); line-height: 1.4; }
+.task-name.done { text-decoration: line-through; color: var(--color-text-tertiary); }
+.task-note { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.5; }
+.task-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+.progress-bar { height: 3px; background: var(--color-border-tertiary); }
+.progress-fill { height: 100%; transition: width 0.3s; }
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 2rem; }
+.stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.stat-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+.ideas-section { margin-top: 1rem; }
+.idea-input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+.idea-input-row input { flex: 1; }
+.idea-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); margin-bottom: 6px; font-size: 13px; color: var(--color-text-primary); }
+.idea-del { background: none; border: none; color: var(--color-text-tertiary); cursor: pointer; font-size: 16px; padding: 0 4px; line-height: 1; }
+.idea-del:hover { color: var(--color-text-danger); }
+.section-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; }
+</style>
+
+<div class="roadmap">
+  <h2 class="sr-only">Дорожная карта разработки игры от идеи до Steam</h2>
+
+  <div class="summary">
+    <div class="stat"><div class="stat-label">Выполнено задач</div><div class="stat-value" id="stat-done">0</div></div>
+    <div class="stat"><div class="stat-label">Всего задач</div><div class="stat-value" id="stat-total">0</div></div>
+    <div class="stat"><div class="stat-label">Текущий этап</div><div class="stat-value" id="stat-phase" style="font-size:15px;line-height:1.3;padding-top:4px">—</div></div>
+  </div>
+
+  <div id="phases"></div>
+
+  <div class="ideas-section">
+    <div class="section-title">Банк идей и набросков</div>
+    <div class="idea-input-row">
+      <input type="text" id="idea-input" placeholder="Добавить идею, набросок или заметку..." />
+      <button onclick="addIdea()">Добавить</button>
+    </div>
+    <div id="ideas-list"></div>
+  </div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 'concept',
+    name: 'Концепция и документация',
+    sub: '~1–2 недели',
+    color: { badge: 'background:#E6F1FB;color:#0C447C', fill: '#378ADD' },
+    tasks: [
+      { id:'c1', name:'Написать Game Design Document (GDD)', note:'У тебя уже есть — считай, этот пункт закрыт', done: true },
+      { id:'c2', name:'Определить MVP — минимально играбельную версию', note:'Какие механики обязательны для первого релиза?' },
+      { id:'c3', name:'Составить список всех ассетов: спрайты, звуки, уровни', note:'Таблица: что нужно нарисовать, что сгенерировать' },
+      { id:'c4', name:'Сделать мудборд визуального стиля', note:'Скриншоты игр-референсов, цветовые палитры' },
+    ]
+  },
+  {
+    id: 'setup',
+    name: 'Настройка проекта',
+    sub: '~2–3 дня',
+    color: { badge: 'background:#EEEDFE;color:#3C3489', fill: '#7F77DD' },
+    tasks: [
+      { id:'s1', name:'Установить Godot 4', note:'godotengine.org — бесплатно, ~100MB' },
+      { id:'s2', name:'Создать репозиторий на GitHub', note:'Бэкап и совместная работа — обязательно' },
+      { id:'s3', name:'Настроить структуру папок проекта', note:'assets/, scenes/, scripts/, audio/' },
+      { id:'s4', name:'Настроить pixel-perfect рендеринг', note:'Project Settings → Rendering → 2D → Snap 2D' },
+    ]
+  },
+  {
+    id: 'prototype',
+    name: 'Прототип — "серый ящик"',
+    sub: '~2–3 недели',
+    color: { badge: 'background:#FAEEDA;color:#633806', fill: '#BA7517' },
+    tasks: [
+      { id:'p1', name:'Движение персонажа: бег, прыжок, гравитация', note:'Без красивых спрайтов — просто цветной прямоугольник' },
+      { id:'p2', name:'Базовые платформы и коллизии', note:'Убедиться что физика ощущается правильно' },
+      { id:'p3', name:'Атака и хитбокс', note:'Тестируем feel — это важнее чем графика' },
+      { id:'p4', name:'Один патрулирующий враг', note:'ИИ: ходит туда-сюда, реагирует на топтание' },
+      { id:'p5', name:'Коллектибл (пивная банка) и счёт', note:'Проверить что цикл "собрал → награда" приятен' },
+      { id:'p6', name:'Win/lose условия', note:'Флаг победы, смерть от врага' },
+    ]
+  },
+  {
+    id: 'art',
+    name: 'Арт и визуал',
+    sub: '~3–4 недели (параллельно с кодом)',
+    color: { badge: 'background:#FBEAF0;color:#72243E', fill: '#D4537E' },
+    tasks: [
+      { id:'a1', name:'Установить Aseprite для пиксель-арта', note:'$20 или бесплатно если собрать из исходников' },
+      { id:'a2', name:'Нарисовать спрайт игрока (idle + run + jump)', note:'28×44px согласно GDD' },
+      { id:'a3', name:'Спрайты врагов-роботов', note:'28×28px, 2–3 кадра анимации' },
+      { id:'a4', name:'Тайлсет: платформы, земля', note:'32×32px, brick-текстура' },
+      { id:'a5', name:'Задний фон: здания + звёзды (параллакс)', note:'2–3 слоя разной глубины' },
+      { id:'a6', name:'UI элементы: сердца, иконки, кнопки', note:'По GDD: HUD верхняя панель' },
+      { id:'a7', name:'10 спрайтов гитар', note:'Каждая уникальная форма, ~24×40px' },
+    ]
+  },
+  {
+    id: 'content',
+    name: 'Полный контент игры',
+    sub: '~2–3 недели',
+    color: { badge: 'background:#E1F5EE;color:#085041', fill: '#1D9E75' },
+    tasks: [
+      { id:'n1', name:'Заменить все прямоугольники на финальные спрайты', note:'Интеграция арта в прототип' },
+      { id:'n2', name:'Собрать полный уровень по GDD', note:'2500px, все платформы, все враги, флаг' },
+      { id:'n3', name:'Главное меню + создание персонажа', note:'Кастомизация волос, рубашки, штанов' },
+      { id:'n4', name:'Магазин гитар с localStorage', note:'Монеты, покупка, экипировка' },
+      { id:'n5', name:'Звуковые эффекты через Web Audio API', note:'Прыжок, монета, убийство, победа' },
+      { id:'n6', name:'Экраны: Game Over, Win, Settings', note:'По GDD раздел 8' },
+    ]
+  },
+  {
+    id: 'polish',
+    name: 'Полировка и тестирование',
+    sub: '~2 недели',
+    color: { badge: 'background:#F1EFE8;color:#444441', fill: '#888780' },
+    tasks: [
+      { id:'pol1', name:'Playtest с реальными людьми', note:'Минимум 5 человек, записать фидбэк' },
+      { id:'pol2', name:'Juice: анимация при сборе, вспышки, shake', note:'Это делает игру "приятной"' },
+      { id:'pol3', name:'Баланс сложности', note:'Расстановка врагов, скорость, урон' },
+      { id:'pol4', name:'Проверить на разных разрешениях', note:'1080p, 1440p, мобильный если нужно' },
+      { id:'pol5', name:'Исправить критические баги', note:'Список из playtest' },
+    ]
+  },
+  {
+    id: 'steam',
+    name: 'Подготовка к Steam',
+    sub: '~2–3 недели',
+    color: { badge: 'background:#FAECE7;color:#712B13', fill: '#D85A30' },
+    tasks: [
+      { id:'st1', name:'Зарегистрировать аккаунт разработчика Steam ($100)', note:'store.steampowered.com/join/newpartner' },
+      { id:'st2', name:'Создать страницу игры в Steamworks', note:'Описание, теги, возрастной рейтинг' },
+      { id:'st3', name:'Скриншоты: минимум 5 качественных', note:'1920×1080, показывают лучшие моменты игры' },
+      { id:'st4', name:'Трейлер / гифки для Steam', note:'30–90 секунд геймплея' },
+      { id:'st5', name:'Построить Godot → Windows/Mac/Linux билды', note:'Godot: Project → Export' },
+      { id:'st6', name:'Интегрировать Steamworks SDK (ачивки, облако)', note:'Плагин GodotSteam' },
+      { id:'st7', name:'Подать на Steam Review (5–7 рабочих дней)', note:'Проверка перед публикацией' },
+      { id:'st8', name:'Дата релиза и маркетинг', note:'Wishlist кампания, соцсети, itch.io для беты' },
+    ]
+  }
+];
+
+const state = { done: new Set(), open: new Set(['concept']), ideas: [] };
+
+function renderPhases() {
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+  PHASES.forEach(phase => {
+    const doneTasks = phase.tasks.filter(t => state.done.has(t.id)).length;
+    const pct = Math.round(doneTasks / phase.tasks.length * 100);
+    const isOpen = state.open.has(phase.id);
+    const div = document.createElement('div');
+    div.className = 'phase';
+    div.innerHTML = `
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${phase.color.fill}"></div></div>
+      <div class="phase-header" onclick="togglePhase('${phase.id}')">
+        <div class="phase-title">
+          <span class="phase-badge" style="${phase.color.badge}">${pct === 100 ? 'Готово' : pct > 0 ? 'В процессе' : 'Не начато'}</span>
+          <div><div class="phase-name">${phase.name}</div><div class="phase-sub">${phase.sub} · ${doneTasks}/${phase.tasks.length} задач</div></div>
+        </div>
+        <span class="chevron ${isOpen ? 'open' : ''}">▼</span>
+      </div>
+      ${isOpen ? `<div class="phase-body">${phase.tasks.map(t => `
+        <div class="task">
+          <div class="task-check ${state.done.has(t.id) ? 'done' : ''}" onclick="toggleTask('${t.id}')"></div>
+          <div class="task-content">
+            <div class="task-name ${state.done.has(t.id) ? 'done' : ''}">${t.name}</div>
+            ${t.note ? `<div class="task-note">${t.note}</div>` : ''}
+          </div>
+        </div>`).join('')}</div>` : ''}
+    `;
+    container.appendChild(div);
+  });
+  updateStats();
+}
+
+function togglePhase(id) {
+  if (state.open.has(id)) state.open.delete(id); else state.open.add(id);
+  renderPhases();
+}
+
+function toggleTask(id) {
+  if (state.done.has(id)) state.done.delete(id); else state.done.add(id);
+  renderPhases();
+}
+
+function updateStats() {
+  const total = PHASES.reduce((s, p) => s + p.tasks.length, 0);
+  const done = PHASES.reduce((s, p) => s + p.tasks.filter(t => state.done.has(t.id)).length, 0);
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-total').textContent = total;
+  const current = PHASES.find(p => {
+    const d = p.tasks.filter(t => state.done.has(t.id)).length;
+    return d < p.tasks.length;
+  });
+  document.getElementById('stat-phase').textContent = current ? current.name : 'Все готово!';
+}
+
+function addIdea() {
+  const input = document.getElementById('idea-input');
+  const val = input.value.trim();
+  if (!val) return;
+  state.ideas.push({ id: Date.now(), text: val });
+  input.value = '';
+  renderIdeas();
+}
+
+function removeIdea(id) {
+  state.ideas = state.ideas.filter(i => i.id !== id);
+  renderIdeas();
+}
+
+function renderIdeas() {
+  const list = document.getElementById('ideas-list');
+  if (state.ideas.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--color-text-tertiary);padding:8px 0;">Пока пусто — добавь первую идею</div>';
+    return;
+  }
+  list.innerHTML = state.ideas.map(i => `
+    <div class="idea-item">
+      <span>${i.text}</span>
+      <button class="idea-del" onclick="removeIdea(${i.id})">×</button>
+    </div>`).join('');
+}
+
+document.getElementById('idea-input').addEventListener('keydown', e => { if (e.key === 'Enter') addIdea(); });
+
+state.done.add('c1');
+renderPhases();
+renderIdeas();
+</script>
