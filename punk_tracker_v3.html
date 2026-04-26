@@ -1,0 +1,3760 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punk Platformer — Dev Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root {
+  --bg:        #f8f8f6;
+  --surface:   #ffffff;
+  --surface2:  #f4f4f2;
+  --surface3:  #eeede9;
+  --border:    rgba(0,0,0,0.07);
+  --border2:   rgba(0,0,0,0.12);
+  --text:      #111110;
+  --text2:     #6f6e69;
+  --text3:     #b0aea8;
+  --accent:    #5b52f5;
+  --accent2:   #7c75ff;
+  --accent-bg: #f0efff;
+  --green:     #16a34a;
+  --green-bg:  #f0fdf4;
+  --amber:     #d97706;
+  --amber-bg:  #fffbeb;
+  --blue:      #2563eb;
+  --blue-bg:   #eff6ff;
+  --red:       #dc2626;
+  --red-bg:    #fef2f2;
+  --purple:    #7c3aed;
+  --purple-bg: #f5f3ff;
+  --radius:    12px;
+  --radius-sm: 8px;
+  --radius-xs: 5px;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow:    0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] {
+  --bg:        #0f0f0e;
+  --surface:   #1a1a18;
+  --surface2:  #222220;
+  --surface3:  #2a2a27;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --text:      #e8e8e4;
+  --text2:     #9a9894;
+  --text3:     #5a5955;
+  --accent:    #7c75ff;
+  --accent2:   #9d98ff;
+  --accent-bg: #1e1c3a;
+  --green:     #34d399;
+  --green-bg:  #052e16;
+  --amber:     #fbbf24;
+  --amber-bg:  #1c1400;
+  --blue:      #60a5fa;
+  --blue-bg:   #0c1a2e;
+  --red:       #f87171;
+  --red-bg:    #2d0a0a;
+  --purple:    #a78bfa;
+  --purple-bg: #1e1030;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow:    0 1px 4px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.4);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar{
+  width:232px;flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
+.logo-title{
+  font-size:13px;font-weight:700;color:var(--text);
+  letter-spacing:-0.01em;display:flex;align-items:center;gap:8px;
+}
+.logo-emoji{
+  width:28px;height:28px;background:var(--accent);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace;letter-spacing:0.01em;}
+.sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto;}
+.nav-section{margin-bottom:18px;}
+.nav-label{
+  font-size:10px;font-weight:600;color:var(--text3);
+  letter-spacing:0.07em;text-transform:uppercase;
+  padding:0 10px;margin-bottom:4px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:7px 10px;border-radius:var(--radius-sm);
+  cursor:pointer;font-size:13px;color:var(--text2);font-weight:400;
+  transition:background 0.1s,color 0.1s;user-select:none;
+}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:500;}
+.nav-icon{font-size:14px;flex-shrink:0;width:17px;text-align:center;opacity:0.8;}
+.nav-item.active .nav-icon{opacity:1;}
+.nav-badge{
+  margin-left:auto;font-size:10px;font-family:'JetBrains Mono',monospace;
+  background:var(--surface2);color:var(--text2);
+  padding:1px 6px;border-radius:20px;letter-spacing:0.01em;
+}
+.nav-item.active .nav-badge{background:rgba(91,82,245,0.12);color:var(--accent);}
+.nav-doc-item{
+  display:flex;align-items:center;gap:6px;padding:6px 10px;
+  border-radius:var(--radius-sm);cursor:pointer;font-size:12.5px;
+  color:var(--text2);transition:all 0.1s;user-select:none;
+}
+.nav-doc-item:hover{background:var(--surface2);color:var(--text);}
+.nav-doc-item.active{color:var(--accent);font-weight:500;}
+.nav-doc-del{
+  margin-left:auto;opacity:0;font-size:12px;padding:1px 4px;
+  border-radius:3px;color:var(--text3);border:none;background:none;cursor:pointer;
+}
+.nav-doc-item:hover .nav-doc-del{opacity:1;}
+.nav-doc-del:hover{background:var(--red-bg);color:var(--red);}
+.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);}
+.progress-mini{display:flex;align-items:center;gap:8px;}
+.progress-track{flex:1;height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.5s cubic-bezier(.4,0,.2,1);}
+
+/* ── MAIN ────────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 24px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;gap:12px;
+}
+.topbar-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.page-title{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em;}
+.topbar-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.content{flex:1;overflow-y:auto;padding:24px;}
+
+/* ── BUTTONS ─────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 13px;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:500;cursor:pointer;border:none;
+  transition:all 0.12s;font-family:'Inter',sans-serif;white-space:nowrap;
+  letter-spacing:-0.01em;
+}
+.btn-primary{background:var(--accent);color:white;box-shadow:0 1px 3px rgba(91,82,245,0.3);}
+.btn-primary:hover{background:var(--accent2);box-shadow:0 2px 8px rgba(91,82,245,0.35);}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(220,38,38,0.15);}
+.btn-danger:hover{background:#fee2e2;}
+.btn-sm{padding:4px 10px;font-size:12px;}
+.icon-btn{
+  width:26px;height:26px;border:none;background:none;cursor:pointer;
+  border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--text3);transition:all 0.1s;
+}
+.icon-btn:hover{background:var(--surface2);color:var(--text2);}
+.icon-btn.delete:hover{background:var(--red-bg);color:var(--red);}
+
+/* ── TABS ────────────────────────────────────────── */
+.tab-bar{
+  display:flex;gap:2px;background:var(--surface2);
+  border-radius:var(--radius-sm);padding:3px;width:fit-content;
+}
+.tab{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.12s;user-select:none;}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-xs);}
+.tab:not(.active):hover{color:var(--text);}
+
+/* ── STAT CARDS ──────────────────────────────────── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;
+  box-shadow:var(--shadow-xs);
+}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.stat-value{font-size:24px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1;letter-spacing:-0.02em;color:var(--text);}
+.stat-sub{font-size:12px;color:var(--text3);margin-top:4px;}
+
+/* ── PHASE CARDS ─────────────────────────────────── */
+.phase-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:8px;overflow:hidden;
+  box-shadow:var(--shadow-xs);transition:box-shadow 0.15s;
+}
+.phase-card:hover{box-shadow:var(--shadow);}
+.phase-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none;}
+.phase-progress-ring{width:32px;height:32px;flex-shrink:0;}
+.phase-info{flex:1;min-width:0;}
+.phase-name{font-size:13.5px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+.phase-meta{font-size:11.5px;color:var(--text3);margin-top:1px;}
+.phase-chevron{color:var(--text3);font-size:10px;transition:transform 0.2s;flex-shrink:0;}
+.phase-chevron.open{transform:rotate(180deg);}
+.phase-progress-bar{height:2px;background:var(--surface3);overflow:hidden;}
+.phase-progress-fill{height:100%;transition:width 0.5s cubic-bezier(.4,0,.2,1);}
+.phase-body{border-top:1px solid var(--border);}
+
+/* ── TASK ROWS ───────────────────────────────────── */
+.task-row{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 16px;
+  border-bottom:1px solid var(--border);transition:background 0.08s;
+}
+.task-row:last-child{border-bottom:none;}
+.task-row:hover{background:var(--surface2);}
+.task-checkbox{
+  width:16px;height:16px;border:1.5px solid var(--border2);
+  border-radius:4px;flex-shrink:0;margin-top:2px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.13s;
+}
+.task-checkbox:hover{border-color:var(--accent);}
+.task-checkbox.checked{background:var(--accent);border-color:var(--accent);}
+.task-checkbox.checked::after{content:'';width:9px;height:5px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block;}
+.task-content{flex:1;min-width:0;}
+.task-name{font-size:13px;color:var(--text);line-height:1.45;}
+.task-name.done{text-decoration:line-through;color:var(--text3);}
+.task-note{font-size:11.5px;color:var(--text3);margin-top:2px;}
+.task-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.task-link{
+  display:inline-flex;align-items:center;gap:4px;font-size:11.5px;
+  padding:2px 9px;border-radius:20px;background:var(--blue-bg);color:var(--blue);
+  text-decoration:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.1s;
+}
+.task-link:hover{background:#dbeafe;}
+.task-link.doc-link{background:var(--amber-bg);color:var(--amber);}
+.task-link.doc-link:hover{background:#fde68a;}
+.task-link-del{font-size:10px;opacity:0.5;margin-left:2px;cursor:pointer;}
+.task-link-del:hover{opacity:1;}
+.task-actions{display:flex;gap:3px;opacity:0;transition:opacity 0.1s;flex-shrink:0;align-items:flex-start;padding-top:1px;}
+.task-row:hover .task-actions{opacity:1;}
+
+/* ── KANBAN ──────────────────────────────────────── */
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start;}
+.kanban-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-xs);}
+.kanban-header{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.kanban-title{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.kanban-count{font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--text3);}
+.kanban-body{padding:8px;min-height:50px;}
+.kanban-card{
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:9px 11px;margin-bottom:6px;font-size:12.5px;color:var(--text);line-height:1.4;
+}
+.kanban-card-phase{font-size:10px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+
+/* ── IDEAS ───────────────────────────────────────── */
+.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px;margin-top:14px;}
+.idea-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;position:relative;transition:box-shadow 0.15s,transform 0.15s;
+  box-shadow:var(--shadow-xs);
+}
+.idea-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
+.idea-text{font-size:13px;color:var(--text);line-height:1.55;padding-right:18px;}
+.idea-meta{display:flex;align-items:center;gap:7px;margin-top:10px;}
+.tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;white-space:nowrap;letter-spacing:0.01em;}
+.tag-mech{background:var(--blue-bg);color:var(--blue);}
+.tag-art{background:var(--purple-bg);color:var(--purple);}
+.tag-sound{background:var(--amber-bg);color:var(--amber);}
+.tag-story{background:var(--green-bg);color:var(--green);}
+.tag-other{background:var(--surface2);color:var(--text2);}
+.idea-del{
+  position:absolute;top:10px;right:10px;width:22px;height:22px;
+  border:none;background:none;cursor:pointer;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--text3);opacity:0;transition:all 0.1s;
+}
+.idea-card:hover .idea-del{opacity:1;}
+.idea-del:hover{background:var(--red-bg);color:var(--red);}
+
+/* ── ASSETS TABLE ────────────────────────────────── */
+.asset-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;width:100%;box-shadow:var(--shadow-xs);}
+.asset-table table{width:100%;border-collapse:collapse;}
+.asset-table th{
+  background:var(--surface2);padding:10px 14px;text-align:left;
+  font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.06em;
+  text-transform:uppercase;border-bottom:1px solid var(--border);
+}
+.asset-table td{padding:8px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle;}
+.asset-table tr:last-child td{border-bottom:none;}
+.asset-table tr:hover td{background:var(--surface2);}
+
+/* inline editable name */
+.asset-name-cell{
+  display:flex;align-items:center;gap:6px;
+}
+.asset-name-text{
+  font-weight:500;flex:1;cursor:text;border-radius:5px;
+  padding:2px 5px;margin:-2px -5px;
+  transition:background .15s;outline:none;
+}
+.asset-name-text:hover{background:var(--surface2);}
+.asset-name-text:focus{
+  background:var(--surface2);
+  box-shadow:0 0 0 2px var(--accent);
+}
+
+/* who-input field */
+.asset-who-input{
+  width:100%;min-width:90px;max-width:140px;
+  border:1.5px solid var(--border2);
+  border-radius:7px;padding:4px 9px;
+  font-size:12px;color:var(--text);
+  background:var(--surface2);
+  outline:none;transition:border-color .15s, box-shadow .15s;
+  font-family:inherit;
+}
+.asset-who-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  background:var(--surface);
+}
+.asset-who-input::placeholder{color:var(--text3);}
+.status-badge{
+  display:inline-flex;align-items:center;gap:4px;font-size:11.5px;
+  padding:3px 9px;border-radius:20px;font-weight:500;cursor:pointer;
+  transition:all 0.1s;user-select:none;letter-spacing:0.01em;
+}
+.status-todo{background:var(--surface2);color:var(--text2);}
+.status-wip{background:var(--amber-bg);color:var(--amber);}
+.status-done{background:var(--green-bg);color:var(--green);}
+.status-review{background:var(--blue-bg);color:var(--blue);}
+
+/* status dropdown */
+.asset-status-wrap{position:relative;display:inline-block;}
+.asset-status-menu{
+  display:none;position:fixed;z-index:9999;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:10px;box-shadow:var(--shadow);
+  padding:4px;min-width:150px;
+}
+.asset-status-menu.open{display:block;}
+.asset-status-opt{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;
+  transition:background .1s;
+}
+.asset-status-opt:hover{background:var(--surface2);}
+
+/* collapsible group row */
+.asset-group-header{cursor:pointer;user-select:none;}
+.asset-group-header:hover td{background:var(--border)!important;}
+.asset-group-chevron{
+  display:inline-block;font-size:10px;margin-right:6px;
+  transition:transform .2s;transform:rotate(0deg);
+}
+.asset-group-chevron.collapsed{transform:rotate(-90deg);}
+
+/* ── MOODBOARD ───────────────────────────────────── */
+/* ── BUGS ────────────────────────────────────────── */
+.bug-row{display:grid;grid-template-columns:24px 1fr auto auto auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;}
+.bug-row:last-child{border-bottom:none;}
+.bug-priority{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.bug-p-crit{background:#dc2626;} .bug-p-high{background:#f97316;} .bug-p-med{background:#eab308;} .bug-p-low{background:#6b7280;}
+.bug-status{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap;}
+.bug-s-open{background:var(--red-bg);color:var(--red);}
+.bug-s-wip{background:var(--amber-bg);color:var(--amber);}
+.bug-s-fixed{background:var(--green-bg);color:var(--green);}
+.bug-s-wontfix{background:var(--surface2);color:var(--text3);}
+
+/* ── CHANGELOG ───────────────────────────────────── */
+.cl-entry{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
+.cl-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);cursor:pointer;user-select:none;}
+.cl-version{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--accent);}
+.cl-date{font-size:12px;color:var(--text3);}
+.cl-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px;letter-spacing:.04em;}
+.cl-tag-release{background:var(--green-bg);color:var(--green);}
+.cl-tag-alpha{background:var(--amber-bg);color:var(--amber);}
+.cl-tag-hotfix{background:var(--red-bg);color:var(--red);}
+.cl-body{padding:12px 16px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--text2);}
+
+/* ── SEARCH ─────────────────────────────────────── */
+.sr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .1s;}
+.sr-item:hover{background:var(--surface2);}
+.sr-icon{font-size:16px;flex-shrink:0;width:24px;text-align:center;}
+.sr-title{font-size:13px;font-weight:500;color:var(--text);}
+.sr-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.sr-section{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);padding:10px 14px 4px;}
+.sr-empty{padding:32px;text-align:center;color:var(--text3);font-size:13px;}
+
+/* ── MOODBOARD ───────────────────────────────────── */
+.mb-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0;gap:10px;flex-wrap:wrap;
+}
+.mb-chip{
+  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  border:1.5px solid var(--border2);background:var(--surface2);
+  color:var(--text2);cursor:pointer;transition:all .15s;
+}
+.mb-chip:hover{border-color:var(--accent);color:var(--accent);}
+.mb-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.mb-size-btn{
+  width:30px;height:30px;border-radius:7px;font-size:14px;
+  border:1.5px solid var(--border2);background:var(--surface2);
+  color:var(--text2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.mb-size-btn:hover{border-color:var(--accent);color:var(--accent);}
+.mb-size-btn.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);}
+.mb-board{
+  flex:1;overflow-y:auto;padding:16px;
+  columns:4 220px;column-gap:12px;
+  position:relative;
+}
+.mb-board.sz-s{columns:6 160px;}
+.mb-board.sz-m{columns:4 220px;}
+.mb-board.sz-l{columns:2 320px;}
+.mb-card{
+  break-inside:avoid;margin-bottom:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;position:relative;
+  cursor:grab;transition:box-shadow .15s,transform .1s,opacity .15s;
+  display:inline-block;width:100%;
+}
+.mb-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.mb-card.mb-drag-over{
+  border:2px dashed var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent);
+  transform:scale(0.97);
+}
+.mb-card img{
+  width:100%;display:block;object-fit:cover;
+  background:var(--surface2);
+}
+.mb-card-footer{
+  padding:7px 10px;display:flex;align-items:center;
+  justify-content:space-between;gap:6px;
+}
+.mb-card-cat{
+  font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:10px;
+  letter-spacing:.03em;
+}
+.mb-cat-ref    {background:#e8f0ff;color:#3b6ce0;}
+.mb-cat-palette{background:#fff0e8;color:#d06030;}
+.mb-cat-char   {background:#e8ffe8;color:#2a8a2a;}
+.mb-cat-env    {background:#f0e8ff;color:#7030c0;}
+.mb-cat-ui     {background:#e8f8ff;color:#1090b0;}
+.mb-cat-music  {background:#fff8e8;color:#b07010;}
+.mb-cat-other  {background:var(--surface2);color:var(--text3);}
+.mb-card-note{font-size:11px;color:var(--text2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mb-card-del{
+  opacity:0;width:22px;height:22px;border-radius:5px;border:none;
+  background:var(--red-bg,#ffe8e8);color:#c0392b;cursor:pointer;
+  font-size:12px;display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s;flex-shrink:0;
+}
+.mb-card:hover .mb-card-del{opacity:1;}
+.mb-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;min-height:300px;color:var(--text3);
+}
+.mb-drop-overlay{
+  display:none;position:absolute;inset:0;z-index:100;
+  background:rgba(91,82,245,.15);border:3px dashed var(--accent);
+  border-radius:12px;flex-direction:column;align-items:center;
+  justify-content:center;color:var(--accent);font-size:14px;font-weight:600;
+  pointer-events:none;
+}
+#page-moodboard{position:relative;}
+/* lightbox */
+.mb-lightbox{
+  position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.88);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:zoom-out;
+}
+.mb-lightbox img{max-width:90vw;max-height:84vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5);cursor:default;}
+.mb-lightbox-meta{
+  display:flex;align-items:center;gap:12px;
+  margin-top:14px;padding:8px 18px;
+  background:rgba(0,0,0,.5);border-radius:20px;
+  max-width:80vw;flex-wrap:wrap;
+}
+/* dark mode cat badges */
+[data-theme="dark"] .mb-cat-ref    {background:#1a2a4a;color:#6090f0;}
+[data-theme="dark"] .mb-cat-palette{background:#3a1800;color:#e08050;}
+[data-theme="dark"] .mb-cat-char   {background:#0a2a0a;color:#50c050;}
+[data-theme="dark"] .mb-cat-env    {background:#200a40;color:#b060e0;}
+[data-theme="dark"] .mb-cat-ui     {background:#002a38;color:#30c0e0;}
+[data-theme="dark"] .mb-cat-music  {background:#2a1800;color:#e0a030;}
+[data-theme="dark"] .mb-cat-other  {background:var(--surface2);color:var(--text3);}
+.checklist-section{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:10px;
+  box-shadow:var(--shadow-xs);
+}
+.checklist-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.checklist-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.08s;}
+.check-item:last-child{border-bottom:none;}
+.check-item:hover{background:var(--surface2);}
+.check-item-text.done{text-decoration:line-through;color:var(--text3);}
+.check-item-note{font-size:11.5px;color:var(--text3);margin-top:2px;}
+
+/* ── DOCUMENTS / EDITOR ──────────────────────────── */
+.docs-layout{display:flex;height:100%;overflow:hidden;}
+.docs-list{
+  width:224px;flex-shrink:0;border-right:1px solid var(--border);
+  background:var(--surface);display:flex;flex-direction:column;overflow:hidden;
+}
+.docs-list-header{
+  padding:14px 14px 10px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.docs-list-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;}
+.docs-list-body{flex:1;overflow-y:auto;padding:6px;}
+.doc-list-item{
+  display:flex;align-items:center;gap:7px;padding:8px 10px;
+  border-radius:var(--radius-sm);cursor:pointer;font-size:13px;
+  color:var(--text2);transition:all 0.1s;user-select:none;
+}
+.doc-list-item:hover{background:var(--surface2);color:var(--text);}
+.doc-list-item.active{background:var(--accent-bg);color:var(--accent);}
+.doc-list-item-icon{font-size:13px;flex-shrink:0;}
+.doc-list-item-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-list-item-del{
+  border:none;background:none;cursor:pointer;font-size:12px;
+  color:inherit;opacity:0;padding:2px 4px;border-radius:3px;flex-shrink:0;
+}
+.doc-list-item:hover .doc-list-item-del{opacity:0.45;}
+.doc-list-item-del:hover{opacity:1!important;background:var(--red-bg);color:var(--red)!important;}
+.doc-list-item.active .doc-list-item-del:hover{background:rgba(91,82,245,0.1);}
+
+.doc-editor-area{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.doc-toolbar{
+  padding:8px 16px;border-bottom:1px solid var(--border);background:var(--surface);
+  display:flex;align-items:center;gap:3px;flex-wrap:wrap;flex-shrink:0;
+}
+.tb-btn{
+  width:28px;height:28px;border:none;background:none;cursor:pointer;
+  border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--text2);transition:all 0.1s;
+  font-family:'Inter',sans-serif;font-weight:500;
+}
+.tb-btn:hover{background:var(--surface2);color:var(--text);}
+.tb-btn.active{background:var(--accent);color:white;}
+.tb-sep{width:1px;height:16px;background:var(--border);margin:0 3px;}
+.tb-select{
+  padding:4px 8px;border:1px solid var(--border2);border-radius:var(--radius-xs);
+  font-size:12px;font-family:'Inter',sans-serif;background:var(--bg);
+  color:var(--text);cursor:pointer;outline:none;
+}
+.doc-title-input{
+  width:100%;border:none;background:transparent;font-family:'Inter',sans-serif;
+  font-size:24px;font-weight:700;color:var(--text);padding:22px 32px 12px;
+  outline:none;letter-spacing:-0.02em;
+}
+.doc-title-input::placeholder{color:var(--text3);}
+.doc-editor{flex:1;overflow-y:auto;padding:0 32px 48px;}
+.doc-editor-body{min-height:300px;outline:none;font-size:14.5px;line-height:1.8;color:var(--text);}
+.doc-editor-body:empty::before{content:attr(data-placeholder);color:var(--text3);}
+.doc-editor-body h1{font-size:26px;font-weight:700;margin:28px 0 10px;color:var(--text);letter-spacing:-0.02em;}
+.doc-editor-body h2{font-size:20px;font-weight:650;margin:22px 0 7px;color:var(--text);letter-spacing:-0.01em;}
+.doc-editor-body h3{font-size:16px;font-weight:600;margin:18px 0 5px;color:var(--text2);}
+.doc-editor-body p{margin:0 0 10px;}
+.doc-editor-body ul,.doc-editor-body ol{padding-left:22px;margin:7px 0 12px;}
+.doc-editor-body li{margin-bottom:4px;}
+.doc-editor-body blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--text2);font-style:italic;margin:12px 0;}
+.doc-editor-body code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--surface2);padding:2px 6px;border-radius:4px;}
+.doc-editor-body pre{background:#17181c;color:#e8e6e1;padding:16px 18px;border-radius:var(--radius-sm);font-family:'JetBrains Mono',monospace;font-size:12.5px;overflow-x:auto;margin:12px 0;line-height:1.7;}
+.doc-editor-body a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+.doc-editor-body table{border-collapse:collapse;width:100%;margin:12px 0;}
+.doc-editor-body table td,.doc-editor-body table th{border:1px solid var(--border2);padding:8px 11px;font-size:13px;}
+.doc-editor-body table th{background:var(--surface2);font-weight:600;}
+.doc-editor-body hr{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.doc-meta{font-size:11.5px;color:var(--text3);padding:0 32px 14px;border-bottom:1px solid var(--border);}
+.doc-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);text-align:center;padding:40px;}
+.doc-empty-icon{font-size:40px;margin-bottom:14px;opacity:0.5;}
+.doc-empty-text{font-size:14px;color:var(--text2);font-weight:600;margin-bottom:5px;}
+.doc-empty-sub{font-size:13px;}
+
+/* ── MODAL ───────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.18);z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity 0.18s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;box-shadow:var(--shadow-lg);
+  padding:24px;width:440px;max-width:92vw;
+  transform:translateY(12px) scale(0.98);transition:transform 0.18s;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:18px;letter-spacing:-0.01em;}
+.form-group{margin-bottom:13px;}
+.form-label{display:block;font-size:11.5px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:0.01em;}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:9px 11px;border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);background:var(--surface);color:var(--text);
+  font-family:'Inter',sans-serif;font-size:13.5px;outline:none;transition:border-color 0.12s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,82,245,0.12);}
+.form-textarea{resize:vertical;min-height:70px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── FILTERS ─────────────────────────────────────── */
+.filter-row{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.filter-chip{
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border2);background:var(--surface);
+  color:var(--text2);transition:all 0.1s;user-select:none;
+}
+.filter-chip:hover{border-color:var(--accent);color:var(--accent);}
+.filter-chip.active{background:var(--accent);color:white;border-color:var(--accent);}
+
+/* ── MISC ────────────────────────────────────────── */
+.ring-bg{fill:none;stroke:var(--surface3);}
+.ring-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1);}
+.page{display:none;}
+.page.active{display:block;}
+.page.full-h{display:none;height:100%;}
+.page.full-h.active{display:flex;flex-direction:column;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-size:11.5px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;}
+[contenteditable]{outline:none;}
+
+/* ── IMPORT ──────────────────────────────────────── */
+.import-zone{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;transition:all 0.15s;margin-bottom:16px;background:var(--surface);}
+.import-zone:hover,.import-zone.dragover{border-color:var(--accent);background:var(--accent-bg);}
+.import-zone-icon{font-size:28px;margin-bottom:8px;}
+.import-zone-text{font-size:13.5px;font-weight:500;color:var(--text2);}
+.import-zone-sub{font-size:12px;color:var(--text3);margin-top:4px;}
+.fmt-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-family:'JetBrains Mono',monospace;}
+
+/* ── MINDMAP ─────────────────────────────────────── */
+.mm-wrap{width:100%;height:100%;position:relative;overflow:hidden;background:var(--bg);}
+.mm-wrap.panning{cursor:grabbing;}
+.mm-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.mm-layer{position:absolute;top:0;left:0;transform-origin:0 0;}
+
+/* node */
+.mm-node{
+  position:absolute;transform:translate(-50%,-50%);
+  border-radius:12px;padding:10px 16px;
+  font-size:13px;font-weight:500;cursor:grab;user-select:none;
+  border:1.5px solid;
+  transition:box-shadow 0.12s;
+  min-width:96px;max-width:220px;text-align:center;
+  line-height:1.5;word-break:break-word;
+  box-shadow:var(--shadow-xs);
+  overflow:visible;
+  z-index:1;
+}
+.mm-node:hover{box-shadow:var(--shadow);z-index:10;}
+.mm-node:hover .mm-anchors{opacity:1;}
+.mm-anchors:hover{opacity:1;}
+.mm-node.dragging{cursor:grabbing;box-shadow:var(--shadow-md);}
+.mm-node.selected{outline:2.5px solid var(--accent);outline-offset:3px;}
+.mm-node.edge-target{outline:2.5px solid #10b981;outline-offset:3px;}
+.mm-node textarea{
+  border:none;background:transparent;font-family:'Inter',sans-serif;
+  font-size:inherit;font-weight:inherit;color:inherit;
+  width:100%;text-align:center;outline:none;resize:none;display:block;line-height:1.5;
+}
+/* Anchor dots — rendered inside mm-layer in world coords */
+.mm-anc{
+  position:absolute;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:var(--accent);
+  border:3px solid white;
+  transform:translate(-50%,-50%);
+  cursor:crosshair;
+  opacity:0;
+  transition:opacity .12s, transform .1s;
+  box-shadow:0 0 0 2px var(--accent);
+  z-index:100;
+  box-sizing:border-box;
+}
+.mm-anc.vis { opacity:1; }
+.mm-anc:hover {
+  transform:translate(-50%,-50%) scale(1.4);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent);
+}
+.mm-anc.snap {
+  transform:translate(-50%,-50%) scale(1.6);
+  background:white;
+  border-color:var(--accent);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 40%,transparent);
+}
+/* ghost edge while dragging */
+.mm-ghost{stroke:var(--accent);stroke-width:2;stroke-dasharray:6 3;fill:none;pointer-events:none;}
+
+.mm-node-badges{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:6px;}
+.mm-badge{
+  display:inline-flex;align-items:center;gap:3px;font-size:10px;
+  padding:2px 7px;border-radius:10px;background:rgba(0,0,0,0.07);
+  cursor:pointer;border:none;font-family:'Inter',sans-serif;color:inherit;
+  max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mm-badge:hover{background:rgba(0,0,0,0.14);}
+
+/* toolbar */
+.mm-toolbar{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);
+  border-radius:40px;padding:5px 10px;box-shadow:var(--shadow-md);z-index:20;white-space:nowrap;
+}
+.mm-btn{
+  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.1s;
+  color:var(--text2);background:transparent;display:flex;align-items:center;gap:4px;
+}
+.mm-btn:hover{background:var(--surface2);color:var(--text);}
+.mm-btn.active{background:var(--accent-bg);color:var(--accent);}
+.mm-btn.danger:hover{background:var(--red-bg);color:var(--red);}
+.mm-sep{width:1px;height:18px;background:var(--border);margin:0 2px;align-self:center;}
+.mm-hint{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  font-size:11.5px;color:var(--text3);background:var(--surface);
+  border:1px solid var(--border);border-radius:20px;padding:4px 16px;
+  pointer-events:none;white-space:nowrap;box-shadow:var(--shadow-xs);
+}
+/* context menu */
+.mm-ctx{
+  position:fixed;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-md);padding:5px;z-index:200;min-width:176px;
+}
+.mm-ctx-item{
+  padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;
+  cursor:pointer;display:flex;align-items:center;gap:9px;color:var(--text);
+}
+.mm-ctx-item:hover{background:var(--surface2);}
+.mm-ctx-item.danger{color:var(--red);}
+.mm-ctx-item.danger:hover{background:var(--red-bg);}
+.mm-ctx-sep{height:1px;background:var(--border);margin:4px 0;}
+.mm-colors{display:flex;gap:5px;padding:7px 12px;}
+.mm-cdot{width:17px;height:17px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.1s,border-color 0.1s;flex-shrink:0;}
+.mm-cdot:hover{transform:scale(1.25);}
+.mm-cdot.active{border-color:var(--accent);}
+.mm-link-panel{
+  position:fixed;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-md);padding:16px;z-index:200;width:272px;
+}
+.mm-link-title{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:11px;display:flex;justify-content:space-between;align-items:center;}
+.mm-edge-hit{pointer-events:stroke;cursor:pointer;stroke:transparent;stroke-width:12;fill:none;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-title"><span class="logo-emoji">⚡</span><div><div>Punk Platformer</div><div class="logo-sub">dev tracker v3</div></div></div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-label">Работа</div>
+      <div class="nav-item active" id="nav-roadmap" onclick="goTo('roadmap',this)">
+        <span class="nav-icon">🗺</span>Roadmap<span class="nav-badge" id="nb-roadmap">—</span>
+      </div>
+      <div class="nav-item" id="nav-assets" onclick="goTo('assets',this)">
+        <span class="nav-icon">🎨</span>Ассеты<span class="nav-badge" id="nb-assets">—</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Документы</div>
+      <div id="sidebar-docs"></div>
+      <div class="nav-item" onclick="createDoc()" style="color:var(--text3);font-size:12px;padding:5px 10px;">
+        <span class="nav-icon">＋</span>Новый документ
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Идеи</div>
+      <div class="nav-item" id="nav-ideas" onclick="goTo('ideas',this)">
+        <span class="nav-icon">💡</span>Банк идей<span class="nav-badge" id="nb-ideas">—</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Планирование</div>
+      <div class="nav-item" id="nav-mindmap" onclick="goTo('mindmap',this)">
+        <span class="nav-icon">🧠</span>Майндмап
+      </div>
+      <div class="nav-item" id="nav-moodboard" onclick="goTo('moodboard',this)">
+        <span class="nav-icon">🖼</span>Мудборд
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Релиз</div>
+      <div class="nav-item" id="nav-bugs" onclick="goTo('bugs',this)">
+        <span class="nav-icon">🐛</span>Баги<span class="nav-badge" id="nb-bugs">—</span>
+      </div>
+      <div class="nav-item" id="nav-changelog" onclick="goTo('changelog',this)">
+        <span class="nav-icon">📋</span>Changelog<span class="nav-badge" id="nb-changelog">—</span>
+      </div>
+      <div class="nav-item" id="nav-steam" onclick="goTo('steam',this)">
+        <span class="nav-icon">🚀</span>Steam<span class="nav-badge" id="nb-steam">—</span>
+      </div>
+      <div class="nav-item" onclick="exportJSON()" style="color:var(--text3);font-size:12px;padding:5px 10px;" title="Сохранить все данные">
+        <span class="nav-icon">💾</span>Экспорт JSON
+      </div>
+      <div class="nav-item" onclick="importJSON()" style="color:var(--text3);font-size:12px;padding:5px 10px;" title="Загрузить данные">
+        <span class="nav-icon">📂</span>Импорт JSON
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="progress-mini">
+      <span style="font-size:11px;color:var(--text3)">Прогресс</span>
+      <div class="progress-track"><div class="progress-fill" id="global-progress" style="width:0%"></div></div>
+      <span style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2)" id="global-pct">0%</span>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:10px;">
+      <button class="btn btn-ghost btn-sm" style="flex:1;font-size:11px" onclick="openGlobalSearch()">🔍 Поиск</button>
+      <button class="btn btn-ghost btn-sm" id="theme-btn" style="font-size:14px;padding:0 10px" onclick="toggleTheme()" title="Тема">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="page-title">Roadmap</div>
+    </div>
+    <div class="topbar-actions" id="topbar-actions"></div>
+  </div>
+
+  <div class="content" id="main-content">
+
+    <!-- ROADMAP -->
+    <div class="page active" id="page-roadmap">
+      <div class="stats-row" id="stats-row"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;flex-wrap:wrap;">
+        <div class="tab-bar">
+          <div class="tab active" onclick="setRoadmapView('list',this)">Список</div>
+          <div class="tab" onclick="setRoadmapView('kanban',this)">Канбан</div>
+        </div>
+        <div id="phase-filter" class="filter-row" style="margin-bottom:0;"></div>
+      </div>
+      <div id="roadmap-content"></div>
+    </div>
+
+    <!-- ASSETS -->
+    <div class="page" id="page-assets">
+      <div id="assets-content"></div>
+    </div>
+
+    <!-- IDEAS -->
+    <div class="page" id="page-ideas">
+      <div class="filter-row" id="ideas-filter">
+        <div class="filter-chip active" onclick="filterIdeas('all',this)">Все</div>
+        <div class="filter-chip" onclick="filterIdeas('mech',this)">Механика</div>
+        <div class="filter-chip" onclick="filterIdeas('art',this)">Арт</div>
+        <div class="filter-chip" onclick="filterIdeas('sound',this)">Звук</div>
+        <div class="filter-chip" onclick="filterIdeas('story',this)">Сюжет</div>
+        <div class="filter-chip" onclick="filterIdeas('other',this)">Другое</div>
+      </div>
+      <div id="ideas-content"></div>
+    </div>
+
+    <!-- STEAM -->
+    <div class="page" id="page-steam">
+      <div id="steam-content"></div>
+    </div>
+
+    <!-- BUGS -->
+    <div class="page" id="page-bugs">
+      <div id="bugs-content"></div>
+    </div>
+
+    <!-- CHANGELOG -->
+    <div class="page" id="page-changelog">
+      <div id="changelog-content"></div>
+    </div>
+
+  </div>
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.5);align-items:flex-start;justify-content:center;padding-top:80px" onclick="e=>e.target===this&&closeSearch()">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:14px;width:600px;max-width:95vw;box-shadow:var(--shadow-lg);overflow:hidden" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px">🔍</span>
+      <input id="search-input" placeholder="Поиск по задачам, ассетам, идеям, багам..." style="flex:1;border:none;background:none;font-size:14px;color:var(--text);outline:none;font-family:inherit" oninput="runSearch(this.value)">
+      <kbd style="font-size:11px;color:var(--text3);background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:2px 6px">Esc</kbd>
+    </div>
+    <div id="search-results" style="max-height:420px;overflow-y:auto;padding:8px"></div>
+  </div>
+</div>
+
+<input type="file" id="import-json-input" style="display:none" accept=".json" onchange="doImportJSON(this)">
+
+  <!-- DOCUMENT EDITOR (full height, separate) -->
+  <div class="page full-h" id="page-doc">
+    <div class="docs-layout">
+      <div class="docs-list">
+        <div class="docs-list-header">
+          <span class="docs-list-title">Документы</span>
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-sm btn-ghost" onclick="triggerImport()" title="Импорт файла">↑</button>
+            <button class="btn btn-sm btn-ghost" onclick="createDoc()">+</button>
+          </div>
+        </div>
+        <input type="file" id="file-import-input" style="display:none" accept=".md,.txt,.html,.htm,.docx,.pdf" onchange="handleFileImport(this)">
+        <div class="docs-list-body" id="docs-list-body"></div>
+      </div>
+      <div class="doc-editor-area">
+        <div class="doc-toolbar" id="doc-toolbar">
+          <select class="tb-select" onchange="execFmt('formatBlock',this.value);this.value=''">
+            <option value="">Стиль</option>
+            <option value="h1">Заголовок 1</option>
+            <option value="h2">Заголовок 2</option>
+            <option value="h3">Заголовок 3</option>
+            <option value="p">Обычный</option>
+            <option value="blockquote">Цитата</option>
+            <option value="pre">Код</option>
+          </select>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="execFmt('bold')" title="Жирный (Ctrl+B)"><b>B</b></button>
+          <button class="tb-btn" onclick="execFmt('italic')" title="Курсив (Ctrl+I)"><i>I</i></button>
+          <button class="tb-btn" onclick="execFmt('underline')" title="Подчёркнутый (Ctrl+U)" style="text-decoration:underline">U</button>
+          <button class="tb-btn" onclick="execFmt('strikeThrough')" title="Зачёркнутый" style="text-decoration:line-through">S</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="execFmt('insertUnorderedList')" title="Маркированный список">≡</button>
+          <button class="tb-btn" onclick="execFmt('insertOrderedList')" title="Нумерованный список">№</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertHR()" title="Разделитель">—</button>
+          <button class="tb-btn" onclick="insertLink()" title="Ссылка">🔗</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="execFmt('removeFormat')" title="Очистить форматирование" style="font-size:11px">✕fmt</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="openExportModal()" title="Сохранить как .txt или .md" style="font-size:11px;padding:0 8px;color:var(--accent);font-weight:600">↓ Сохранить</button>
+        </div>
+        <div id="doc-editor-wrap" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;">
+          <div id="doc-empty" class="doc-empty">
+            <div class="doc-empty-icon">📄</div>
+            <div class="doc-empty-text">Выбери документ</div>
+            <div class="doc-empty-sub">или создай новый через кнопку «+»</div>
+          </div>
+          <div id="doc-active" style="display:none;flex:1;display:none;flex-direction:column;">
+            <input class="doc-title-input" id="doc-title-input" placeholder="Название документа" oninput="saveDocTitle()">
+            <div class="doc-meta" id="doc-meta"></div>
+            <div class="doc-editor" id="doc-editor">
+              <div class="doc-editor-body" id="doc-body" contenteditable="true" data-placeholder="Начни писать..." oninput="scheduleDocSave()"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOODBOARD (full height) -->
+  <div class="page full-h" id="page-moodboard" style="display:none;flex-direction:column;overflow:hidden;background:var(--bg)">
+    <div class="mb-toolbar">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <button class="mb-chip active" id="mb-filter-all" onclick="mbFilter('all',this)">Все</button>
+        <button class="mb-chip" onclick="mbFilter('ref',this)"    >🎨 Референс</button>
+        <button class="mb-chip" onclick="mbFilter('palette',this)">🎨 Палитра</button>
+        <button class="mb-chip" onclick="mbFilter('char',this)"   >🧍 Персонаж</button>
+        <button class="mb-chip" onclick="mbFilter('env',this)"    >🏙 Окружение</button>
+        <button class="mb-chip" onclick="mbFilter('ui',this)"     >📐 UI</button>
+        <button class="mb-chip" onclick="mbFilter('music',this)"  >🎵 Музыка</button>
+        <button class="mb-chip" onclick="mbFilter('other',this)"  >📦 Другое</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span style="font-size:11px;color:var(--text3)">Размер:</span>
+        <button class="mb-size-btn" id="mb-sz-s" onclick="mbSetSize('s',this)" title="Мелкие">S</button>
+        <button class="mb-size-btn active" id="mb-sz-m" onclick="mbSetSize('m',this)" title="Средние">M</button>
+        <button class="mb-size-btn" id="mb-sz-l" onclick="mbSetSize('l',this)" title="Крупные">L</button>
+      </div>
+    </div>
+    <div style="flex:1;position:relative;overflow:hidden;">
+      <div class="mb-board" id="mb-board"></div>
+      <div class="mb-drop-overlay" id="mb-drop-overlay">
+        <div style="font-size:52px">📎</div>
+        <div style="font-size:18px;font-weight:700;margin-top:14px">Отпусти картинки сюда</div>
+        <div style="font-size:13px;opacity:.7;margin-top:6px">поддерживаются jpg, png, gif, webp</div>
+      </div>
+    </div>
+    <input type="file" id="mb-file-input" style="display:none;position:fixed" accept="image/*" multiple onchange="mbHandleFiles(this.files)">
+  </div>
+
+  <!-- MINDMAP (full height) -->
+  <div class="page full-h" id="page-mindmap" style="display:none">
+    <div class="mm-wrap" id="mm-wrap">
+      <svg class="mm-svg" id="mm-svg"></svg>
+      <div class="mm-layer" id="mm-layer"></div>
+      <div class="mm-hint" id="mm-hint">Двойной клик на холсте — новый узел · Тяни от якоря — связь · ПКМ — меню</div>
+      <div class="mm-toolbar">
+        <button class="mm-btn" onclick="mmZoomIn()">＋</button>
+        <button class="mm-btn" onclick="mmZoomOut()">−</button>
+        <button class="mm-btn" onclick="mmFitAll()">↔ Вписать</button>
+        <div class="mm-sep"></div>
+        <button class="mm-btn danger" onclick="mmDeleteSelected()">✕ Удалить</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- INFO BUTTON -->
+<div id="info-btn" onclick="toggleInfo()" title="О проекте" style="
+  position:fixed;bottom:18px;right:18px;z-index:9000;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--surface);border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;font-weight:700;
+  color:var(--text3);font-style:italic;
+  box-shadow:var(--shadow-xs);
+  transition:border-color .15s,color .15s;
+  user-select:none;font-family:'Inter',sans-serif;
+">i</div>
+
+<div id="info-popup" style="
+  display:none;position:fixed;bottom:52px;right:18px;z-index:9000;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:12px;padding:16px 18px;
+  box-shadow:var(--shadow);min-width:200px;
+  font-family:'Inter',sans-serif;
+">
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text3);margin-bottom:10px;text-transform:uppercase">О трекере</div>
+  <div style="display:flex;flex-direction:column;gap:7px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <span style="font-size:12px;color:var(--text2)">Версия</span>
+      <span style="font-size:12px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace">v1.0.0</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <span style="font-size:12px;color:var(--text2)">Разработчик</span>
+      <span style="font-size:12px;font-weight:600;color:var(--accent)">SeBa</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <span style="font-size:12px;color:var(--text2)">Строк кода</span>
+      <span style="font-size:12px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace">3 319</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Добавить</div>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Отмена</button>
+      <button class="btn btn-primary" id="modal-confirm">Добавить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleInfo() {
+  const popup = document.getElementById('info-popup');
+  const btn   = document.getElementById('info-btn');
+  const open  = popup.style.display === 'flex';
+  popup.style.display = open ? 'none' : 'flex';
+  popup.style.flexDirection = 'column';
+  btn.style.borderColor = open ? 'var(--border2)' : 'var(--accent)';
+  btn.style.color       = open ? 'var(--text3)'   : 'var(--accent)';
+}
+
+// ============================================================
+// DATA DEFINITIONS
+// ============================================================
+const PHASES_DEF = [
+  {id:'concept',name:'Концепция и документация',sub:'~1–2 нед',color:'#4f8ef7',tasks:[
+    {id:'c1',name:'Написать GDD (Game Design Document)',note:'Готов — отметь ✓',done:true},
+    {id:'c2',name:'Определить MVP',note:'Что обязательно для первого релиза?'},
+    {id:'c3',name:'Составить список всех ассетов',note:'Таблица: спрайты, звуки, уровни'},
+    {id:'c4',name:'Сделать мудборд визуального стиля',note:'Скриншоты референсов, цветовые палитры'},
+  ]},
+  {id:'setup',name:'Настройка проекта',sub:'~2–3 дня',color:'#a78bfa',tasks:[
+    {id:'s1',name:'Установить Godot 4',note:'godotengine.org — бесплатно'},
+    {id:'s2',name:'Создать репозиторий на GitHub',note:'Бэкап и совместная работа'},
+    {id:'s3',name:'Настроить структуру папок',note:'assets/, scenes/, scripts/, audio/'},
+    {id:'s4',name:'Настроить pixel-perfect рендеринг',note:'Project Settings → Rendering → Snap 2D'},
+  ]},
+  {id:'proto',name:'Прототип — серый ящик',sub:'~2–3 нед',color:'#f59e0b',tasks:[
+    {id:'p1',name:'Движение персонажа: бег, прыжок, гравитация',note:'Пока просто цветной прямоугольник'},
+    {id:'p2',name:'Базовые платформы и коллизии',note:'Физика должна ощущаться правильно'},
+    {id:'p3',name:'Атака и хитбокс',note:'Тестируем feel — важнее чем графика'},
+    {id:'p4',name:'Патрулирующий враг',note:'Ходит туда-сюда, реагирует на топтание'},
+    {id:'p5',name:'Коллектибл (пивная банка) и счёт',note:'Цикл "собрал → награда" должен ощущаться приятно'},
+    {id:'p6',name:'Win/lose условия',note:'Флаг победы, смерть от врага'},
+  ]},
+  {id:'art',name:'Арт и визуал',sub:'~3–4 нед',color:'#ec4899',tasks:[
+    {id:'a1',name:'Установить Aseprite',note:'$20 или собрать из исходников бесплатно'},
+    {id:'a2',name:'Спрайт игрока: idle, run, jump',note:'28×44px согласно GDD'},
+    {id:'a3',name:'Спрайты врагов-роботов',note:'28×28px, 2–3 кадра анимации'},
+    {id:'a4',name:'Тайлсет: платформы, земля',note:'32×32px, brick-текстура'},
+    {id:'a5',name:'Задний фон с параллаксом',note:'2–3 слоя: звёзды, здания'},
+    {id:'a6',name:'UI элементы: сердца, иконки, кнопки',note:'HUD верхняя панель'},
+    {id:'a7',name:'10 спрайтов гитар',note:'Каждая уникальная, ~24×40px'},
+  ]},
+  {id:'content',name:'Полный контент',sub:'~2–3 нед',color:'#10b981',tasks:[
+    {id:'n1',name:'Заменить прямоугольники на финальные спрайты',note:'Интеграция арта в прототип'},
+    {id:'n2',name:'Собрать полный уровень по GDD',note:'2500px, все платформы, враги, флаг'},
+    {id:'n3',name:'Главное меню + создание персонажа',note:'Кастомизация волос, рубашки, штанов'},
+    {id:'n4',name:'Магазин гитар с localStorage',note:'Монеты, покупка, экипировка'},
+    {id:'n5',name:'Звуковые эффекты',note:'Прыжок, монета, убийство, победа'},
+    {id:'n6',name:'Экраны: Game Over, Win, Settings',note:'По GDD раздел 8'},
+  ]},
+  {id:'polish',name:'Полировка и тестирование',sub:'~2 нед',color:'#64748b',tasks:[
+    {id:'pol1',name:'Playtest с реальными людьми',note:'Минимум 5 человек, записать фидбэк'},
+    {id:'pol2',name:'Juice: анимации, вспышки, shake',note:'Делает игру ощутимой и живой'},
+    {id:'pol3',name:'Баланс сложности',note:'Расстановка врагов, скорость, урон'},
+    {id:'pol4',name:'Проверить на разных разрешениях',note:'1080p, 1440p'},
+    {id:'pol5',name:'Исправить критические баги',note:'Список из playtest'},
+  ]},
+  {id:'steamp',name:'Подготовка к Steam',sub:'~2–3 нед',color:'#f97316',tasks:[
+    {id:'st1',name:'Регистрация разработчика Steam ($100)',note:'store.steampowered.com/join/newpartner'},
+    {id:'st2',name:'Создать страницу игры в Steamworks',note:'Описание, теги, возрастной рейтинг'},
+    {id:'st3',name:'Скриншоты — минимум 5 штук',note:'1920×1080, лучшие моменты игры'},
+    {id:'st4',name:'Трейлер / гифки',note:'30–90 секунд геймплея'},
+    {id:'st5',name:'Сборка билдов: Windows / Mac / Linux',note:'Godot: Project → Export'},
+    {id:'st6',name:'Интегрировать GodotSteam SDK',note:'Ачивки, облако, онлайн'},
+    {id:'st7',name:'Подать на Steam Review',note:'5–7 рабочих дней на проверку'},
+    {id:'st8',name:'Дата релиза + маркетинг',note:'Wishlist кампания, соцсети, itch.io'},
+  ]},
+];
+
+const ASSET_TYPES = ['Спрайт','Анимация','Тайл','Фон','UI','Музыка','Звук','Комикс','Шейдер','Другое'];
+const ASSET_TYPE_ICONS = {Спрайт:'🖼',Анимация:'🎞',Тайл:'🧱',Фон:'🌆',UI:'📐',Музыка:'🎵',Звук:'🔊',Комикс:'📖',Шейдер:'✨',Другое:'📦'};
+const ASSET_STATUSES = ['todo','wip','review','done'];
+const ASSET_STATUS_LABELS = {todo:'Не начато',wip:'В работе',review:'На проверке',done:'Готово'};
+const ASSET_STATUS_CLASSES = {todo:'status-todo',wip:'status-wip',review:'status-review',done:'status-done'};
+const IDEA_CATS = {mech:'Механика',art:'Арт',sound:'Звук',story:'Сюжет',other:'Другое'};
+const IDEA_TAG_CLASSES = {mech:'tag-mech',art:'tag-art',sound:'tag-sound',story:'tag-story',other:'tag-other'};
+
+const STEAM_SECTIONS = [
+  {id:'store',title:'Страница магазина',items:[
+    {id:'ss1',text:'Описание игры на русском и английском',note:'Кратко + детально, с ключевыми словами'},
+    {id:'ss2',text:'Теги жанра (Platformer, Pixel Art, Punk)'},
+    {id:'ss3',text:'Минимум 5 скриншотов 1920×1080',note:'Первый скриншот — самый важный'},
+    {id:'ss4',text:'Трейлер (рекомендуется)',note:'30–90 сек геймплея'},
+    {id:'ss5',text:'Capsule art 616×353px',note:'Главная обложка в магазине'},
+  ]},
+  {id:'legal',title:'Документы и настройки',items:[
+    {id:'sl1',text:'Возрастной рейтинг IARC',note:'Заполняется в Steamworks, бесплатно'},
+    {id:'sl2',text:'Системные требования',note:'Min / Recommended: CPU, RAM, GPU, OS'},
+    {id:'sl3',text:'Поддерживаемые языки',note:'Хотя бы English + Russian'},
+  ]},
+  {id:'build',title:'Техническая часть',items:[
+    {id:'sb1',text:'Сборка Windows 64-bit',note:'Godot: Project → Export → Windows Desktop'},
+    {id:'sb2',text:'Сборка Linux',note:'Расширяет аудиторию'},
+    {id:'sb3',text:'Интеграция Steamworks API',note:'Плагин GodotSteam на GitHub'},
+    {id:'sb4',text:'Хотя бы 1 Steam Achievement'},
+    {id:'sb5',text:'Тест на чистой машине',note:'Без Godot editor — убедиться что запускается'},
+  ]},
+  {id:'launch',title:'Перед релизом',items:[
+    {id:'sla1',text:'Wishlist кампания (за 2–4 нед до релиза)',note:'Reddit, соцсети, itch.io'},
+    {id:'sla2',text:'Ключи для пресс/стримеров',note:'5–10 ключей — хорошее начало'},
+    {id:'sla3',text:'Установить цену',note:'Посмотри похожие инди-платформеры ($3–8)'},
+    {id:'sla4',text:'Выбрать дату релиза',note:'Избегай пятницу и крупные распродажи'},
+  ]},
+];
+
+const GDD_CONTENT = `<h1>Punk Platformer — Game Design Document</h1>
+<h2>1. Концепция и Видение</h2>
+<p><strong>Жанр:</strong> 2D Side-scrolling Platformer</p>
+<p><strong>Суть:</strong> Играешь за панк-подростка с ирокезом, который бегает по мрачному городу, собирает пивные банки, побеждает роботов и покупает крутые гитары. Визуальный стиль — неоновый панк 80-х с пиксель-арт эстетикой.</p>
+<p><strong>Ощущение:</strong> Быстрый, отзывчивый, с приятным feedback от прыжков и атак. Чувство контроля и прогресса.</p>
+<h2>2. Визуальный стиль</h2>
+<p><strong>Пиксель-арт</strong> в духе ретро-консолей (NES/SNES era). Неоновая цветовая палитра: чёрный фон, неоново-зелёный (#39ff14) и розовый (#ff4fd8) как акцентные цвета. Тёмный городской пейзаж с параллакс-эффектом.</p>
+<h3>Цветовая палитра</h3>
+<ul><li>Primary (Hair/FX): #39ff14 (Neon Green)</li><li>Secondary (Accents): #ff4fd8 (Hot Pink)</li><li>Background Dark: #0a0812, #12101a</li><li>Platform Brick: #8b4513, #a0522d</li><li>Enemy (Robot): #cc2222, #881111</li></ul>
+<h2>3. Персонаж — The Punk</h2>
+<p><strong>Размер:</strong> ~28×44 пикселей (32×48 хитбокс)</p>
+<p><strong>Физика:</strong> GRAVITY = 0.5 / JUMP_FORCE = -12 / SPEED = 5 / MAX_FALL_SPEED = 10</p>
+<p><strong>Атака:</strong> Кулдаун 40 фреймов, длительность 20 фреймов, хитбокс 30px впереди игрока.</p>
+<h2>4. Уровень</h2>
+<p><strong>Общая ширина:</strong> ~2500 пикселей. <strong>Тайл:</strong> 32×32px. <strong>Скролл:</strong> горизонтальный, камера ведёт игрока ~33% от левого края.</p>
+<h2>5. Коллектиблы — Пивные банки</h2>
+<p>Белый/красный цилиндр 10×16px. 16 штук на уровне. +10 очков за каждую. Двухтоновый звуковой сигнал при сборе.</p>
+<h2>6. Враги — Злые Роботы</h2>
+<p>Красный корпус, 28×28px. Патрулируют заданный участок со скоростью 1.5px/frame. Можно победить топтанием (прыгнуть сверху) — +50 очков и отскок. Боковое касание — урон игроку, 60 фреймов неуязвимости.</p>
+<h2>7. Цель — Флаг победы</h2>
+<p>На x=2400. Серый столб, неоново-зелёный треугольный флаг. Достижение флага = победа.</p>
+<h2>8. Магазин гитар</h2>
+<p>10 гитар от бесплатных кулаков до Iceman за 250 монет. Каждая гитара: уникальный внешний вид, урон и звук атаки. Монеты = собранные пивные банки, сохраняются через localStorage.</p>
+<h2>9. MVP чеклист</h2>
+<ul><li>Стартовый экран с созданием персонажа</li><li>Движение: бег, прыжок, коллизии</li><li>Коллектиблы (пивные банки)</li><li>Патрулирующие враги</li><li>Механика топтания</li><li>HUD: счёт, жизни, кол-во банок</li><li>Условие победы (флаг)</li><li>Звуковые эффекты</li><li>Магазин гитар</li><li>Сохранение монет (localStorage)</li></ul>`;
+
+// ============================================================
+// STATE
+// ============================================================
+function defaultAssets() {
+  return [
+      // ── ПЕРСОНАЖ ──────────────────────────────────────────────
+      {id:'as_p1', name:'Игрок — idle',                    type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p2', name:'Игрок — run',                     type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p3', name:'Игрок — jump / fall',             type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p4', name:'Игрок — атака (мувсет, 3 фазы)',  type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p5', name:'Игрок — хит / смерть',            type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p6', name:'Игрок — нажатие педали',          type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      // ── ВРАГИ ─────────────────────────────────────────────────
+      {id:'as_e1', name:'Walker — idle / walk / атака / смерть',   type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e2', name:'Shooter — idle / shoot / смерть',         type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e3', name:'Heavy — idle / walk / атака / смерть',    type:'Анимация', size:'40×48px', who:'', status:'todo'},
+      {id:'as_e4', name:'Manager — idle / бафф / смерть',          type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e5', name:'Drone — idle / полёт / атака / смерть',   type:'Анимация', size:'24×24px', who:'', status:'todo'},
+      // ── БОССЫ ─────────────────────────────────────────────────
+      {id:'as_b1', name:'Boss 1 — Riot Mech (все фазы + смерть)',  type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      {id:'as_b2', name:'Boss 2 — Trash King (все фазы + смерть)', type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      {id:'as_b3', name:'Boss 3 — Corporate Tyrant (все фазы)',    type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      // ── ГИТАРЫ (спрайты в руках + иконки магазина) ────────────
+      {id:'as_g1', name:'Гитара — Stratocaster',           type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g2', name:'Гитара — Telecaster',             type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g3', name:'Гитара — Les Paul',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g4', name:'Гитара — SG',                     type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g5', name:'Гитара — Iceman',                 type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g6', name:'Гитара — Superstrat',             type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g7', name:'Гитара — Flying V',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g8', name:'Гитара — Explorer',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g9', name:'Гитара — Jaguar',                 type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g10',name:'Гитара — DIY Punk Guitar (эндгейм)', type:'Спрайт',size:'24×40px',   who:'', status:'todo'},
+      // ── ПЕДАЛИ (спрайт педали на полу + иконка) ───────────────
+      {id:'as_pd1',name:'Педаль — Distortion (спрайт + FX волна)', type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd2',name:'Педаль — Reverb (3 волны FX)',            type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd3',name:'Педаль — Overdrive (FX)',                  type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd4',name:'Педаль — Wah (FX пробивания)',             type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      // ── ПРЕДМЕТЫ / ПИКАПЫ ─────────────────────────────────────
+      {id:'as_i1', name:'Пивная банка — обычная',          type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      {id:'as_i2', name:'Пивная банка — золотая (HP)',     type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      {id:'as_i3', name:'Пивная банка — токсичная',        type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      // ── ТАЙЛСЕТЫ ──────────────────────────────────────────────
+      {id:'as_t1', name:'Тайлсет — Уровень 1 (поля, гаражи, сараи, транспорт)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t2', name:'Тайлсет — Уровень 2 (пятиэтажки, крыши, заборы, прожекторы)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t3', name:'Тайлсет — Уровень 3 (свалка, мусор, рекламные экраны)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t4', name:'Тайлсет — Уровень 4 (трубы, канализация, токсичные ёмкости)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t5', name:'Тайлсет — Уровень 5 (стекло, неон, корпоративный офис)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      // ── ФОНЫ ──────────────────────────────────────────────────
+      {id:'as_bg1',name:'Фон — Уровень 1: окраина, поля (параллакс 2–3 слоя)',   type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg2',name:'Фон — Уровень 2: советские пятиэтажки, ночное небо',    type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg3',name:'Фон — Уровень 3: свалка, рекламные билборды',           type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg4',name:'Фон — Уровень 4: канализация, тёмные трубы, пар',       type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg5',name:'Фон — Уровень 5: корпоративная башня, неон, стерильность', type:'Фон', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg6',name:'Фон — Ночная остановка (перекрёсток)',                  type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      // ── СПЕЦЭФФЕКТЫ УРОВНЯ ────────────────────────────────────
+      {id:'as_vfx1',name:'VFX — токсичная струя (вверх/вниз, таймингованная)', type:'Анимация', size:'16×64px', who:'', status:'todo'},
+      {id:'as_vfx2',name:'VFX — искажение экрана (токсичная банка)',            type:'Шейдер',  size:'—',       who:'', status:'todo'},
+      {id:'as_vfx3',name:'VFX — удар (хит-эффект на враге)',                    type:'Анимация', size:'32×32px', who:'', status:'todo'},
+      {id:'as_vfx4',name:'VFX — звуковая волна (Flying V, Reverb-педаль)',      type:'Анимация', size:'96×32px', who:'', status:'todo'},
+      {id:'as_vfx5',name:'VFX — пробивание щита (Wah)',                         type:'Анимация', size:'32×32px', who:'', status:'todo'},
+      // ── ПЕРСОНАЖИ КАТ-СЦЕН ────────────────────────────────────
+      {id:'as_cs1',name:'Загадочная девушка — спрайт (ночная остановка)',       type:'Спрайт',  size:'28×44px', who:'', status:'todo'},
+      // ── UI ────────────────────────────────────────────────────
+      {id:'as_ui1',name:'HUD — полоса HP',                type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui2',name:'HUD — счётчик пивных банок',     type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui3',name:'HUD — слот гитары + иконка',     type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui4',name:'HUD — слот педали + кулдаун',    type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui5',name:'Экран магазина (между уровнями)',  type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui6',name:'Экран паузы (смена гитары/педали)', type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui7',name:'Экран Game Over',                 type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui8',name:'Экран победы над боссом',         type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui9',name:'Экран выбора (перекрёсток)',      type:'UI', size:'—', who:'', status:'todo'},
+      // ── КОМИКС-СЛАЙДЫ ─────────────────────────────────────────
+      {id:'as_cm1',name:'Комикс — вступление (до Уровня 1)',        type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm2',name:'Комикс — переход Уровень 1 → 2',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm3',name:'Комикс — переход Уровень 2 → 3',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm4',name:'Комикс — переход Уровень 3 → 4',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm5',name:'Комикс — перекрёсток (встреча с девушкой)',  type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm6',name:'Комикс — концовка A: Семья',                type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm7',name:'Комикс — концовка B: Остался панком',       type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm8',name:'Комикс — концовка C: Внутри системы',       type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      // ── МУЗЫКА ────────────────────────────────────────────────
+      {id:'as_m1', name:'Музыка — Уровень 1: меланхоличный гаражный панк', type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m2', name:'Музыка — Уровень 2: уличный панк + industrial',    type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m3', name:'Музыка — Уровень 3: noisy industrial punk',        type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m4', name:'Музыка — Уровень 4: dark synth / drone',           type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m5', name:'Музыка — Уровень 5: cold corporate techno',        type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m6', name:'Музыка — тема магазина',                           type:'Музыка', size:'1–2 мин', who:'', status:'todo'},
+      {id:'as_m7', name:'Музыка — тема босса (Riot Mech)',                  type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m8', name:'Музыка — тема босса (Trash King)',                 type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m9', name:'Музыка — тема босса (Corporate Tyrant)',           type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m10',name:'Музыка — финальные титры',                         type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      // ── ЗВУКИ (SFX) ───────────────────────────────────────────
+      {id:'as_sfx1', name:'SFX — прыжок',                    type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx2', name:'SFX — приземление',               type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx3', name:'SFX — удар гитарой (базовый)',    type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx4', name:'SFX — подбор пивной банки',       type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx5', name:'SFX — подбор золотой банки (HP)', type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx6', name:'SFX — токсичная банка (эффект)',  type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx7', name:'SFX — урон по игроку',            type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx8', name:'SFX — смерть игрока',             type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx9', name:'SFX — смерть врага',              type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx10',name:'SFX — педаль Distortion (BUM)',   type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx11',name:'SFX — педаль Reverb (3 волны)',   type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx12',name:'SFX — педаль Overdrive',          type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx13',name:'SFX — педаль Wah',                type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx14',name:'SFX — выстрел Shooter',           type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx15',name:'SFX — токсичная струя (Уровень 4)', type:'Звук', size:'~2с', who:'', status:'todo'},
+      {id:'as_sfx16',name:'SFX — покупка в магазине',        type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx17',name:'SFX — смена гитары/педали',       type:'Звук', size:'<1с', who:'', status:'todo'},
+    ];
+}
+
+function loadState() {
+  const gddId = 'doc_gdd_' + Date.now();
+  const freshState = () => ({
+    tasks: {},
+    customTasks: [],
+    taskLinks: {},
+    assets: defaultAssets(),
+    customAssets: [],
+    ideas: [],
+    steam: {},
+    moodboard: [],
+    bugs: [],
+    changelog: [],
+    docs: [
+      {id: gddId, title:'GDD — Game Design Document', content: GDD_CONTENT, created: Date.now(), updated: Date.now()}
+    ],
+    activeDocId: gddId,
+  });
+
+  // Try loading v4 (current)
+  try {
+    const raw = localStorage.getItem('punk_tracker_v4');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Guard: assets must be an array (previous bug stored an object)
+      if (!Array.isArray(parsed.assets)) {
+        console.warn('[Tracker] v4 state corrupted (assets not array), rebuilding...');
+        localStorage.removeItem('punk_tracker_v4');
+      } else {
+        return parsed;
+      }
+    }
+  } catch(e) {}
+
+  // Migrate from v3 — keep tasks/ideas/docs, reset assets to new full list
+  try {
+    const raw = localStorage.getItem('punk_tracker_v3');
+    if (raw) {
+      const old = JSON.parse(raw);
+      if (typeof old !== 'object' || old === null) throw new Error('bad v3');
+      const state = freshState();
+      if (old.tasks)       state.tasks       = old.tasks;
+      if (old.customTasks) state.customTasks  = old.customTasks;
+      if (old.taskLinks)   state.taskLinks    = old.taskLinks;
+      if (old.ideas)       state.ideas        = old.ideas;
+      if (old.customAssets && old.customAssets.length) state.customAssets = old.customAssets;
+      if (old.steam)       state.steam        = old.steam;
+      if (old.docs && old.docs.length > 1) state.docs = old.docs; // preserve user docs
+      if (old.activeDocId) state.activeDocId  = old.activeDocId;
+      console.log('[Tracker] Migrated from v3 → v4, assets reset to full GDD list');
+      return state;
+    }
+  } catch(e) {}
+
+  return freshState();
+}
+
+function saveState() {
+  localStorage.setItem('punk_tracker_v4', JSON.stringify(STATE));
+  updateBadges();
+  updateGlobalProgress();
+  renderSidebarDocs();
+}
+
+let STATE = loadState();
+let roadmapView = 'list';
+let activeIdeasFilter = 'all';
+let currentPage = 'roadmap';
+let phaseFilter = 'all';
+let docSaveTimer = null;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goTo(page, el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  // hide all pages
+  document.querySelectorAll('.page, .page.full-h').forEach(p => {
+    p.classList.remove('active');
+    if (p.classList.contains('full-h')) p.style.display = 'none';
+  });
+  const mc = document.getElementById('main-content');
+
+  if (page === 'doc' || page === 'mindmap' || page === 'moodboard') {
+    mc.style.display = 'none';
+    const dp = document.getElementById('page-' + page);
+    dp.style.display = 'flex';
+    dp.classList.add('active');
+  } else {
+    mc.style.display = '';
+    document.getElementById('main-content').style.padding = '22px';
+    const pg = document.getElementById('page-' + page);
+    if (pg) pg.classList.add('active');
+  }
+
+  const titles = {roadmap:'Roadmap',assets:'Ассеты',ideas:'Банк идей',steam:'Steam Checklist',doc:'Документы',mindmap:'Майндмап',moodboard:'Мудборд',bugs:'Трекер багов',changelog:'Changelog'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+  currentPage = page;
+  updateTopbarActions(page);
+  if (page === 'roadmap') renderRoadmap();
+  else if (page === 'assets') renderAssets();
+  else if (page === 'ideas') renderIdeas();
+  else if (page === 'steam') renderSteam();
+  else if (page === 'doc') renderDocEditor();
+  else if (page === 'mindmap') { setTimeout(initMindmap, 30); }
+  else if (page === 'moodboard') { renderMoodboard(); initMoodboardDrop(); }
+  else if (page === 'bugs') renderBugs();
+  else if (page === 'changelog') renderChangelog();
+}
+
+function updateTopbarActions(page) {
+  const el = document.getElementById('topbar-actions');
+  if (page === 'roadmap') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddTaskModal()">+ Задача</button>`;
+  else if (page === 'assets') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddAssetModal()">+ Ассет</button>`;
+  else if (page === 'ideas') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddIdeaModal()">+ Идея</button>`;
+  else if (page === 'doc') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="triggerImport()" title="Импорт .md .txt .html .docx">↑ Импорт</button><button class="btn btn-primary btn-sm" onclick="createDoc()">+ Документ</button>`;
+  else if (page === 'mindmap') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="mmFitAll()">↔ Вписать</button>`;
+  else if (page === 'moodboard') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="mbTriggerUpload()">↑ Загрузить</button><button class="btn btn-primary btn-sm" onclick="mbOpenUrl()">+ URL</button>`;
+  else if (page === 'bugs') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddBugModal()">+ Баг</button>`;
+  else if (page === 'changelog') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddChangelogModal()">+ Версия</button>`;
+  else el.innerHTML = '';
+}
+
+// ============================================================
+// SIDEBAR DOCS
+// ============================================================
+function renderSidebarDocs() {
+  const el = document.getElementById('sidebar-docs');
+  if (!STATE.docs || STATE.docs.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = STATE.docs.map(d => `
+    <div class="nav-doc-item ${STATE.activeDocId === d.id ? 'active' : ''}" onclick="openDoc('${d.id}')">
+      <span style="font-size:13px;flex-shrink:0">📄</span>
+      <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px">${d.title || 'Без названия'}</span>
+      <button class="nav-doc-del" onclick="event.stopPropagation();deleteDoc('${d.id}')" title="Удалить">✕</button>
+    </div>
+  `).join('');
+}
+
+function openDoc(id) {
+  STATE.activeDocId = id;
+  // nav highlight
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  goTo('doc', null);
+  renderSidebarDocs();
+}
+
+function createDoc() {
+  const id = 'doc_' + Date.now();
+  STATE.docs.push({id, title:'Новый документ', content:'', created: Date.now(), updated: Date.now()});
+  STATE.activeDocId = id;
+  saveState();
+  goTo('doc', null);
+}
+
+function deleteDoc(id) {
+  if (!confirm('Удалить документ?')) return;
+  STATE.docs = STATE.docs.filter(d => d.id !== id);
+  if (STATE.activeDocId === id) STATE.activeDocId = STATE.docs.length > 0 ? STATE.docs[0].id : null;
+  saveState();
+  renderDocEditor();
+}
+
+// ============================================================
+// DOCUMENT EDITOR
+// ============================================================
+function renderDocEditor() {
+  renderSidebarDocs();
+  const listBody = document.getElementById('docs-list-body');
+  if (!STATE.docs) STATE.docs = [];
+  listBody.innerHTML = STATE.docs.map(d => `
+    <div class="doc-list-item ${STATE.activeDocId === d.id ? 'active' : ''}" onclick="selectDoc('${d.id}')">
+      <span class="doc-list-item-icon">📄</span>
+      <span class="doc-list-item-name">${d.title || 'Без названия'}</span>
+      <button class="doc-list-item-del" onclick="event.stopPropagation();deleteDoc('${d.id}')">✕</button>
+    </div>
+  `).join('') || '<div style="font-size:12px;color:var(--text3);padding:12px 10px;">Нет документов</div>';
+
+  const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+  const empty = document.getElementById('doc-empty');
+  const active = document.getElementById('doc-active');
+
+  if (!doc) {
+    empty.style.display = 'flex';
+    active.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  active.style.display = 'flex';
+
+  document.getElementById('doc-title-input').value = doc.title || '';
+  document.getElementById('doc-body').innerHTML = doc.content || '';
+
+  const d = new Date(doc.updated);
+  document.getElementById('doc-meta').textContent = `Изменено: ${d.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'})} в ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+function selectDoc(id) {
+  STATE.activeDocId = id;
+  saveState();
+  renderDocEditor();
+}
+
+function scheduleDocSave() {
+  clearTimeout(docSaveTimer);
+  docSaveTimer = setTimeout(() => {
+    const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+    if (doc) {
+      doc.content = document.getElementById('doc-body').innerHTML;
+      doc.updated = Date.now();
+      saveState();
+      const d = new Date(doc.updated);
+      const meta = document.getElementById('doc-meta');
+      if (meta) meta.textContent = `Изменено: ${d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})} в ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
+    }
+  }, 600);
+}
+
+function saveDocTitle() {
+  const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+  if (doc) {
+    doc.title = document.getElementById('doc-title-input').value;
+    doc.updated = Date.now();
+    clearTimeout(docSaveTimer);
+    docSaveTimer = setTimeout(() => saveState(), 600);
+  }
+}
+
+function execFmt(cmd, val) {
+  document.getElementById('doc-body').focus();
+  document.execCommand(cmd, false, val || null);
+  scheduleDocSave();
+}
+
+function insertHR() {
+  execFmt('insertHTML', '<hr>');
+}
+
+function insertLink() {
+  const url = prompt('Введи URL ссылки:');
+  if (!url) return;
+  const text = window.getSelection().toString() || url;
+  execFmt('insertHTML', `<a href="${url}" target="_blank">${text}</a>`);
+}
+
+// ============================================================
+// ROADMAP
+// ============================================================
+function allTasks() {
+  const tasks = [];
+  PHASES_DEF.forEach(p => p.tasks.forEach(t => tasks.push({...t, phaseId:p.id, phaseName:p.name})));
+  STATE.customTasks.forEach(t => tasks.push(t));
+  return tasks;
+}
+
+function isTaskDone(id, def) {
+  return STATE.tasks[id] !== undefined ? STATE.tasks[id].done : (def || false);
+}
+
+function toggleTask(id, def) {
+  STATE.tasks[id] = {done: !isTaskDone(id, def)};
+  saveState();
+  renderRoadmap();
+}
+
+function renderRoadmap() {
+  renderStats();
+  renderPhaseFilter();
+  if (roadmapView === 'kanban') renderKanban();
+  else renderRoadmapList();
+}
+
+function renderStats() {
+  const tasks = allTasks();
+  const done = tasks.filter(t => isTaskDone(t.id, t.done)).length;
+  const total = tasks.length;
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  const current = PHASES_DEF.find(p => p.tasks.some(t => !isTaskDone(t.id, t.done)));
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Выполнено</div><div class="stat-value">${done}</div><div class="stat-sub">из ${total} задач</div></div>
+    <div class="stat-card"><div class="stat-label">Прогресс</div><div class="stat-value">${pct}%</div><div class="stat-sub">до релиза</div></div>
+    <div class="stat-card"><div class="stat-label">Текущий этап</div><div class="stat-value" style="font-size:13px;line-height:1.3;padding-top:5px">${current ? current.name : '🎉 Готово!'}</div></div>
+    <div class="stat-card"><div class="stat-label">Осталось</div><div class="stat-value">${total - done}</div><div class="stat-sub">задач</div></div>`;
+}
+
+function renderPhaseFilter() {
+  const el = document.getElementById('phase-filter');
+  const chips = [{id:'all',name:'Все'},...PHASES_DEF.map(p => ({id:p.id,name:p.name.split(' ')[0]}))];
+  el.innerHTML = chips.map(c => `<div class="filter-chip ${phaseFilter===c.id?'active':''}" onclick="setPhaseFilter('${c.id}')">${c.name}</div>`).join('');
+}
+
+function setPhaseFilter(id) { phaseFilter = id; renderRoadmap(); }
+
+function setRoadmapView(view, el) {
+  roadmapView = view;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderRoadmap();
+}
+
+function renderRoadmapList() {
+  const container = document.getElementById('roadmap-content');
+  const phases = phaseFilter === 'all' ? PHASES_DEF : PHASES_DEF.filter(p => p.id === phaseFilter);
+  container.innerHTML = phases.map(phase => {
+    const all = [...phase.tasks, ...STATE.customTasks.filter(t => t.phaseId === phase.id)];
+    const done = all.filter(t => isTaskDone(t.id, t.done)).length;
+    const pct = all.length > 0 ? Math.round(done/all.length*100) : 0;
+    const r = 11, circ = 2*Math.PI*r;
+    const offset = circ - (pct/100)*circ;
+    return `<div class="phase-card">
+      <div class="phase-progress-bar"><div class="phase-progress-fill" style="width:${pct}%;background:${phase.color}"></div></div>
+      <div class="phase-header" onclick="togglePhaseOpen('${phase.id}',this)">
+        <svg class="phase-progress-ring" viewBox="0 0 30 30">
+          <circle class="ring-bg" cx="15" cy="15" r="${r}" stroke-width="2.5"/>
+          <circle class="ring-fill" cx="15" cy="15" r="${r}" stroke="${phase.color}" stroke-width="2.5"
+            stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" transform="rotate(-90 15 15)"/>
+          <text x="15" y="15" text-anchor="middle" dominant-baseline="central" font-size="7" font-family="DM Mono" fill="var(--text2)">${pct}%</text>
+        </svg>
+        <div class="phase-info">
+          <div class="phase-name">${phase.name}</div>
+          <div class="phase-meta">${phase.sub} · ${done}/${all.length}</div>
+        </div>
+        <span class="phase-chevron open" id="chev-${phase.id}">▼</span>
+      </div>
+      <div class="phase-body" id="phasebody-${phase.id}">
+        ${all.map(t => renderTaskRow(t)).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTaskRow(t) {
+  const done = isTaskDone(t.id, t.done);
+  const links = STATE.taskLinks[t.id] || [];
+  const linksHtml = links.length > 0 ? `<div class="task-links">${links.map((l,i) => {
+    const icon = getLinkIcon(l);
+    if (l.type === 'doc')
+      return `<button class="task-link doc-link" onclick="openDoc('${l.docId}')">
+        ${icon} ${l.label}<span class="task-link-del" onclick="event.stopPropagation();removeTaskLink('${t.id}',${i})">✕</span></button>`;
+    if (l.type === 'page')
+      return `<button class="task-link doc-link" style="background:var(--accent-bg);color:var(--accent)" onclick="goTo('${l.pageId}',document.getElementById('nav-${l.pageId}'))">
+        ${icon} ${l.label}<span class="task-link-del" onclick="event.stopPropagation();removeTaskLink('${t.id}',${i})">✕</span></button>`;
+    return `<a class="task-link" href="${l.href}" target="_blank">
+      ${icon} ${l.label}<span class="task-link-del" onclick="event.stopPropagation();event.preventDefault();removeTaskLink('${t.id}',${i})">✕</span></a>`;
+  }).join('')}</div>` : '';
+  return `<div class="task-row">
+    <div class="task-checkbox ${done?'checked':''}" onclick="toggleTask('${t.id}',${t.done||false})"></div>
+    <div class="task-content">
+      <div class="task-name ${done?'done':''}">${t.name}</div>
+      ${t.note ? `<div class="task-note">${t.note}</div>` : ''}
+      ${linksHtml}
+    </div>
+    <div class="task-actions">
+      <button class="icon-btn" onclick="openAddLinkModal('${t.id}')" title="Добавить ссылку">🔗</button>
+      <button class="icon-btn delete" onclick="deleteTask('${t.id}')" title="Удалить">✕</button>
+    </div>
+  </div>`;
+}
+
+function togglePhaseOpen(id) {
+  const body = document.getElementById('phasebody-' + id);
+  const chev = document.getElementById('chev-' + id);
+  if (!body) return;
+  const hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  if (chev) chev.classList.toggle('open', hidden);
+}
+
+function renderKanban() {
+  const container = document.getElementById('roadmap-content');
+  const tasks = allTasks();
+  const cols = {todo:[], done:[]};
+  tasks.forEach(t => { if (isTaskDone(t.id,t.done)) cols.done.push(t); else cols.todo.push(t); });
+  const statuses = [{key:'todo',label:'Не начато',color:'#94a3b8'},{key:'done',label:'Готово',color:'#10b981'}];
+  container.innerHTML = `<div class="kanban" style="grid-template-columns:1fr 1fr;">` +
+    statuses.map(s => `<div class="kanban-col">
+      <div class="kanban-header"><div class="kanban-title"><div class="status-dot" style="background:${s.color}"></div>${s.label}</div><div class="kanban-count">${cols[s.key].length}</div></div>
+      <div class="kanban-body">${cols[s.key].length === 0 ? '<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px 0">Пусто</div>' :
+        cols[s.key].map(t => `<div class="kanban-card">${t.name}<div class="kanban-card-phase">${PHASES_DEF.find(p=>p.id===t.phaseId)?.name||''}</div></div>`).join('')}
+      </div></div>`).join('') + `</div>`;
+}
+
+function deleteTask(id) {
+  STATE.customTasks = STATE.customTasks.filter(t => t.id !== id);
+  delete STATE.tasks[id];
+  delete STATE.taskLinks[id];
+  saveState();
+  renderPage(currentPage);
+}
+
+function removeTaskLink(taskId, idx) {
+  if (!STATE.taskLinks[taskId]) return;
+  STATE.taskLinks[taskId].splice(idx, 1);
+  saveState();
+  renderRoadmap();
+}
+
+// ============================================================
+// ASSETS
+// ============================================================
+function allAssets() { return [...STATE.assets, ...STATE.customAssets]; }
+
+let assetTypeFilter = 'all';
+const collapsedGroups = new Set(); // stores collapsed type names
+
+function renderAssets() {
+  const assets = allAssets();
+  const done = assets.filter(a => a.status === 'done').length;
+  const wip  = assets.filter(a => a.status === 'wip').length;
+  const todo = assets.filter(a => a.status === 'todo').length;
+
+  const typesInData = ['all', ...ASSET_TYPES.filter(t => assets.some(a => a.type === t))];
+  const filtered = assetTypeFilter === 'all' ? assets : assets.filter(a => a.type === assetTypeFilter);
+
+  const groups = {};
+  filtered.forEach(a => {
+    if (!groups[a.type]) groups[a.type] = [];
+    groups[a.type].push(a);
+  });
+
+  const tabsHtml = typesInData.map(t => {
+    const count = t === 'all' ? assets.length : assets.filter(a => a.type === t).length;
+    const active = assetTypeFilter === t ? 'style="background:var(--accent);color:#fff;border-color:var(--accent)"' : '';
+    const icon = t === 'all' ? '📦' : (ASSET_TYPE_ICONS[t] || '');
+    return `<button class="filter-chip" ${active} onclick="setAssetFilter('${t}')">${icon} ${t === 'all' ? 'Все' : t} <span style="opacity:.7;font-size:11px">${count}</span></button>`;
+  }).join('');
+
+  const STATUS_DOT = {todo:'⬜',wip:'🟡',review:'🔵',done:'🟢'};
+
+  const rowsHtml = Object.entries(groups).map(([type, list]) => {
+    const gdone = list.filter(a=>a.status==='done').length;
+    const pct = Math.round(gdone/list.length*100);
+    const collapsed = collapsedGroups.has(type);
+    const chevronCls = collapsed ? 'asset-group-chevron collapsed' : 'asset-group-chevron';
+
+    const dataRows = collapsed ? '' : list.map(a => `<tr class="asset-data-row" data-group="${type}">
+      <td style="padding-left:24px">
+        <div class="asset-name-cell">
+          <span class="asset-name-text" contenteditable="true"
+            onblur="updateAssetName('${a.id}',this)"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}"
+            title="Нажми для редактирования"
+          >${escHtml(a.name)}</span>
+        </div>
+      </td>
+      <td style="color:var(--text2);font-size:12px">${ASSET_TYPE_ICONS[a.type]||''} ${a.type}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">${a.size||'—'}</td>
+      <td>
+        <input class="asset-who-input" type="text" value="${escHtml(a.who||'')}" placeholder="не назначен"
+          onblur="updateAssetWho('${a.id}',this.value)"
+          onkeydown="if(event.key==='Enter')this.blur()">
+      </td>
+      <td>
+        <div class="asset-status-wrap">
+          <div class="status-badge ${ASSET_STATUS_CLASSES[a.status]}" onclick="showStatusMenu(event,'${a.id}')">
+            ${STATUS_DOT[a.status]} ${ASSET_STATUS_LABELS[a.status]} <span style="font-size:9px;opacity:.6">▾</span>
+          </div>
+        </div>
+      </td>
+      <td><button class="icon-btn delete" onclick="deleteAsset('${a.id}')">✕</button></td>
+    </tr>`).join('');
+
+    return `<tr class="asset-group-header" onclick="toggleAssetGroup('${type}')">
+      <td colspan="6" style="padding:8px 14px;font-weight:600;font-size:12px;color:var(--text2);letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--surface2)">
+        <span class="${chevronCls}">▶</span>
+        <span style="margin-right:10px">${ASSET_TYPE_ICONS[type]||''} ${type.toUpperCase()}</span>
+        <span style="font-weight:400;color:var(--text3)">${gdone}/${list.length}</span>
+        <span style="display:inline-block;width:80px;height:5px;background:var(--border2);border-radius:3px;margin-left:10px;vertical-align:middle;overflow:hidden">
+          <span style="display:block;height:100%;width:${pct}%;background:${pct===100?'var(--green)':'var(--accent)'};border-radius:3px"></span>
+        </span>
+      </td>
+    </tr>${dataRows}`;
+  }).join('');
+
+  document.getElementById('assets-content').innerHTML = `
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
+      <div class="stat-card"><div class="stat-label">Всего</div><div class="stat-value">${assets.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Готово</div><div class="stat-value" style="color:var(--green)">${done}</div></div>
+      <div class="stat-card"><div class="stat-label">В работе</div><div class="stat-value" style="color:var(--amber)">${wip}</div></div>
+      <div class="stat-card"><div class="stat-label">Не начато</div><div class="stat-value" style="color:var(--text3)">${todo}</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">${tabsHtml}</div>
+    <div class="asset-table"><table>
+      <thead><tr><th>Название</th><th>Тип</th><th>Размер</th><th>Кто делает</th><th>Статус</th><th></th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table></div>`;
+}
+
+function toggleAssetGroup(type) {
+  if (collapsedGroups.has(type)) collapsedGroups.delete(type);
+  else collapsedGroups.add(type);
+  renderAssets();
+}
+
+function setAssetFilter(type) {
+  assetTypeFilter = type;
+  renderAssets();
+}
+
+// ── Status dropdown ──────────────────────────────────────────
+let _statusMenuId = null;
+
+function showStatusMenu(e, assetId) {
+  e.stopPropagation();
+  closeStatusMenu();
+
+  _statusMenuId = assetId;
+  const STATUS_DOT = {todo:'⬜',wip:'🟡',review:'🔵',done:'🟢'};
+  const rect = e.currentTarget.getBoundingClientRect();
+
+  const menu = document.createElement('div');
+  menu.className = 'asset-status-menu open';
+  menu.id = 'asset-status-menu';
+  menu.style.top  = (rect.bottom + 4) + 'px';
+  menu.style.left = rect.left + 'px';
+
+  menu.innerHTML = ASSET_STATUSES.map(s => `
+    <div class="asset-status-opt" onclick="setAssetStatus('${assetId}','${s}')">
+      <span class="status-badge ${ASSET_STATUS_CLASSES[s]}" style="pointer-events:none">
+        ${STATUS_DOT[s]} ${ASSET_STATUS_LABELS[s]}
+      </span>
+    </div>`).join('');
+
+  document.body.appendChild(menu);
+
+  // reposition if overflows viewport bottom
+  const mb = menu.getBoundingClientRect();
+  if (mb.bottom > window.innerHeight - 8) {
+    menu.style.top = (rect.top - mb.height - 4) + 'px';
+  }
+}
+
+function closeStatusMenu() {
+  const m = document.getElementById('asset-status-menu');
+  if (m) m.remove();
+  _statusMenuId = null;
+}
+
+function setAssetStatus(id, status) {
+  const a = STATE.assets.find(x=>x.id===id) || STATE.customAssets.find(x=>x.id===id);
+  if (a) { a.status = status; saveState(); }
+  closeStatusMenu();
+  renderAssets();
+}
+
+// Close menu on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('#asset-status-menu') && !e.target.closest('.asset-status-wrap')) {
+    closeStatusMenu();
+  }
+});
+
+function cycleAssetStatus(id) {
+  const a = allAssets().find(x => x.id === id); if (!a) return;
+  const next = ASSET_STATUSES[(ASSET_STATUSES.indexOf(a.status)+1)%ASSET_STATUSES.length];
+  (STATE.assets.find(x=>x.id===id)||STATE.customAssets.find(x=>x.id===id)).status = next;
+  saveState(); renderAssets();
+}
+
+function updateAssetName(id, el) {
+  const val = el.textContent.trim();
+  if (!val) { el.textContent = allAssets().find(x=>x.id===id)?.name || ''; return; }
+  const a = STATE.assets.find(x=>x.id===id) || STATE.customAssets.find(x=>x.id===id);
+  if (a && a.name !== val) { a.name = val; saveState(); }
+}
+
+function updateAssetWho(id, val) {
+  const a = STATE.assets.find(x=>x.id===id)||STATE.customAssets.find(x=>x.id===id);
+  if (a) { a.who = val.trim(); saveState(); }
+}
+
+function deleteAsset(id) {
+  STATE.assets = STATE.assets.filter(a => a.id !== id);
+  STATE.customAssets = STATE.customAssets.filter(a => a.id !== id);
+  saveState(); renderAssets();
+}
+
+// ============================================================
+// IDEAS
+// ============================================================
+function renderIdeas() {
+  const filtered = activeIdeasFilter==='all' ? STATE.ideas : STATE.ideas.filter(i => i.cat===activeIdeasFilter);
+  const el = document.getElementById('ideas-content');
+  if (filtered.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--text3)"><div style="font-size:32px;margin-bottom:12px">💡</div><div style="font-size:14px;color:var(--text2);font-weight:500">Нет идей${activeIdeasFilter!=='all'?' в этой категории':''}</div><div style="font-size:13px;margin-top:4px">Нажми «+ Идея»</div></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="ideas-grid">${filtered.map(i => `
+    <div class="idea-card">
+      <div class="idea-text">${i.text}</div>
+      <div class="idea-meta"><span class="tag ${IDEA_TAG_CLASSES[i.cat]}">${IDEA_CATS[i.cat]}</span><span style="font-size:11px;color:var(--text3);margin-left:auto">${i.date||''}</span></div>
+      <button class="idea-del" onclick="deleteIdea('${i.id}')">✕</button>
+    </div>`).join('')}</div>`;
+}
+
+function filterIdeas(cat, el) {
+  activeIdeasFilter = cat;
+  document.querySelectorAll('#ideas-filter .filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderIdeas();
+}
+
+function deleteIdea(id) { STATE.ideas = STATE.ideas.filter(i => i.id !== id); saveState(); renderIdeas(); }
+
+// ============================================================
+// STEAM
+// ============================================================
+function renderSteam() {
+  const all = STEAM_SECTIONS.flatMap(s => s.items);
+  const done = all.filter(i => STATE.steam[i.id]).length;
+  document.getElementById('steam-content').innerHTML = `
+    <div class="stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px;">
+      <div class="stat-card"><div class="stat-label">Выполнено</div><div class="stat-value">${done}/${all.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Готовность</div><div class="stat-value">${Math.round(done/all.length*100)}%</div></div>
+      <div class="stat-card"><div class="stat-label">Осталось</div><div class="stat-value">${all.length-done}</div></div>
+    </div>
+    ${STEAM_SECTIONS.map(section => {
+      const sd = section.items.filter(i => STATE.steam[i.id]).length;
+      return `<div class="checklist-section">
+        <div class="checklist-header"><div class="checklist-title">${section.title}</div><span style="font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--text3)">${sd}/${section.items.length}</span></div>
+        ${section.items.map(item => `<div class="check-item" onclick="toggleSteam('${item.id}')">
+          <div class="task-checkbox ${STATE.steam[item.id]?'checked':''}"></div>
+          <div class="task-content">
+            <div class="task-name ${STATE.steam[item.id]?'done':''}">${item.text}</div>
+            ${item.note?`<div class="check-item-note">${item.note}</div>`:''}
+          </div>
+        </div>`).join('')}
+      </div>`;
+    }).join('')}`;
+}
+
+function toggleSteam(id) { STATE.steam[id] = !STATE.steam[id]; saveState(); renderSteam(); }
+
+// ============================================================
+// MODALS
+// ============================================================
+function openAddTaskModal() {
+  document.getElementById('modal-title').textContent = 'Добавить задачу';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-input" id="m-task-name" placeholder="Что нужно сделать?" autofocus></div>
+    <div class="form-group"><label class="form-label">Заметка (необязательно)</label><input type="text" class="form-input" id="m-task-note" placeholder="Подсказка или ссылка"></div>
+    <div class="form-group"><label class="form-label">Этап</label>
+      <select class="form-select" id="m-task-phase">${PHASES_DEF.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить';
+  document.getElementById('modal-confirm').onclick = () => {
+    const name = document.getElementById('m-task-name').value.trim();
+    if (!name) return;
+    const phaseId = document.getElementById('m-task-phase').value;
+    STATE.customTasks.push({id:'ct_'+Date.now(), phaseId, name, note: document.getElementById('m-task-note').value.trim(), done:false, phaseName: PHASES_DEF.find(p=>p.id===phaseId)?.name});
+    saveState(); closeModal(); renderRoadmap();
+  };
+  openModal();
+}
+
+function openAddAssetModal() {
+  document.getElementById('modal-title').textContent = 'Добавить ассет';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-input" id="m-an" placeholder="Спрайт меча..." autofocus></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Тип</label><select class="form-select" id="m-at">${ASSET_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label">Размер</label><input type="text" class="form-input" id="m-as" placeholder="32×32px"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Кто делает</label><input type="text" class="form-input" id="m-aw" placeholder="Имя"></div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить';
+  document.getElementById('modal-confirm').onclick = () => {
+    const name = document.getElementById('m-an').value.trim();
+    if (!name) return;
+    STATE.customAssets.push({id:'ca_'+Date.now(), name, type:document.getElementById('m-at').value, size:document.getElementById('m-as').value.trim(), who:document.getElementById('m-aw').value.trim(), status:'todo'});
+    saveState(); closeModal(); renderAssets();
+  };
+  openModal();
+}
+
+function openAddIdeaModal() {
+  document.getElementById('modal-title').textContent = 'Добавить идею';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-group"><label class="form-label">Идея</label><textarea class="form-textarea" id="m-it" placeholder="Опиши идею..." autofocus></textarea></div>
+    <div class="form-group"><label class="form-label">Категория</label><select class="form-select" id="m-ic">${Object.entries(IDEA_CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить';
+  document.getElementById('modal-confirm').onclick = () => {
+    const text = document.getElementById('m-it').value.trim();
+    if (!text) return;
+    const now = new Date();
+    STATE.ideas.push({id:'id_'+Date.now(), text, cat:document.getElementById('m-ic').value, date:now.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})});
+    saveState(); closeModal(); renderIdeas();
+  };
+  openModal();
+}
+
+const INTERNAL_PAGES = [
+  {id:'roadmap',  label:'Roadmap',       icon:'🗺'},
+  {id:'assets',   label:'Ассеты',        icon:'🎨'},
+  {id:'ideas',    label:'Банк идей',     icon:'💡'},
+  {id:'mindmap',  label:'Майндмап',      icon:'🧠'},
+  {id:'moodboard',label:'Мудборд',       icon:'🖼'},
+  {id:'steam',    label:'Steam Checklist',icon:'🚀'},
+  {id:'doc',      label:'Документы',     icon:'📄'},
+];
+
+function getLinkIcon(l) {
+  if (l.type === 'page') return INTERNAL_PAGES.find(p=>p.id===l.pageId)?.icon || '📌';
+  if (l.type === 'doc')  return '📄';
+  return '🔗';
+}
+
+function openAddLinkModal(taskId) {
+  document.getElementById('modal-title').textContent = '🔗 Прикрепить ссылку';
+  const docs = STATE.docs || [];
+
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Тип</label>
+        <select class="form-select" id="m-lt" onchange="toggleLinkType()">
+          <option value="page">📌 Раздел трекера</option>
+          <option value="doc">📄 Документ из трекера</option>
+          <option value="url">🔗 Внешняя ссылка (URL)</option>
+        </select>
+      </div>
+
+      <div id="m-page-group" class="form-group">
+        <label class="form-label">Раздел</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          ${INTERNAL_PAGES.map(p=>`
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;font-size:13px;transition:border-color .15s" class="link-page-opt">
+              <input type="radio" name="m-lpage" value="${p.id}" style="accent-color:var(--accent)">
+              <span>${p.icon} ${p.label}</span>
+            </label>`).join('')}
+        </div>
+      </div>
+
+      <div id="m-doc-group" class="form-group" style="display:none">
+        <label class="form-label">Документ</label>
+        <select class="form-select" id="m-ldoc">
+          ${docs.length > 0 ? docs.map(d=>`<option value="${d.id}">${d.title||'Без названия'}</option>`).join('') : '<option value="">Нет документов</option>'}
+        </select>
+      </div>
+
+      <div id="m-url-group" class="form-group" style="display:none">
+        <label class="form-label">URL</label>
+        <input type="text" class="form-input" id="m-lurl" placeholder="https://...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Подпись <span style="color:var(--text3);font-weight:400">(необязательно)</span></label>
+        <input type="text" class="form-input" id="m-llabel" placeholder="Оставь пустым — подставится автоматически">
+      </div>
+    </div>`;
+
+  // Highlight selected radio
+  document.querySelectorAll('input[name="m-lpage"]').forEach(r => {
+    r.addEventListener('change', () => {
+      document.querySelectorAll('.link-page-opt').forEach(o => o.style.borderColor = 'var(--border2)');
+      r.closest('.link-page-opt').style.borderColor = 'var(--accent)';
+    });
+  });
+  // Pre-select first
+  const first = document.querySelector('input[name="m-lpage"]');
+  if (first) { first.checked = true; first.closest('.link-page-opt').style.borderColor = 'var(--accent)'; }
+
+  document.getElementById('modal-confirm').textContent = 'Прикрепить';
+  document.getElementById('modal-confirm').onclick = () => {
+    const type  = document.getElementById('m-lt').value;
+    const label = document.getElementById('m-llabel').value.trim();
+    if (!STATE.taskLinks[taskId]) STATE.taskLinks[taskId] = [];
+
+    if (type === 'page') {
+      const pageId = document.querySelector('input[name="m-lpage"]:checked')?.value;
+      if (!pageId) return;
+      const page = INTERNAL_PAGES.find(p=>p.id===pageId);
+      STATE.taskLinks[taskId].push({type:'page', pageId, label: label || `${page.icon} ${page.label}`});
+    } else if (type === 'doc') {
+      const docId = document.getElementById('m-ldoc').value;
+      if (!docId) return;
+      const doc = STATE.docs.find(d=>d.id===docId);
+      STATE.taskLinks[taskId].push({type:'doc', label: label || (doc?.title||'Документ'), docId});
+    } else {
+      const href = document.getElementById('m-lurl').value.trim();
+      if (!href) return;
+      STATE.taskLinks[taskId].push({type:'url', label: label || href, href});
+    }
+    saveState(); closeModal(); renderRoadmap();
+  };
+  openModal();
+}
+
+function toggleLinkType() {
+  const type = document.getElementById('m-lt').value;
+  document.getElementById('m-page-group').style.display = type === 'page' ? '' : 'none';
+  document.getElementById('m-doc-group').style.display  = type === 'doc'  ? '' : 'none';
+  document.getElementById('m-url-group').style.display  = type === 'url'  ? '' : 'none';
+}
+
+function openModal() { document.getElementById('modal-overlay').classList.add('open'); setTimeout(() => document.querySelector('#modal-body input, #modal-body textarea')?.focus(), 100); }
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  const ov = document.getElementById('modal-overlay');
+  ov.classList.remove('open');
+  ov.classList.remove('active');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const ov = document.getElementById('modal-overlay');
+    ov.classList.remove('open');
+    ov.classList.remove('active');
+  }
+});
+
+// ============================================================
+// BADGES & PROGRESS
+// ============================================================
+function updateBadges() {
+  const tasks = allTasks();
+  const done = tasks.filter(t => isTaskDone(t.id,t.done)).length;
+  document.getElementById('nb-roadmap').textContent = `${done}/${tasks.length}`;
+  const assets = allAssets();
+  document.getElementById('nb-assets').textContent = `${assets.filter(a=>a.status==='done').length}/${assets.length}`;
+  document.getElementById('nb-ideas').textContent = STATE.ideas.length;
+  const steamAll = STEAM_SECTIONS.flatMap(s=>s.items);
+  document.getElementById('nb-steam').textContent = `${steamAll.filter(i=>STATE.steam[i.id]).length}/${steamAll.length}`;
+  document.getElementById('nb-bugs').textContent =
+    `${(STATE.bugs||[]).filter(b=>b.status==='open').length}/${(STATE.bugs||[]).length}`;
+  document.getElementById('nb-changelog').textContent = (STATE.changelog||[]).length;
+}
+
+function updateGlobalProgress() {
+  const tasks = allTasks();
+  const done = tasks.filter(t => isTaskDone(t.id,t.done)).length;
+  const pct = tasks.length > 0 ? Math.round(done/tasks.length*100) : 0;
+  document.getElementById('global-progress').style.width = pct + '%';
+  document.getElementById('global-pct').textContent = pct + '%';
+}
+
+function renderPage(page) {
+  if (page === 'roadmap') renderRoadmap();
+  else if (page === 'assets') renderAssets();
+  else if (page === 'ideas') renderIdeas();
+  else if (page === 'steam') renderSteam();
+}
+
+// ============================================================
+// FILE IMPORT
+// ============================================================
+function triggerImport() {
+  document.getElementById('file-import-input').click();
+}
+
+async function handleFileImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  input.value = '';
+  const ext = file.name.split('.').pop().toLowerCase();
+  let content = '';
+  const title = file.name.replace(/\.[^.]+$/, '');
+  try {
+    if (ext === 'txt') {
+      const text = await readFileAsText(file);
+      content = `<pre style="white-space:pre-wrap;font-family:inherit;font-size:13.5px">${escHtml(text)}</pre>`;
+    } else if (ext === 'md') {
+      content = mdToHtml(await readFileAsText(file));
+    } else if (ext === 'html' || ext === 'htm') {
+      const text = await readFileAsText(file);
+      const parser = new DOMParser();
+      const parsed = parser.parseFromString(text, 'text/html');
+      parsed.querySelectorAll('script,style,link,meta').forEach(el => el.remove());
+      content = parsed.body ? parsed.body.innerHTML : text;
+    } else if (ext === 'docx') {
+      if (typeof mammoth === 'undefined') { alert('Библиотека mammoth не загружена. Нужен интернет.'); return; }
+      const ab = await readFileAsArrayBuffer(file);
+      const result = await mammoth.convertToHtml({arrayBuffer: ab});
+      content = result.value;
+    } else if (ext === 'pdf') {
+      content = await importPDF(file);
+    } else {
+      alert('Формат не поддерживается.\nПоддерживаются: .md, .txt, .html, .docx, .pdf'); return;
+    }
+    const id = 'doc_import_' + Date.now();
+    STATE.docs.push({id, title, content, created: Date.now(), updated: Date.now(), imported: true});
+    STATE.activeDocId = id;
+    saveState();
+    goTo('doc', null);
+  } catch(e) { alert('Ошибка при чтении файла: ' + e.message); }
+}
+
+async function importPDF(file) {
+  if (typeof pdfjsLib === 'undefined') {
+    return `<p style="color:var(--red)">Библиотека PDF.js не загружена. Проверь интернет-соединение.</p>`;
+  }
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const ab = await readFileAsArrayBuffer(file);
+  const pdf = await pdfjsLib.getDocument({data: ab}).promise;
+  let html = `<div style="font-size:13px;color:var(--text3);margin-bottom:16px;padding:8px 12px;background:var(--surface2);border-radius:6px">📄 PDF — ${pdf.numPages} стр. Текст извлечён, форматирование упрощено.</div>`;
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items.map(item => item.str).join(' ').replace(/\s{2,}/g, ' ').trim();
+    if (pageText) {
+      html += `<div style="margin-bottom:20px"><div style="font-size:10.5px;font-family:'JetBrains Mono',monospace;color:var(--text3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)">СТРАНИЦА ${i}</div><p style="line-height:1.75">${escHtml(pageText)}</p></div>`;
+    }
+  }
+  return html;
+}
+
+function readFileAsText(file) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = e => res(e.target.result); r.onerror = rej; r.readAsText(file,'utf-8'); });
+}
+function readFileAsArrayBuffer(file) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = e => res(e.target.result); r.onerror = rej; r.readAsArrayBuffer(file); });
+}
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function mdToHtml(md) {
+  let h = md;
+  h = h.replace(/```[\w]*\n?([\s\S]*?)```/gm, '<pre>$1</pre>');
+  h = h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+  h = h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+  h = h.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+  h = h.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+  h = h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  h = h.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  h = h.replace(/_(.+?)_/g,'<em>$1</em>');
+  h = h.replace(/~~(.+?)~~/g,'<del>$1</del>');
+  h = h.replace(/`([^`]+)`/g,'<code>$1</code>');
+  h = h.replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>');
+  h = h.replace(/^---+$/gm,'<hr>');
+  h = h.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+  h = h.replace(/\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)+)/g, (_,header,rows)=>{
+    const ths=header.split('|').filter(c=>c.trim()).map(c=>`<th>${c.trim()}</th>`).join('');
+    const trs=rows.trim().split('\n').map(row=>`<tr>${row.split('|').filter(c=>c.trim()).map(c=>`<td>${c.trim()}</td>`).join('')}</tr>`).join('');
+    return `<table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>`;
+  });
+  h = h.replace(/((?:^[-*] .+\n?)+)/gm, m=>`<ul>${m.trim().split('\n').map(l=>`<li>${l.replace(/^[-*] /,'')}</li>`).join('')}</ul>`);
+  h = h.replace(/((?:^\d+\. .+\n?)+)/gm, m=>`<ol>${m.trim().split('\n').map(l=>`<li>${l.replace(/^\d+\. /,'')}</li>`).join('')}</ol>`);
+  h = h.split(/\n{2,}/).map(block=>{
+    block=block.trim(); if(!block) return '';
+    if(/^<(h[1-6]|ul|ol|blockquote|pre|table|hr)/.test(block)) return block;
+    return `<p>${block.replace(/\n/g,'<br>')}</p>`;
+  }).join('\n');
+  return h;
+}
+
+
+// ============================================================
+// MINDMAP ENGINE — anchor-point connections
+// ============================================================
+const MM_COLORS = [
+  {bg:'#ffffff', border:'#d4d0c8', text:'#111110'},  // 0 neutral
+  {bg:'#eff6ff', border:'#93c5fd', text:'#1d4ed8'},  // 1 blue
+  {bg:'#f0fdf4', border:'#6ee7b7', text:'#16a34a'},  // 2 green
+  {bg:'#fffbeb', border:'#fcd34d', text:'#d97706'},  // 3 amber
+  {bg:'#fef2f2', border:'#fca5a5', text:'#dc2626'},  // 4 red
+  {bg:'#f5f3ff', border:'#c4b5fd', text:'#7c3aed'},  // 5 purple
+  {bg:'#17181c', border:'#3d3d3a', text:'#f4f4f2'},  // 6 dark
+];
+const MM_COLOR_NAMES = ['Нейтральный','Синий','Зелёный','Янтарный','Красный','Фиолетовый','Тёмный'];
+
+let mm = { nodes:[], edges:[] };
+let mmVP = { x:0, y:0, scale:1 };
+let mmSel     = null;   // selected node id
+let mmDrag    = null;   // {id, ox, oy}
+let mmPan     = null;   // {sx, sy}
+let mmEdgeDrag = null;  // {fromId, fromSide, gx, gy} — ghost edge being drawn
+let mmCtxMenu  = null;
+let mmLinkPanel = null;
+let mmInited   = false;
+let mmSaveTimer = null;
+
+function mmGenId() { return 'mm_'+Date.now()+'_'+Math.random().toString(36).slice(2,5); }
+
+function mmPersist() {
+  STATE.mindmap = { nodes: mm.nodes, edges: mm.edges };
+  clearTimeout(mmSaveTimer);
+  mmSaveTimer = setTimeout(saveState, 500);
+}
+
+function mmLoad() {
+  if (STATE.mindmap && STATE.mindmap.nodes) {
+    mm.nodes = STATE.mindmap.nodes;
+    mm.edges = STATE.mindmap.edges || [];
+  } else {
+    mm.nodes = [];
+    mm.edges = [];
+  }
+}
+
+// ---- NODE GEOMETRY ----
+// Returns the screen-space point for a given anchor side of a node
+function mmAnchorPos(node, side) {
+  // node.x, node.y are world coords (centre of node)
+  // We need approx half-size; use fixed estimates since DOM may not exist
+  const hw = 70, hh = 28; // half-width, half-height approx
+  const pts = {
+    top:    {x: node.x,        y: node.y - hh},
+    right:  {x: node.x + hw,   y: node.y},
+    bottom: {x: node.x,        y: node.y + hh},
+    left:   {x: node.x - hw,   y: node.y},
+  };
+  return pts[side] || {x: node.x, y: node.y};
+}
+
+// Get actual pixel half-size from rendered DOM element
+function mmNodeHalfSize(id) {
+  const el = document.getElementById('mmn-'+id);
+  if (!el) return {hw:70, hh:28};
+  return {hw: el.offsetWidth/2, hh: el.offsetHeight/2};
+}
+
+function mmAnchorPosExact(node, side) {
+  const {hw, hh} = mmNodeHalfSize(node.id);
+  return {
+    top:    {x: node.x,      y: node.y - hh},
+    right:  {x: node.x + hw, y: node.y},
+    bottom: {x: node.x,      y: node.y + hh},
+    left:   {x: node.x - hw, y: node.y},
+  }[side] || {x: node.x, y: node.y};
+}
+
+// Best anchor on target node toward a world point
+function mmBestAnchor(node, wx, wy) {
+  const dx = wx - node.x, dy = wy - node.y;
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? 'right' : 'left';
+  return dy > 0 ? 'bottom' : 'top';
+}
+
+// ---- COORD UTILS ----
+function mmClientToWorld(cx, cy) {
+  const wrap = document.getElementById('mm-wrap');
+  const rect = wrap.getBoundingClientRect();
+  return { x:(cx-rect.left-mmVP.x)/mmVP.scale, y:(cy-rect.top-mmVP.y)/mmVP.scale };
+}
+function mmWorldToScreen(wx, wy) {
+  const wrap = document.getElementById('mm-wrap');
+  const rect = wrap.getBoundingClientRect();
+  return { x: wx*mmVP.scale + mmVP.x + rect.left, y: wy*mmVP.scale + mmVP.y + rect.top };
+}
+function mmViewCenter() {
+  const wrap = document.getElementById('mm-wrap');
+  const rect = wrap.getBoundingClientRect();
+  return mmClientToWorld(rect.left+rect.width/2, rect.top+rect.height/2);
+}
+
+// ---- VIEWPORT ----
+function mmApplyVP() {
+  const t = `translate(${mmVP.x}px,${mmVP.y}px) scale(${mmVP.scale})`;
+  const layer = document.getElementById('mm-layer');
+  if (layer) { layer.style.transform = t; layer.style.transformOrigin='0 0'; }
+  mmDrawEdges();
+}
+
+// ---- INIT ----
+function initMindmap() {
+  if (mmInited) { mmDrawNodes(); setTimeout(mmFitAll,40); return; }
+  mmInited = true;
+  mmLoad();
+
+  const wrap  = document.getElementById('mm-wrap');
+  const svg   = document.getElementById('mm-svg');
+
+  // Double-click on canvas = new node
+  wrap.addEventListener('dblclick', e => {
+    if (e.target !== wrap && e.target !== svg &&
+        !e.target.classList.contains('mm-layer')) return;
+    const pos = mmClientToWorld(e.clientX, e.clientY);
+    mmAddNodeAt(pos.x, pos.y);
+  });
+
+  // Mouse down on canvas = pan
+  wrap.addEventListener('mousedown', e => {
+    mmCloseCtx(); mmCloseLinkPanel();
+    const onCanvas = e.target===wrap || e.target===svg ||
+                     e.target.classList.contains('mm-layer');
+    if (!onCanvas || e.button!==0) return;
+    mmPan = {sx: e.clientX - mmVP.x, sy: e.clientY - mmVP.y};
+    wrap.classList.add('panning');
+    mmSelect(null);
+  });
+
+  window.addEventListener('mousemove', mmOnMove);
+  window.addEventListener('mouseup',   mmOnUp);
+
+  // Wheel zoom
+  wrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const f = e.deltaY < 0 ? 1.1 : 0.91;
+    const rect = wrap.getBoundingClientRect();
+    const cx = e.clientX-rect.left, cy = e.clientY-rect.top;
+    mmVP.x = cx-(cx-mmVP.x)*f;
+    mmVP.y = cy-(cy-mmVP.y)*f;
+    mmVP.scale = Math.max(0.1, Math.min(4, mmVP.scale*f));
+    mmApplyVP();
+  }, {passive:false});
+
+  // Keyboard
+  wrap.setAttribute('tabindex','0');
+  wrap.addEventListener('keydown', e => {
+    if (document.activeElement.tagName==='TEXTAREA') return;
+    if (e.key==='Delete'||e.key==='Backspace') { e.preventDefault(); mmDeleteSelected(); }
+    if (e.key==='Escape') { mmEdgeDrag=null; mmDrawEdges(); mmSelect(null); }
+    if (e.key==='n') { const c=mmViewCenter(); mmAddNodeAt(c.x,c.y); }
+  });
+
+  // Click on SVG = maybe delete edge
+  svg.addEventListener('click', e => {
+    const hit = e.target.closest('[data-edge]');
+    if (!hit) return;
+    if (confirm('Удалить эту связь?')) {
+      mm.edges = mm.edges.filter(ed => ed.id!==hit.dataset.edge);
+      mmPersist(); mmDrawEdges();
+    }
+  });
+
+  mmDrawNodes();
+  setTimeout(mmFitAll, 60);
+}
+
+// ---- MOUSE MOVE / UP ----
+function mmOnMove(e) {
+  if (mmPan) {
+    mmVP.x = e.clientX - mmPan.sx;
+    mmVP.y = e.clientY - mmPan.sy;
+    mmApplyVP();
+  }
+  if (mmDrag) {
+    const pos  = mmClientToWorld(e.clientX, e.clientY);
+    const node = mm.nodes.find(n=>n.id===mmDrag.id);
+    if (node) {
+      node.x = pos.x - mmDrag.ox;
+      node.y = pos.y - mmDrag.oy;
+      const el = document.getElementById('mmn-'+mmDrag.id);
+      if (el) { el.style.left=node.x+'px'; el.style.top=node.y+'px'; }
+      // update anchor positions if this node's anchors are shown
+      if (mmAnchorNodeId === node.id) mmShowAnchors(node.id);
+      mmDrawEdges();
+    }
+  }
+  if (mmEdgeDrag) {
+    const pos = mmClientToWorld(e.clientX, e.clientY);
+    mmEdgeDrag.gx = pos.x;
+    mmEdgeDrag.gy = pos.y;
+
+    // Find nearest anchor in world space (SNAP_W = snap radius in world units)
+    const SNAP_W = 30 / mmVP.scale;
+    let snapNodeId = null, snapSide = null, bestD = SNAP_W;
+
+    document.querySelectorAll('.mm-node.edge-target').forEach(el=>el.classList.remove('edge-target'));
+    document.querySelectorAll('.mm-anc').forEach(a=>a.classList.remove('snap'));
+
+    for (const node of mm.nodes) {
+      if (node.id === mmEdgeDrag.fromId) continue;
+      const pts = mmAnchorPoints(node);
+      for (const [side, p] of Object.entries(pts)) {
+        const d = Math.hypot(pos.x - p.x, pos.y - p.y);
+        if (d < bestD) { bestD = d; snapNodeId = node.id; snapSide = side; }
+      }
+    }
+
+    if (snapNodeId) {
+      const el = document.getElementById('mmn-'+snapNodeId);
+      if (el) el.classList.add('edge-target');
+      // Highlight the snap anchor dot
+      document.querySelectorAll('.mm-anc').forEach(a => {
+        if (a.dataset.nodeId === snapNodeId && a.dataset.side === snapSide) a.classList.add('snap');
+      });
+    }
+
+    mmDrawEdges();
+  }
+}
+
+function mmOnUp(e) {
+  if (mmDrag) { mmPersist(); mmDrag=null; }
+  if (mmPan)  {
+    mmPan=null;
+    const w=document.getElementById('mm-wrap');
+    if(w) w.classList.remove('panning');
+  }
+  if (mmEdgeDrag) {
+    const pos = mmClientToWorld(e.clientX, e.clientY);
+    const SNAP_W = 40 / mmVP.scale; // slightly larger on mouseup
+    let targetId = null, toSide = null, bestD = SNAP_W;
+
+    for (const node of mm.nodes) {
+      if (node.id === mmEdgeDrag.fromId) continue;
+      const pts = mmAnchorPoints(node);
+      for (const [side, p] of Object.entries(pts)) {
+        const d = Math.hypot(pos.x - p.x, pos.y - p.y);
+        if (d < bestD) { bestD = d; targetId = node.id; toSide = side; }
+      }
+    }
+
+    // Wider fallback: drop on node body
+    if (!targetId) {
+      for (const node of mm.nodes) {
+        if (node.id === mmEdgeDrag.fromId) continue;
+        const {hw,hh} = mmNodeHalfSize(node.id);
+        if (Math.abs(pos.x-node.x)<=hw && Math.abs(pos.y-node.y)<=hh) {
+          targetId = node.id;
+          toSide   = mmBestAnchor(node, pos.x, pos.y);
+          break;
+        }
+      }
+    }
+
+    if (targetId && toSide) {
+      const exists = mm.edges.some(ed =>
+        (ed.from===mmEdgeDrag.fromId && ed.to===targetId) ||
+        (ed.from===targetId && ed.to===mmEdgeDrag.fromId)
+      );
+      if (!exists) {
+        mm.edges.push({
+          id: mmGenId(),
+          from: mmEdgeDrag.fromId, fromSide: mmEdgeDrag.fromSide,
+          to:   targetId,          toSide,
+        });
+        mmPersist();
+      }
+    }
+
+    document.querySelectorAll('.mm-node.edge-target').forEach(el=>el.classList.remove('edge-target'));
+    mmEdgeDrag = null;
+    mmHideAnchors();
+    mmDrawEdges();
+  }
+}
+
+// ---- HIT TEST ----
+function mmNodeAtWorld(wx, wy, expand=0) {
+  // Find node whose bounding box (optionally expanded) contains the world point
+  for (const node of mm.nodes) {
+    const {hw,hh} = mmNodeHalfSize(node.id);
+    const ehw = hw + expand/mmVP.scale;
+    const ehh = hh + expand/mmVP.scale;
+    if (wx>=node.x-ehw && wx<=node.x+ehw && wy>=node.y-ehh && wy<=node.y+ehh) return node.id;
+  }
+  return null;
+}
+
+// ---- DRAW NODES ----
+function mmDrawNodes() {
+  const layer = document.getElementById('mm-layer');
+  if (!layer) return;
+  layer.innerHTML = '';
+
+  mm.nodes.forEach(node => {
+    const c = MM_COLORS[node.color||0];
+    const el = document.createElement('div');
+    el.className = 'mm-node' + (mmSel===node.id ? ' selected' : '');
+    el.id = 'mmn-'+node.id;
+    el.style.cssText = `left:${node.x}px;top:${node.y}px;background:${c.bg};border-color:${c.border};color:${c.text}`;
+
+    // text span
+    const span = document.createElement('div');
+    span.textContent = node.text;
+    el.appendChild(span);
+
+    // badges
+    if (node.links && node.links.length>0) {
+      const bd = document.createElement('div');
+      bd.className = 'mm-node-badges';
+      node.links.forEach(lk => {
+        const b = document.createElement('button');
+        b.className = 'mm-badge';
+        b.textContent = (lk.type==='doc'?'📄 ':'☑ ')+lk.label;
+        b.onclick = ev => { ev.stopPropagation(); lk.type==='doc' ? openDoc(lk.docId) : goToTask(lk.taskId); };
+        bd.appendChild(b);
+      });
+      el.appendChild(bd);
+    }
+
+    // Show anchors on hover
+    el.addEventListener('mouseenter', () => mmShowAnchors(node.id));
+    el.addEventListener('mouseleave', e => {
+      // Don't hide if cursor is moving onto an anchor dot or still within hover range
+      if (mmEdgeDrag) return;
+      const rel = e.relatedTarget;
+      if (rel && rel.classList && rel.classList.contains('mm-anc')) return;
+      mmScheduleHideAnchors(node.id);
+    });
+
+    // node drag / select
+    el.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      mmCloseCtx();
+      if (e.button!==0) return;
+      mmSelect(node.id);
+      const pos = mmClientToWorld(e.clientX, e.clientY);
+      mmDrag = {id:node.id, ox:pos.x-node.x, oy:pos.y-node.y};
+    });
+    el.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      mmStartEdit(node.id, el);
+    });
+    el.addEventListener('contextmenu', e => {
+      e.preventDefault(); e.stopPropagation();
+      mmOpenCtx(e, node.id);
+    });
+
+    layer.appendChild(el);
+  });
+
+  mmApplyVP();
+  mmRefreshAnchorLayer(); // reposition any visible anchors
+}
+
+// ---- ANCHOR LAYER ----
+let mmAnchorNodeId = null;
+let _mmHideTimer = null;
+
+function mmScheduleHideAnchors(nodeId) {
+  clearTimeout(_mmHideTimer);
+  _mmHideTimer = setTimeout(() => {
+    // Check if cursor is now over an anchor dot
+    if (mmEdgeDrag) return;
+    const hovered = document.querySelector('.mm-anc:hover');
+    if (hovered) return;
+    // Check if cursor is over the same node
+    const nodeEl = document.getElementById('mmn-'+nodeId);
+    if (nodeEl && nodeEl.matches(':hover')) return;
+    mmHideAnchors();
+  }, 80);
+}
+
+// Anchor world positions for a node (using half-sizes from DOM)
+function mmAnchorPoints(node) {
+  const {hw, hh} = mmNodeHalfSize(node.id);
+  return {
+    top:    { x: node.x,      y: node.y - hh },
+    right:  { x: node.x + hw, y: node.y      },
+    bottom: { x: node.x,      y: node.y + hh },
+    left:   { x: node.x - hw, y: node.y      },
+  };
+}
+
+function mmRenderAnchors(nodeIds, fromId, fromSide) {
+  // Remove old anchors
+  document.querySelectorAll('.mm-anc').forEach(a => a.remove());
+  const layer = document.getElementById('mm-layer');
+  if (!layer) return;
+
+  nodeIds.forEach(nodeId => {
+    const node = mm.nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    const pts = mmAnchorPoints(node);
+    const isFrom = nodeId === fromId;
+
+    ['top','right','bottom','left'].forEach(side => {
+      if (isFrom && side !== fromSide) return; // source: only show the used anchor
+      const p = pts[side];
+      const dot = document.createElement('div');
+      dot.className = 'mm-anc vis';
+      dot.dataset.nodeId = nodeId;
+      dot.dataset.side   = side;
+      // position in mm-layer world coords
+      dot.style.left = p.x + 'px';
+      dot.style.top  = p.y + 'px';
+
+      dot.addEventListener('mouseenter', () => clearTimeout(_mmHideTimer));
+      dot.addEventListener('mouseleave', e => {
+        if (mmEdgeDrag) return;
+        const rel = e.relatedTarget;
+        // If moving back to node or another anchor — don't hide
+        if (rel && (rel.classList.contains('mm-node') || rel.classList.contains('mm-anc') ||
+            rel.closest('.mm-node'))) return;
+        mmScheduleHideAnchors(mmAnchorNodeId);
+      });
+
+      dot.addEventListener('mousedown', e => {
+        e.stopPropagation();
+        e.preventDefault();
+        const pos = mmClientToWorld(e.clientX, e.clientY);
+        mmEdgeDrag = { fromId: nodeId, fromSide: side, gx: pos.x, gy: pos.y };
+        // Show all nodes' anchors for target selection
+        mmRenderAnchors(mm.nodes.map(n=>n.id), nodeId, side);
+      });
+
+      layer.appendChild(dot);
+    });
+  });
+}
+
+function mmShowAnchors(nodeId) {
+  mmAnchorNodeId = nodeId;
+  mmRenderAnchors([nodeId], null, null);
+}
+
+function mmHideAnchors() {
+  if (mmEdgeDrag) return; // don't hide while dragging
+  mmAnchorNodeId = null;
+  document.querySelectorAll('.mm-anc').forEach(a => a.remove());
+}
+
+// ---- DRAW EDGES ----
+function mmDrawEdges() {
+  const svg = document.getElementById('mm-svg');
+  if (!svg) return;
+  let html = '';
+
+  mm.edges.forEach(edge => {
+    const from = mm.nodes.find(n=>n.id===edge.from);
+    const to   = mm.nodes.find(n=>n.id===edge.to);
+    if (!from||!to) return;
+
+    const fPos = mmAnchorPosExact(from, edge.fromSide||'right');
+    const tPos = mmAnchorPosExact(to,   edge.toSide||'left');
+
+    // world → screen
+    const x1 = fPos.x*mmVP.scale+mmVP.x;
+    const y1 = fPos.y*mmVP.scale+mmVP.y;
+    const x2 = tPos.x*mmVP.scale+mmVP.x;
+    const y2 = tPos.y*mmVP.scale+mmVP.y;
+
+    // cubic bezier control points from the anchor side direction
+    const dist = Math.max(40, Math.hypot(x2-x1,y2-y1)*0.45);
+    const sideVec = {
+      top:    [0,-1], right:[1,0], bottom:[0,1], left:[-1,0]
+    };
+    const fv = sideVec[edge.fromSide||'right'] || [1,0];
+    const tv = sideVec[edge.toSide||'left']    || [-1,0];
+    const cx1 = x1+fv[0]*dist, cy1 = y1+fv[1]*dist;
+    const cx2 = x2+tv[0]*dist, cy2 = y2+tv[1]*dist;
+
+    const d = `M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`;
+    html += `
+      <path d="${d}" fill="none" stroke="#c4c0b8" stroke-width="1.8"/>
+      <path class="mm-edge-hit" d="${d}" data-edge="${edge.id}"/>`;
+  });
+
+  // Ghost edge while dragging from anchor
+  if (mmEdgeDrag) {
+    const fromNode = mm.nodes.find(n=>n.id===mmEdgeDrag.fromId);
+    if (fromNode) {
+      const fPos = mmAnchorPosExact(fromNode, mmEdgeDrag.fromSide);
+      const x1 = fPos.x*mmVP.scale+mmVP.x;
+      const y1 = fPos.y*mmVP.scale+mmVP.y;
+      const x2 = mmEdgeDrag.gx*mmVP.scale+mmVP.x;
+      const y2 = mmEdgeDrag.gy*mmVP.scale+mmVP.y;
+      const dist = Math.max(30, Math.hypot(x2-x1,y2-y1)*0.4);
+      const sv = {top:[0,-1],right:[1,0],bottom:[0,1],left:[-1,0]}[mmEdgeDrag.fromSide]||[1,0];
+      const d = `M${x1},${y1} C${x1+sv[0]*dist},${y1+sv[1]*dist} ${x2},${y2} ${x2},${y2}`;
+      html += `<path class="mm-ghost" d="${d}"/>`;
+      // dot at start
+      html += `<circle cx="${x1}" cy="${y1}" r="4" fill="var(--accent)" opacity="0.8"/>`;
+    }
+  }
+
+  svg.innerHTML = html;
+}
+
+// ---- SELECT ----
+function mmSelect(id) {
+  mmSel = id;
+  document.querySelectorAll('.mm-node').forEach(el => {
+    el.classList.toggle('selected', el.id==='mmn-'+id);
+  });
+}
+
+// ---- ADD NODE ----
+function mmAddNodeAt(x, y) {
+  const node = {id:mmGenId(), x, y, text:'Новый узел', color:0, links:[]};
+  mm.nodes.push(node);
+  mmPersist();
+  mmDrawNodes();
+  mmSelect(node.id);
+  const el = document.getElementById('mmn-'+node.id);
+  if (el) setTimeout(()=>mmStartEdit(node.id,el), 30);
+}
+
+// ---- EDIT ----
+function mmStartEdit(id, el) {
+  mmSelect(id);
+  const node = mm.nodes.find(n=>n.id===id);
+  if (!el) el = document.getElementById('mmn-'+id);
+  if (!el) return;
+  // Replace first child (text div) with textarea
+  const firstChild = el.querySelector('div:not(.mm-anchors):not(.mm-node-badges)');
+  if (firstChild) {
+    const ta = document.createElement('textarea');
+    ta.value = node.text;
+    ta.rows  = Math.max(1, node.text.split('\n').length);
+    ta.style.width = Math.max(80, node.text.length*8)+'px';
+    ta.addEventListener('input', ()=>{ ta.rows=Math.max(1,ta.value.split('\n').length); });
+    ta.addEventListener('keydown', e => {
+      if (e.key==='Escape'||(e.key==='Enter'&&!e.shiftKey)){e.preventDefault();ta.blur();}
+    });
+    ta.addEventListener('blur', () => {
+      node.text = ta.value.trim()||node.text;
+      mmPersist(); mmDrawNodes();
+    });
+    firstChild.replaceWith(ta);
+    ta.focus(); ta.select();
+  }
+}
+
+// ---- DELETE ----
+function mmDeleteSelected() {
+  if (!mmSel) return;
+  mm.nodes = mm.nodes.filter(n=>n.id!==mmSel);
+  mm.edges = mm.edges.filter(e=>e.from!==mmSel&&e.to!==mmSel);
+  mmSel=null; mmPersist(); mmDrawNodes(); mmDrawEdges();
+}
+
+// ---- ZOOM ----
+function mmZoomIn()  { mmZoomC(1.15); }
+function mmZoomOut() { mmZoomC(0.87); }
+function mmZoomC(f) {
+  const wrap=document.getElementById('mm-wrap');
+  if (!wrap) return;
+  const rect=wrap.getBoundingClientRect();
+  const cx=rect.width/2, cy=rect.height/2;
+  mmVP.x=cx-(cx-mmVP.x)*f; mmVP.y=cy-(cy-mmVP.y)*f;
+  mmVP.scale=Math.max(0.1,Math.min(4,mmVP.scale*f));
+  mmApplyVP();
+}
+function mmFitAll() {
+  if (!mm.nodes.length) return;
+  const wrap=document.getElementById('mm-wrap');
+  if (!wrap) return;
+  const rect=wrap.getBoundingClientRect();
+  const pad=90;
+  const xs=mm.nodes.map(n=>n.x), ys=mm.nodes.map(n=>n.y);
+  const minX=Math.min(...xs)-pad, maxX=Math.max(...xs)+pad;
+  const minY=Math.min(...ys)-pad, maxY=Math.max(...ys)+pad;
+  mmVP.scale=Math.min(rect.width/(maxX-minX||1), rect.height/(maxY-minY||1), 1.6);
+  mmVP.x=(rect.width-(minX+maxX)*mmVP.scale)/2;
+  mmVP.y=(rect.height-(minY+maxY)*mmVP.scale)/2;
+  mmApplyVP();
+}
+
+// ---- CONTEXT MENU ----
+function mmOpenCtx(e, id) {
+  mmCloseCtx(); mmSelect(id);
+  const node = mm.nodes.find(n=>n.id===id);
+  const menu = document.createElement('div');
+  menu.className='mm-ctx'; menu.id='mm-ctx';
+  menu.style.left=e.clientX+'px'; menu.style.top=e.clientY+'px';
+
+  // color row
+  const cr = document.createElement('div'); cr.className='mm-colors';
+  MM_COLORS.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='mm-cdot'+(node.color===i?' active':'');
+    d.style.background=c.bg; d.style.borderColor=c.border;
+    d.title=MM_COLOR_NAMES[i];
+    d.onclick=ev=>{ev.stopPropagation();node.color=i;mmPersist();mmCloseCtx();mmDrawNodes();};
+    cr.appendChild(d);
+  });
+  menu.appendChild(cr);
+
+  const sep=()=>{const d=document.createElement('div');d.className='mm-ctx-sep';return d;};
+  const item=(icon,label,fn,cls='')=>{
+    const d=document.createElement('div');
+    d.className='mm-ctx-item '+cls;
+    d.innerHTML=`<span>${icon}</span>${label}`;
+    d.onclick=ev=>{ev.stopPropagation();mmCloseCtx();fn();};
+    return d;
+  };
+  menu.appendChild(sep());
+  menu.appendChild(item('✏️','Редактировать',()=>{const el=document.getElementById('mmn-'+id);if(el)mmStartEdit(id,el);}));
+  menu.appendChild(item('🔗','Привязать задачу / документ',()=>mmOpenLinkPanel(id,e.clientX,e.clientY)));
+  menu.appendChild(item('📋','Дублировать',()=>{
+    const src=mm.nodes.find(n=>n.id===id);
+    const cl={...src,id:mmGenId(),x:src.x+70,y:src.y+70,links:[...(src.links||[])]};
+    mm.nodes.push(cl); mmPersist(); mmDrawNodes(); mmSelect(cl.id);
+  }));
+  menu.appendChild(sep());
+  menu.appendChild(item('✕','Удалить',mmDeleteSelected,'danger'));
+
+  document.body.appendChild(menu); mmCtxMenu=menu;
+
+  const mr=menu.getBoundingClientRect();
+  if(mr.right>window.innerWidth)  menu.style.left=(e.clientX-mr.width)+'px';
+  if(mr.bottom>window.innerHeight) menu.style.top=(e.clientY-mr.height)+'px';
+
+  setTimeout(()=>document.addEventListener('click',mmCloseCtx,{once:true}),10);
+}
+function mmCloseCtx() { if(mmCtxMenu){mmCtxMenu.remove();mmCtxMenu=null;} }
+
+// ---- LINK PANEL ----
+function mmOpenLinkPanel(id, cx, cy) {
+  mmCloseLinkPanel();
+  const docs=STATE.docs||[];
+  const tasks=[...PHASES_DEF.flatMap(p=>p.tasks.map(t=>({...t,phaseName:p.name}))),...STATE.customTasks];
+  const node=mm.nodes.find(n=>n.id===id);
+  const panel=document.createElement('div');
+  panel.className='mm-link-panel'; panel.id='mm-link-panel';
+  panel.style.left=Math.min(cx,window.innerWidth-290)+'px';
+  panel.style.top=Math.min(cy,window.innerHeight-230)+'px';
+  panel.innerHTML=`
+    <div class="mm-link-title">Привязать к узлу
+      <button onclick="mmCloseLinkPanel()" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--text3)">✕</button>
+    </div>
+    <div class="form-label">Документ</div>
+    <select class="form-select" id="mm-lp-doc" style="margin-bottom:10px;font-size:12.5px">
+      <option value="">— выбрать —</option>
+      ${docs.map(d=>`<option value="${d.id}">${d.title||'Без названия'}</option>`).join('')}
+    </select>
+    <div class="form-label">Задача</div>
+    <select class="form-select" id="mm-lp-task" style="margin-bottom:12px;font-size:12.5px">
+      <option value="">— выбрать —</option>
+      ${tasks.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}
+    </select>
+    <button class="btn btn-primary btn-sm" style="width:100%" onclick="mmApplyLink('${id}')">Привязать</button>`;
+  document.body.appendChild(panel); mmLinkPanel=panel;
+}
+function mmApplyLink(id) {
+  const node=mm.nodes.find(n=>n.id===id);
+  if (!node.links) node.links=[];
+  const docId=document.getElementById('mm-lp-doc').value;
+  const taskId=document.getElementById('mm-lp-task').value;
+  if (docId&&!node.links.find(l=>l.type==='doc'&&l.docId===docId)) {
+    const doc=STATE.docs.find(d=>d.id===docId);
+    node.links.push({type:'doc',docId,label:doc?.title||'Документ'});
+  }
+  if (taskId&&!node.links.find(l=>l.type==='task'&&l.taskId===taskId)) {
+    const task=[...PHASES_DEF.flatMap(p=>p.tasks),...STATE.customTasks].find(t=>t.id===taskId);
+    node.links.push({type:'task',taskId,label:task?.name||'Задача'});
+  }
+  mmPersist(); mmCloseLinkPanel(); mmDrawNodes();
+}
+function mmCloseLinkPanel() { if(mmLinkPanel){mmLinkPanel.remove();mmLinkPanel=null;} }
+
+function goToTask(taskId) {
+  goTo('roadmap', document.getElementById('nav-roadmap'));
+  phaseFilter='all';
+  setTimeout(()=>renderRoadmap(), 80);
+}
+
+// ============================================================
+// EXPORT DOCUMENT (.txt / .md)
+// ============================================================
+
+function htmlToMarkdown(html) {
+  // Use a temp element to parse
+  const el = document.createElement('div');
+  el.innerHTML = html;
+
+  function nodeToMd(node) {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+    const tag = node.tagName.toLowerCase();
+    const inner = Array.from(node.childNodes).map(nodeToMd).join('');
+
+    switch(tag) {
+      case 'h1': return `# ${inner}\n\n`;
+      case 'h2': return `## ${inner}\n\n`;
+      case 'h3': return `### ${inner}\n\n`;
+      case 'h4': return `#### ${inner}\n\n`;
+      case 'h5': return `##### ${inner}\n\n`;
+      case 'h6': return `###### ${inner}\n\n`;
+      case 'p':  return `${inner}\n\n`;
+      case 'br': return `\n`;
+      case 'strong': case 'b': return `**${inner}**`;
+      case 'em': case 'i':    return `*${inner}*`;
+      case 'u':               return `<u>${inner}</u>`;
+      case 's': case 'strike': case 'del': return `~~${inner}~~`;
+      case 'code': return `\`${inner}\``;
+      case 'pre':  return `\`\`\`\n${node.textContent}\n\`\`\`\n\n`;
+      case 'blockquote': return inner.split('\n').map(l => `> ${l}`).join('\n') + '\n\n';
+      case 'hr':  return `---\n\n`;
+      case 'a':   return `[${inner}](${node.getAttribute('href')||''})`; 
+      case 'ul': {
+        const items = Array.from(node.querySelectorAll(':scope > li'))
+          .map(li => `- ${Array.from(li.childNodes).map(nodeToMd).join('').trim()}`).join('\n');
+        return items + '\n\n';
+      }
+      case 'ol': {
+        const items = Array.from(node.querySelectorAll(':scope > li'))
+          .map((li, i) => `${i+1}. ${Array.from(li.childNodes).map(nodeToMd).join('').trim()}`).join('\n');
+        return items + '\n\n';
+      }
+      case 'li': return inner;
+      case 'div': case 'section': case 'article': return inner + (inner.endsWith('\n') ? '' : '\n');
+      case 'span': return inner;
+      default: return inner;
+    }
+  }
+
+  return Array.from(el.childNodes).map(nodeToMd).join('')
+    .replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+function htmlToPlainText(html) {
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  // Replace block elements with newlines
+  el.querySelectorAll('h1,h2,h3,h4,h5,h6,p,div,li,br,hr,blockquote,pre').forEach(n => {
+    const tag = n.tagName.toLowerCase();
+    if (tag === 'br' || tag === 'hr') {
+      n.replaceWith('\n');
+    } else if (tag === 'li') {
+      n.insertAdjacentText('afterbegin', '• ');
+      n.insertAdjacentText('beforeend', '\n');
+    } else {
+      n.insertAdjacentText('beforeend', '\n\n');
+    }
+  });
+  return el.textContent.replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+function openExportModal() {
+  const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+  if (!doc) { alert('Нет активного документа'); return; }
+
+  const safeName = (doc.title || 'document').replace(/[^\w\-а-яёА-ЯЁ ]/gi, '_').trim();
+
+  document.getElementById('modal-title').textContent = '↓ Сохранить документ';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Формат</label>
+        <div style="display:flex;gap:8px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;flex:1;transition:border-color .15s" id="fmt-md-wrap">
+            <input type="radio" name="export-fmt" value="md" id="fmt-md" checked onchange="updateExportPreview()">
+            <span style="font-weight:600">.md</span><span style="color:var(--text2);font-size:12px">Markdown</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;flex:1;transition:border-color .15s" id="fmt-txt-wrap">
+            <input type="radio" name="export-fmt" value="txt" id="fmt-txt" onchange="updateExportPreview()">
+            <span style="font-weight:600">.txt</span><span style="color:var(--text2);font-size:12px">Обычный текст</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Имя файла</label>
+        <input class="form-input" id="export-filename" value="${safeName}" placeholder="название файла">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px" id="export-filename-preview">${safeName}.md</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6">
+        <b style="color:var(--text)">Где сохранится файл?</b><br>
+        Браузер откроет диалог «Сохранить как» — ты сможешь выбрать любую папку.<br>
+        <span style="color:var(--text3)">(Если диалог не появился — файл скачается в папку загрузок)</span>
+      </div>
+    </div>`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-confirm').textContent = 'Сохранить';
+  document.getElementById('modal-confirm').onclick = () => doExport(doc);
+
+  // live preview of filename
+  document.getElementById('export-filename').addEventListener('input', updateExportPreview);
+  updateExportPreview();
+}
+
+function updateExportPreview() {
+  const fmt = document.querySelector('input[name="export-fmt"]:checked')?.value || 'md';
+  const name = document.getElementById('export-filename')?.value || 'document';
+  const prev = document.getElementById('export-filename-preview');
+  if (prev) prev.textContent = name + '.' + fmt;
+  // highlight selected radio card
+  document.getElementById('fmt-md-wrap').style.borderColor  = fmt==='md'  ? 'var(--accent)' : 'var(--border2)';
+  document.getElementById('fmt-txt-wrap').style.borderColor = fmt==='txt' ? 'var(--accent)' : 'var(--border2)';
+}
+
+async function doExport(doc) {
+  const fmt  = document.querySelector('input[name="export-fmt"]:checked')?.value || 'md';
+  const name = (document.getElementById('export-filename')?.value || 'document').trim() || 'document';
+  const filename = name + '.' + fmt;
+  const mime = fmt === 'md' ? 'text/markdown' : 'text/plain';
+
+  const content = fmt === 'md'
+    ? `# ${doc.title || ''}\n\n` + htmlToMarkdown(doc.content || '')
+    : (doc.title ? doc.title + '\n' + '='.repeat(doc.title.length) + '\n\n' : '') + htmlToPlainText(doc.content || '');
+
+  // Try File System Access API (shows native Save As dialog)
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{
+          description: fmt === 'md' ? 'Markdown файл' : 'Текстовый файл',
+          accept: { [mime]: ['.' + fmt] }
+        }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      closeModal();
+      return;
+    } catch(e) {
+      if (e.name === 'AbortError') { closeModal(); return; } // user cancelled
+      // fallback to download
+    }
+  }
+
+  // Fallback: trigger download
+  const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  closeModal();
+}
+
+// ============================================================
+// MOODBOARD
+// ============================================================
+const MB_CATS = {
+  ref:    {label:'Референс', icon:'🎨', cls:'mb-cat-ref'},
+  palette:{label:'Палитра',  icon:'🎨', cls:'mb-cat-palette'},
+  char:   {label:'Персонаж', icon:'🧍', cls:'mb-cat-char'},
+  env:    {label:'Окружение',icon:'🏙', cls:'mb-cat-env'},
+  ui:     {label:'UI',       icon:'📐', cls:'mb-cat-ui'},
+  music:  {label:'Музыка',   icon:'🎵', cls:'mb-cat-music'},
+  other:  {label:'Другое',   icon:'📦', cls:'mb-cat-other'},
+};
+let mbActiveFilter = 'all';
+let mbCardSize = 'm';
+
+function renderMoodboard() {
+  if (!STATE.moodboard) STATE.moodboard = [];
+  const board = document.getElementById('mb-board');
+  if (!board) return;
+  const all   = STATE.moodboard;
+  const items = mbActiveFilter === 'all' ? all : all.filter(i => i.cat === mbActiveFilter);
+
+  board.className = `mb-board sz-${mbCardSize}`;
+
+  if (all.length === 0) {
+    board.innerHTML = `<div class="mb-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;color:var(--text3)">
+      <div style="font-size:52px;margin-bottom:16px">🎨</div>
+      <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px">Мудборд пустой</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px;line-height:1.6;text-align:center;max-width:280px">
+        Перетащи картинки сюда, вставь <b>Ctrl+V</b>, загрузи файлы или добавь по ссылке
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button class="btn btn-ghost btn-sm" onclick="mbTriggerUpload()">↑ Загрузить файлы</button>
+        <button class="btn btn-primary btn-sm" onclick="mbOpenUrl()">+ По ссылке</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  if (items.length === 0) {
+    board.innerHTML = `<div style="padding:60px;text-align:center;color:var(--text3);font-size:13px">Нет изображений в этой категории</div>`;
+    return;
+  }
+
+  board.innerHTML = items.map(item => {
+    const cat = MB_CATS[item.cat] || MB_CATS.other;
+    const safeId = item.id.replace(/[^a-z0-9_]/gi,'_');
+    return `<div class="mb-card" data-id="${item.id}" draggable="true"
+        ondragstart="mbDragStart(event,'${item.id}')"
+        ondragover="mbDragOver(event)"
+        ondragenter="mbDragEnter(event)"
+        ondragleave="mbDragLeave(event)"
+        ondrop="mbDropOnCard(event,'${item.id}')"
+        ondragend="mbDragEnd(event)">
+      <img src="${escHtml(item.src)}" alt="${escHtml(item.note||'')}"
+        loading="lazy"
+        onclick="mbOpenLightbox('${item.id}')"
+        onerror="this.style.display='none';document.getElementById('mberr_${safeId}').style.display='flex'">
+      <div id="mberr_${safeId}" style="display:none;height:80px;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:var(--text3);font-size:12px;background:var(--surface2)">
+        <span style="font-size:24px">🖼</span>Не загрузилось
+      </div>
+      <div class="mb-card-footer">
+        <span class="mb-card-cat ${cat.cls}" style="cursor:pointer" onclick="event.stopPropagation();mbEditCat('${item.id}',this)" title="Изменить категорию">${cat.icon} ${cat.label} ✎</span>
+        ${item.note ? `<span class="mb-card-note" title="${escHtml(item.note)}">${escHtml(item.note)}</span>` : '<span></span>'}
+        <button class="mb-card-del" onclick="event.stopPropagation();mbDelete('${item.id}')" title="Удалить">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function mbFilter(cat, el) {
+  mbActiveFilter = cat;
+  document.querySelectorAll('#page-moodboard .mb-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderMoodboard();
+}
+
+function mbSetSize(sz, el) {
+  mbCardSize = sz;
+  document.querySelectorAll('.mb-size-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mb-board').className = `mb-board sz-${sz}`;
+}
+
+function mbOpenUrl() {
+  const catOptions = Object.entries(MB_CATS).map(([k,v]) =>
+    `<option value="${k}"${mbActiveFilter===k?' selected':''}>${v.icon} ${v.label}</option>`).join('');
+
+  document.getElementById('modal-title').textContent = '🖼 Добавить изображение';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Ссылка на изображение</label>
+        <input class="form-input" id="mb-url-inp" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select class="form-input" id="mb-cat-inp">${catOptions}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка <span style="color:var(--text3);font-weight:400">(необязательно)</span></label>
+        <input class="form-input" id="mb-note-inp" placeholder="Источник, описание...">
+      </div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.6;background:var(--surface2);border-radius:8px;padding:10px 12px">
+        💡 Также: перетащи файл на страницу, вставь <b>Ctrl+V</b> из буфера или загрузи кнопкой в тулбаре
+      </div>
+    </div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить';
+  document.getElementById('modal-confirm').onclick = mbSubmitUrl;
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('mb-url-inp')?.focus(), 80);
+}
+
+function mbSubmitUrl() {
+  const url  = (document.getElementById('mb-url-inp')?.value || '').trim();
+  const cat  = document.getElementById('mb-cat-inp')?.value || 'ref';
+  const note = (document.getElementById('mb-note-inp')?.value || '').trim();
+  if (!url) { document.getElementById('mb-url-inp')?.focus(); return; }
+  mbAddItem(url, cat, note);
+  closeModal();
+}
+
+function mbAddItem(src, cat, note) {
+  if (!STATE.moodboard) STATE.moodboard = [];
+  STATE.moodboard.unshift({
+    id: 'mb_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    src, cat: cat || 'ref', note: note || ''
+  });
+  saveState();
+  renderMoodboard();
+}
+
+function mbDelete(id) {
+  STATE.moodboard = (STATE.moodboard||[]).filter(i => i.id !== id);
+  saveState();
+  renderMoodboard();
+}
+
+function mbOpenLightbox(id) {
+  const item = (STATE.moodboard||[]).find(i => i.id === id);
+  if (!item) return;
+  const cat = MB_CATS[item.cat] || MB_CATS.other;
+  const lb = document.createElement('div');
+  lb.className = 'mb-lightbox';
+  lb.innerHTML = `
+    <img src="${escHtml(item.src)}" alt="${escHtml(item.note||'')}">
+    <div class="mb-lightbox-meta">
+      <span class="mb-card-cat ${cat.cls}">${cat.icon} ${cat.label}</span>
+      ${item.note ? `<span style="font-size:13px;color:rgba(255,255,255,.8)">${escHtml(item.note)}</span>` : ''}
+      <span style="font-size:12px;color:rgba(255,255,255,.4);margin-left:auto">Esc / клик — закрыть</span>
+    </div>`;
+  lb.onclick = e => { if (e.target === lb || e.target.tagName === 'IMG') lb.remove(); };
+  document.body.appendChild(lb);
+}
+
+function mbEditCat(id, triggerEl) {
+  // Remove any existing cat menu
+  const existing = document.getElementById('mb-cat-menu');
+  if (existing) { existing.remove(); if (existing.dataset.for === id) return; }
+
+  const item = (STATE.moodboard||[]).find(i => i.id === id);
+  if (!item) return;
+
+  const menu = document.createElement('div');
+  menu.id = 'mb-cat-menu';
+  menu.dataset.for = id;
+  menu.style.cssText = `position:fixed;z-index:9999;background:var(--surface);
+    border:1px solid var(--border2);border-radius:10px;
+    box-shadow:var(--shadow);padding:4px;min-width:160px;`;
+
+  menu.innerHTML = Object.entries(MB_CATS).map(([k,v]) => `
+    <div class="asset-status-opt" onclick="mbSetCat('${id}','${k}')" style="${item.cat===k?'background:var(--surface2)':''}">
+      <span class="mb-card-cat ${v.cls}" style="pointer-events:none">${v.icon} ${v.label}</span>
+      ${item.cat===k ? '<span style="margin-left:auto;font-size:11px;color:var(--accent)">✓</span>' : ''}
+    </div>`).join('');
+
+  const rect = triggerEl.getBoundingClientRect();
+  menu.style.top  = (rect.bottom + 4) + 'px';
+  menu.style.left = rect.left + 'px';
+  document.body.appendChild(menu);
+
+  // flip up if overflows
+  const mb = menu.getBoundingClientRect();
+  if (mb.bottom > window.innerHeight - 8) menu.style.top = (rect.top - mb.height - 4) + 'px';
+
+  setTimeout(() => document.addEventListener('click', _mbCatMenuClose, {once:true}), 0);
+}
+
+function _mbCatMenuClose(e) {
+  const menu = document.getElementById('mb-cat-menu');
+  if (menu && !menu.contains(e.target)) menu.remove();
+}
+
+function mbSetCat(id, cat) {
+  const item = (STATE.moodboard||[]).find(i => i.id === id);
+  if (item) { item.cat = cat; saveState(); renderMoodboard(); }
+  document.getElementById('mb-cat-menu')?.remove();
+}
+
+function mbTriggerUpload() {
+  const inp = document.getElementById('mb-file-input');
+  if (inp) inp.click();
+}
+
+function mbHandleFiles(files) {
+  const cat = mbActiveFilter !== 'all' ? mbActiveFilter : 'ref';
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => mbAddItem(e.target.result, cat, file.name.replace(/\.[^.]+$/, ''));
+    reader.readAsDataURL(file);
+  });
+  const inp = document.getElementById('mb-file-input');
+  if (inp) inp.value = '';
+}
+
+// ── Drag-to-reorder карточек ─────────────────────────────────
+let _mbDragId = null;
+
+function mbDragStart(e, id) {
+  _mbDragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/mb-card-id', id); // custom type to detect internal drag
+  setTimeout(() => {
+    const el = document.querySelector(`.mb-card[data-id="${id}"]`);
+    if (el) el.style.opacity = '0.4';
+  }, 0);
+}
+
+function mbDragEnd(e) {
+  _mbDragId = null;
+  document.querySelectorAll('.mb-card').forEach(c => {
+    c.style.opacity = '';
+    c.classList.remove('mb-drag-over');
+  });
+}
+
+function mbDragEnter(e) {
+  if (!_mbDragId) return;
+  e.currentTarget.classList.add('mb-drag-over');
+}
+
+function mbDragLeave(e) {
+  e.currentTarget.classList.remove('mb-drag-over');
+}
+
+function mbDragOver(e) {
+  if (!_mbDragId) return; // not an internal card drag
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+
+function mbDropOnCard(e, targetId) {
+  e.preventDefault();
+  e.stopPropagation(); // prevent document drop handler from firing
+  e.currentTarget.classList.remove('mb-drag-over');
+  const fromId = _mbDragId;
+  if (!fromId || fromId === targetId) return;
+
+  const arr = STATE.moodboard;
+  const fromIdx = arr.findIndex(i => i.id === fromId);
+  const toIdx   = arr.findIndex(i => i.id === targetId);
+  if (fromIdx === -1 || toIdx === -1) return;
+
+  // Swap positions
+  const [moved] = arr.splice(fromIdx, 1);
+  arr.splice(toIdx, 0, moved);
+  saveState();
+  renderMoodboard();
+}
+
+let _mbDropInit = false;
+function initMoodboardDrop() {
+  if (_mbDropInit) return;
+  _mbDropInit = true;
+
+  const overlay = document.getElementById('mb-drop-overlay');
+
+  document.addEventListener('dragenter', e => {
+    if (currentPage !== 'moodboard') return;
+    // Ignore internal card reorder drags
+    if (_mbDragId) return;
+    if (e.dataTransfer && e.dataTransfer.types &&
+        (e.dataTransfer.types.includes('Files') || e.dataTransfer.types.includes('text/uri-list'))) {
+      e.preventDefault();
+      overlay.style.display = 'flex';
+    }
+  });
+
+  document.addEventListener('dragover', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return; // internal reorder — don't handle here
+    e.preventDefault();
+  });
+
+  document.addEventListener('dragleave', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return;
+    if (e.relatedTarget === null) overlay.style.display = 'none';
+  });
+
+  document.addEventListener('drop', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return; // internal card reorder — handled by mbDropOnCard
+    e.preventDefault();
+    overlay.style.display = 'none';
+
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (files.length) {
+      mbHandleFiles(files);
+      return;
+    }
+
+    const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
+    if (/^https?:\/\//.test(url)) {
+      mbAddItem(url, mbActiveFilter !== 'all' ? mbActiveFilter : 'ref', '');
+    }
+  });
+
+  // Paste: only images from clipboard, NOT plain-text URLs
+  // (URLs are added explicitly via the + URL button to avoid duplicates)
+  document.addEventListener('paste', e => {
+    if (currentPage !== 'moodboard') return;
+    // Ignore paste if modal is open (user typing URL in the form)
+    if (document.getElementById('modal-overlay').classList.contains('open')) return;
+    const imgItems = Array.from(e.clipboardData.items).filter(i => i.type.startsWith('image/'));
+    if (!imgItems.length) return; // don't handle text/URL paste — use the + URL button
+    imgItems.forEach(ci => {
+      const reader = new FileReader();
+      reader.onload = ev => mbAddItem(ev.target.result, mbActiveFilter !== 'all' ? mbActiveFilter : 'ref', 'из буфера');
+      reader.readAsDataURL(ci.getAsFile());
+    });
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const lb = document.querySelector('.mb-lightbox');
+    if (lb) lb.remove();
+  }
+});
+
+// ============================================================
+// DARK THEME
+// ============================================================
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('theme-btn').textContent = next === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('pt_theme', next);
+}
+function initTheme() {
+  const saved = localStorage.getItem('pt_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+}
+
+// ============================================================
+// EXPORT / IMPORT JSON
+// ============================================================
+function exportJSON() {
+  const data = JSON.stringify(STATE, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `punk_tracker_backup_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();}, 1000);
+}
+function importJSON() {
+  document.getElementById('import-json-input').click();
+}
+function doImportJSON(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.tasks && !data.assets) { alert('Файл не похож на бэкап трекера'); return; }
+      if (!confirm('Заменить все текущие данные данными из файла?')) return;
+      Object.assign(STATE, data);
+      saveState();
+      location.reload();
+    } catch { alert('Ошибка чтения JSON файла'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ============================================================
+// GLOBAL SEARCH
+// ============================================================
+function openGlobalSearch() {
+  const ov = document.getElementById('search-overlay');
+  ov.style.display = 'flex';
+  setTimeout(()=>document.getElementById('search-input').focus(), 50);
+  document.getElementById('search-results').innerHTML = '<div class="sr-empty">Начни вводить для поиска...</div>';
+}
+function closeSearch() {
+  document.getElementById('search-overlay').style.display = 'none';
+  document.getElementById('search-input').value = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSearch();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openGlobalSearch(); }
+});
+
+function runSearch(q) {
+  const res = document.getElementById('search-results');
+  q = q.trim().toLowerCase();
+  if (!q) { res.innerHTML = '<div class="sr-empty">Начни вводить для поиска...</div>'; return; }
+
+  const hits = [];
+  const allTasks = Object.values(STATE.tasks).flat().concat(STATE.customTasks||[]);
+  allTasks.forEach(t => {
+    if ((t.title||t.name||'').toLowerCase().includes(q))
+      hits.push({icon:'🗺', title:t.title||t.name, sub:'Roadmap · '+t.phase, page:'roadmap'});
+  });
+  const allAssets = (STATE.assets||[]).concat(STATE.customAssets||[]);
+  allAssets.forEach(a => {
+    if (a.name.toLowerCase().includes(q))
+      hits.push({icon:'🎨', title:a.name, sub:'Ассеты · '+a.type+' · '+ASSET_STATUS_LABELS[a.status], page:'assets'});
+  });
+  (STATE.ideas||[]).forEach(i => {
+    if ((i.text||'').toLowerCase().includes(q))
+      hits.push({icon:'💡', title:i.text, sub:'Банк идей · '+IDEA_CATS[i.cat], page:'ideas'});
+  });
+  (STATE.bugs||[]).forEach(b => {
+    if ((b.title||'').toLowerCase().includes(q))
+      hits.push({icon:'🐛', title:b.title, sub:'Баги · '+b.priority, page:'bugs'});
+  });
+  (STATE.changelog||[]).forEach(c => {
+    if ((c.version||'').toLowerCase().includes(q)||(c.notes||'').toLowerCase().includes(q))
+      hits.push({icon:'📋', title:'v'+c.version, sub:'Changelog · '+c.date, page:'changelog'});
+  });
+  (STATE.docs||[]).forEach(d => {
+    if ((d.title||'').toLowerCase().includes(q))
+      hits.push({icon:'📄', title:d.title, sub:'Документы', page:'doc', docId:d.id});
+  });
+
+  if (!hits.length) { res.innerHTML = '<div class="sr-empty">Ничего не найдено</div>'; return; }
+  res.innerHTML = hits.slice(0,20).map(h => `
+    <div class="sr-item" onclick="searchGoTo(${JSON.stringify(h)})">
+      <span class="sr-icon">${h.icon}</span>
+      <div><div class="sr-title">${escHtml(h.title||'')}</div><div class="sr-sub">${escHtml(h.sub||'')}</div></div>
+    </div>`).join('');
+}
+
+function searchGoTo(h) {
+  closeSearch();
+  if (h.docId) { openDoc(h.docId); return; }
+  const navEl = document.getElementById('nav-'+h.page);
+  goTo(h.page, navEl);
+}
+
+// ============================================================
+// BUGS
+// ============================================================
+const BUG_PRIORITIES = ['critical','high','medium','low'];
+const BUG_PRIORITY_LABELS = {critical:'Критический',high:'Высокий',medium:'Средний',low:'Низкий'};
+const BUG_PRIORITY_CLS   = {critical:'bug-p-crit',high:'bug-p-high',medium:'bug-p-med',low:'bug-p-low'};
+const BUG_STATUSES = ['open','wip','fixed','wontfix'];
+const BUG_STATUS_LABELS = {open:'Открыт',wip:'В работе',fixed:'Исправлен',wontfix:'Не актуально'};
+const BUG_STATUS_CLS    = {open:'bug-s-open',wip:'bug-s-wip',fixed:'bug-s-fixed',wontfix:'bug-s-wontfix'};
+
+function renderBugs() {
+  if (!STATE.bugs) STATE.bugs = [];
+  const bugs = STATE.bugs;
+  const open = bugs.filter(b=>b.status==='open').length;
+  const fixed = bugs.filter(b=>b.status==='fixed').length;
+
+  const rows = bugs.length === 0
+    ? `<div style="padding:60px;text-align:center;color:var(--text3);font-size:13px">🐛 Баги ещё не добавлены — отличный знак!</div>`
+    : `<div class="asset-table" style="margin-top:12px"><table>
+        <thead><tr><th>Приоритет</th><th>Заголовок</th><th>Платформа</th><th>Версия</th><th>Статус</th><th></th></tr></thead>
+        <tbody>${bugs.map(b=>`<tr>
+          <td><div style="display:flex;align-items:center;gap:6px">
+            <div class="bug-priority ${BUG_PRIORITY_CLS[b.priority]}"></div>
+            <span style="font-size:12px;color:var(--text2)">${BUG_PRIORITY_LABELS[b.priority]}</span>
+          </div></td>
+          <td style="font-weight:500">${escHtml(b.title)}</td>
+          <td style="font-size:12px;color:var(--text3)">${escHtml(b.platform||'—')}</td>
+          <td style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace">${escHtml(b.version||'—')}</td>
+          <td><div class="bug-status ${BUG_STATUS_CLS[b.status]}" style="cursor:pointer" onclick="cycleBugStatus('${b.id}')">${BUG_STATUS_LABELS[b.status]}</div></td>
+          <td><button class="icon-btn delete" onclick="deleteBug('${b.id}')">✕</button></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+
+  document.getElementById('bugs-content').innerHTML = `
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+      <div class="stat-card"><div class="stat-label">Всего</div><div class="stat-value">${bugs.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Открыто</div><div class="stat-value" style="color:var(--red)">${open}</div></div>
+      <div class="stat-card"><div class="stat-label">В работе</div><div class="stat-value" style="color:var(--amber)">${bugs.filter(b=>b.status==='wip').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Исправлено</div><div class="stat-value" style="color:var(--green)">${fixed}</div></div>
+    </div>${rows}`;
+  updateBadges();
+}
+
+function openAddBugModal() {
+  document.getElementById('modal-title').textContent = '🐛 Добавить баг';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
+      <div class="form-group"><label class="form-label">Заголовок *</label>
+        <input class="form-input" id="bug-title" placeholder="Что происходит?"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label class="form-label">Приоритет</label>
+          <select class="form-input" id="bug-priority">
+            ${BUG_PRIORITIES.map(p=>`<option value="${p}">${BUG_PRIORITY_LABELS[p]}</option>`).join('')}
+          </select></div>
+        <div class="form-group"><label class="form-label">Платформа</label>
+          <input class="form-input" id="bug-platform" placeholder="Windows / Mac / Web"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label class="form-label">Версия билда</label>
+          <input class="form-input" id="bug-version" placeholder="0.1.0"></div>
+        <div class="form-group"><label class="form-label">Статус</label>
+          <select class="form-input" id="bug-status">
+            ${BUG_STATUSES.map(s=>`<option value="${s}">${BUG_STATUS_LABELS[s]}</option>`).join('')}
+          </select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Описание / шаги воспроизведения</label>
+        <textarea class="form-input" id="bug-desc" rows="3" placeholder="1. Открыть...&#10;2. Нажать...&#10;3. Упало"></textarea></div>
+    </div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить баг';
+  document.getElementById('modal-confirm').onclick = () => {
+    const title = document.getElementById('bug-title').value.trim();
+    if (!title) { document.getElementById('bug-title').focus(); return; }
+    if (!STATE.bugs) STATE.bugs = [];
+    STATE.bugs.unshift({
+      id: 'bug_'+Date.now(),
+      title,
+      priority: document.getElementById('bug-priority').value,
+      platform: document.getElementById('bug-platform').value.trim(),
+      version:  document.getElementById('bug-version').value.trim(),
+      status:   document.getElementById('bug-status').value,
+      desc:     document.getElementById('bug-desc').value.trim(),
+      created:  Date.now()
+    });
+    saveState(); closeModal(); renderBugs();
+  };
+  openModal();
+}
+
+function cycleBugStatus(id) {
+  const b = (STATE.bugs||[]).find(x=>x.id===id); if (!b) return;
+  b.status = BUG_STATUSES[(BUG_STATUSES.indexOf(b.status)+1)%BUG_STATUSES.length];
+  saveState(); renderBugs();
+}
+function deleteBug(id) {
+  STATE.bugs = (STATE.bugs||[]).filter(x=>x.id!==id);
+  saveState(); renderBugs();
+}
+
+// ============================================================
+// CHANGELOG
+// ============================================================
+const CL_TAGS = ['release','alpha','hotfix'];
+const CL_TAG_LABELS = {release:'Release',alpha:'Alpha',hotfix:'Hotfix'};
+const CL_TAG_CLS    = {release:'cl-tag-release',alpha:'cl-tag-alpha',hotfix:'cl-tag-hotfix'};
+
+function renderChangelog() {
+  if (!STATE.changelog) STATE.changelog = [];
+  const cl = STATE.changelog;
+
+  const entries = cl.length === 0
+    ? `<div style="padding:60px;text-align:center;color:var(--text3);font-size:13px">📋 Changelog пустой — добавь первую версию!</div>`
+    : cl.map(c => `
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v${escHtml(c.version)}</span>
+          <span class="cl-date">${escHtml(c.date)}</span>
+          <span class="cl-tag ${CL_TAG_CLS[c.tag]||'cl-tag-alpha'}">${CL_TAG_LABELS[c.tag]||c.tag}</span>
+          <span style="margin-left:auto;display:flex;gap:6px">
+            <button class="icon-btn" onclick="editChangelogEntry('${c.id}')" style="font-size:12px">✎</button>
+            <button class="icon-btn delete" onclick="deleteChangelogEntry('${c.id}')">✕</button>
+          </span>
+        </div>
+        <div class="cl-body">${escHtml(c.notes)}</div>
+      </div>`).join('');
+
+  document.getElementById('changelog-content').innerHTML = `
+    <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:13px;color:var(--text2)">${cl.length} версий</div>
+    </div>${entries}`;
+  updateBadges();
+}
+
+function openAddChangelogModal(existing) {
+  const isEdit = !!existing;
+  document.getElementById('modal-title').textContent = isEdit ? '✎ Редактировать версию' : '📋 Новая версия';
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div class="form-group"><label class="form-label">Версия *</label>
+          <input class="form-input" id="cl-version" placeholder="0.1.0" value="${existing?.version||''}"></div>
+        <div class="form-group"><label class="form-label">Дата</label>
+          <input class="form-input" id="cl-date" type="date" value="${existing?.date||today}"></div>
+        <div class="form-group"><label class="form-label">Тип</label>
+          <select class="form-input" id="cl-tag">
+            ${CL_TAGS.map(t=>`<option value="${t}" ${existing?.tag===t?'selected':''}>${CL_TAG_LABELS[t]}</option>`).join('')}
+          </select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Что изменилось</label>
+        <textarea class="form-input" id="cl-notes" rows="5" placeholder="+ Добавлено: атака гитарой&#10;+ Добавлен уровень 1&#10;~ Изменено: физика прыжка&#10;- Удалено: старая механика">${existing?.notes||''}</textarea></div>
+    </div>`;
+  document.getElementById('modal-confirm').textContent = isEdit ? 'Сохранить' : 'Добавить';
+  document.getElementById('modal-confirm').onclick = () => {
+    const version = document.getElementById('cl-version').value.trim();
+    if (!version) { document.getElementById('cl-version').focus(); return; }
+    if (!STATE.changelog) STATE.changelog = [];
+    const entry = {
+      id: existing?.id || 'cl_'+Date.now(),
+      version,
+      date:  document.getElementById('cl-date').value || today,
+      tag:   document.getElementById('cl-tag').value,
+      notes: document.getElementById('cl-notes').value.trim(),
+    };
+    if (isEdit) {
+      const i = STATE.changelog.findIndex(x=>x.id===existing.id);
+      if (i>=0) STATE.changelog[i] = entry;
+    } else {
+      STATE.changelog.unshift(entry);
+    }
+    saveState(); closeModal(); renderChangelog();
+  };
+  openModal();
+}
+function editChangelogEntry(id) {
+  const entry = (STATE.changelog||[]).find(x=>x.id===id);
+  if (entry) openAddChangelogModal(entry);
+}
+function deleteChangelogEntry(id) {
+  STATE.changelog = (STATE.changelog||[]).filter(x=>x.id!==id);
+  saveState(); renderChangelog();
+}
+(function init() {
+  initTheme();
+  updateBadges();
+  updateGlobalProgress();
+  renderSidebarDocs();
+  renderRoadmap();
+  updateTopbarActions('roadmap');
+  initMoodboardDrop();
+  // Close info popup on outside click
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#info-btn') && !e.target.closest('#info-popup')) {
+      const p = document.getElementById('info-popup');
+      const b = document.getElementById('info-btn');
+      if (p) p.style.display = 'none';
+      if (b) { b.style.borderColor='var(--border2)'; b.style.color='var(--text3)'; }
+    }
+  });
+})();
+</script>
+</body>
+</html>
