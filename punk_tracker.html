@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Punk Platformer — Dev Tracker</title>
+<title>Game Dev Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -11,39 +11,69 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root {
-  --bg:        #f8f8f6;
+  --bg:        #fafaf9;
   --surface:   #ffffff;
-  --surface2:  #f4f4f2;
-  --surface3:  #eeede9;
-  --border:    rgba(0,0,0,0.07);
-  --border2:   rgba(0,0,0,0.12);
-  --text:      #111110;
-  --text2:     #6f6e69;
-  --text3:     #b0aea8;
-  --accent:    #5b52f5;
-  --accent2:   #7c75ff;
-  --accent-bg: #f0efff;
-  --green:     #16a34a;
-  --green-bg:  #f0fdf4;
-  --amber:     #d97706;
+  --surface2:  #f5f5f3;
+  --surface3:  #ecece9;
+  --border:    rgba(0,0,0,0.06);
+  --border2:   rgba(0,0,0,0.10);
+  --text:      #1c1917;
+  --text2:     #57534e;
+  --text3:     #a8a29e;
+  --accent:    #6366f1;
+  --accent2:   #818cf8;
+  --accent-bg: #eef2ff;
+  --green:     #10b981;
+  --green-bg:  #ecfdf5;
+  --amber:     #f59e0b;
   --amber-bg:  #fffbeb;
-  --blue:      #2563eb;
+  --blue:      #3b82f6;
   --blue-bg:   #eff6ff;
-  --red:       #dc2626;
-  --red-bg:    #fef2f2;
-  --purple:    #7c3aed;
+  --red:       #ef4444;
+  --red-bg:   #fef2f2;
+  --purple:    #8b5cf6;
   --purple-bg: #f5f3ff;
-  --radius:    12px;
-  --radius-sm: 8px;
-  --radius-xs: 5px;
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow:    0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-md: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-lg: 0 24px 64px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+  --shadow:    0 2px 8px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.05);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg:        #0c0c0e;
+  --surface:   #18181b;
+  --surface2:  #1f1f23;
+  --surface3:  #27272a;
+  --border:    rgba(255,255,255,0.06);
+  --border2:   rgba(255,255,255,0.10);
+  --text:      #fafafa;
+  --text2:     #a1a1aa;
+  --text3:     #52525b;
+  --accent:    #818cf8;
+  --accent2:   #a5b4fc;
+  --accent-bg: #1e1b4b;
+  --green:     #34d399;
+  --green-bg:  #064e3b;
+  --amber:     #fbbf24;
+  --amber-bg:  #451a03;
+  --blue:      #60a5fa;
+  --blue-bg:   #1e3a5f;
+  --red:       #f87171;
+  --red-bg:    #450a0a;
+  --purple:    #a78bfa;
+  --purple-bg: #2e1065;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow:    0 2px 8px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.4);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 .app{display:flex;height:100vh;overflow:hidden;}
 
 /* ── SIDEBAR ─────────────────────────────────────── */
@@ -52,7 +82,26 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   background:var(--surface);
   border-right:1px solid var(--border);
   display:flex;flex-direction:column;
+  transition:width 0.3s ease, opacity 0.3s ease;
+  overflow:hidden;
 }
+.sidebar.collapsed{width:60px;}
+.sidebar.collapsed .sidebar-logo .logo-title > div,
+.sidebar.collapsed #project-selector,
+.sidebar.collapsed .sidebar-footer:not(.collapsed-footer){display:none;}
+.sidebar.collapsed .sidebar-logo{padding:20px 8px;text-align:center;}
+.sidebar.collapsed .sidebar-logo .logo-title{margin:0;}
+.sidebar.collapsed .sidebar-logo .logo-emoji{margin:0 auto;}
+.sidebar.collapsed .nav-item{padding:10px 8px;justify-content:center;}
+.sidebar.collapsed .nav-item .nav-icon{margin:0;}
+.sidebar.collapsed .nav-item span:not(.nav-icon){display:none;}
+.sidebar.collapsed .nav-badge{display:none;}
+.sidebar.collapsed .nav-label{display:none;}
+.sidebar.collapsed .nav-section{margin-bottom:16px;}
+.sidebar.collapsed .collapsed-footer .theme-toggle{margin:0 auto;display:block;}
+.sidebar.collapsed .collapsed-footer > div:first-child span{display:none;}
+.sidebar.collapsed .collapsed-footer .progress-mini span:first-child{display:none;}
+.sidebar.collapsed .collapsed-footer .progress-mini{justify-content:center;}
 .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
 .logo-title{
   font-size:13px;font-weight:700;color:var(--text);
@@ -64,21 +113,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 }
 .logo-sub{font-size:11px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace;letter-spacing:0.01em;}
 .sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto;}
-.nav-section{margin-bottom:18px;}
+.nav-section{margin-bottom:24px;}
+[data-collapsed="true"]{display:none !important;}
 .nav-label{
-  font-size:10px;font-weight:600;color:var(--text3);
-  letter-spacing:0.07em;text-transform:uppercase;
-  padding:0 10px;margin-bottom:4px;
+  font-size:11px;font-weight:600;color:var(--text3);
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:0 10px;margin-bottom:8px;
 }
 .nav-item{
-  display:flex;align-items:center;gap:9px;
-  padding:7px 10px;border-radius:var(--radius-sm);
-  cursor:pointer;font-size:13px;color:var(--text2);font-weight:400;
-  transition:background 0.1s,color 0.1s;user-select:none;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;margin:2px 6px;border-radius:10px;
+  cursor:pointer;font-size:14px;color:var(--text2);font-weight:500;
+  transition:all 0.15s ease;user-select:none;
 }
-.nav-item:hover{background:var(--surface2);color:var(--text);}
-.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:500;}
-.nav-icon{font-size:14px;flex-shrink:0;width:17px;text-align:center;opacity:0.8;}
+.nav-item:hover{background:rgba(0,0,0,0.04);color:var(--text);}
+[data-theme="dark"] .nav-item:hover{background:rgba(255,255,255,0.06);}
+.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:600;box-shadow:0 2px 8px rgba(91,82,245,0.15);}
+.nav-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center;opacity:0.7;}
 .nav-item.active .nav-icon{opacity:1;}
 .nav-badge{
   margin-left:auto;font-size:10px;font-family:'JetBrains Mono',monospace;
@@ -99,8 +150,24 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 }
 .nav-doc-item:hover .nav-doc-del{opacity:1;}
 .nav-doc-del:hover{background:var(--red-bg);color:var(--red);}
-.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);}
-.progress-mini{display:flex;align-items:center;gap:8px;}
+.sidebar-footer{padding:16px 18px;border-top:1px solid var(--border);}
+.theme-toggle{
+  width:28px;height:28px;border:none;background:var(--surface2);border-radius:6px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:background 0.15s;
+}
+.theme-toggle:hover{background:var(--surface3);}
+.theme-toggle .theme-dark{display:none;}
+[data-theme="dark"] .theme-toggle .theme-light{display:none;}
+[data-theme="dark"] .theme-toggle .theme-dark{display:inline;}
+.phase-progress-bar-mini{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:2px;}
+.phase-progress-fill-mini{height:100%;border-radius:2px;transition:width 0.3s;}
+.phase-progress-row{display:flex;align-items:center;gap:8px;font-size:10px;}
+.phase-progress-label{color:var(--text2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;}
+.phase-progress-pct{color:var(--text3);font-family:'JetBrains Mono',monospace;width:36px;text-align:right;font-size:10px;}
+#progress-chevron{transition:transform 0.2s;display:inline-block;}
+.progress-mini{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:var(--radius-sm);}
+.sidebar-footer .progress-mini:hover{background:var(--surface2);}
 .progress-track{flex:1;height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;}
 .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.5s cubic-bezier(.4,0,.2,1);}
 
@@ -108,36 +175,37 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
 .topbar{
   background:var(--surface);border-bottom:1px solid var(--border);
-  padding:0 24px;height:52px;
+  padding:0 28px;height:56px;
   display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;gap:12px;
+  flex-shrink:0;gap:16px;
 }
-.topbar-left{display:flex;align-items:center;gap:10px;min-width:0;}
-.page-title{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em;}
-.topbar-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
-.content{flex:1;overflow-y:auto;padding:24px;}
+.topbar-left{display:flex;align-items:center;gap:12px;min-width:0;}
+.page-title{font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em;}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.content{flex:1;overflow-y:auto;padding:28px 36px;}
 
 /* ── BUTTONS ─────────────────────────────────────── */
 .btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 13px;border-radius:var(--radius-sm);
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 16px;border-radius:var(--radius-sm);
   font-size:13px;font-weight:500;cursor:pointer;border:none;
-  transition:all 0.12s;font-family:'Inter',sans-serif;white-space:nowrap;
+  transition:all 0.2s cubic-bezier(0.4,0,0.2,1);font-family:var(--font-sans);white-space:nowrap;
   letter-spacing:-0.01em;
 }
-.btn-primary{background:var(--accent);color:white;box-shadow:0 1px 3px rgba(91,82,245,0.3);}
-.btn-primary:hover{background:var(--accent2);box-shadow:0 2px 8px rgba(91,82,245,0.35);}
+.btn-primary{background:var(--accent);color:white;box-shadow:0 2px 6px rgba(99,102,241,0.25);}
+.btn-primary:hover{background:var(--accent2);box-shadow:0 4px 12px rgba(99,102,241,0.35);transform:translateY(-1px);}
 .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
-.btn-ghost:hover{background:var(--surface2);color:var(--text);}
-.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(220,38,38,0.15);}
-.btn-danger:hover{background:#fee2e2;}
-.btn-sm{padding:4px 10px;font-size:12px;}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);border-color:var(--border);}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,0.15);}
+.btn-danger:hover{background:var(--red);color:white;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-sm:hover{transform:translateY(-1px);}
 .icon-btn{
-  width:26px;height:26px;border:none;background:none;cursor:pointer;
+  width:28px;height:28px;border:none;background:none;cursor:pointer;
   border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;
-  font-size:13px;color:var(--text3);transition:all 0.1s;
+  font-size:14px;color:var(--text3);transition:all 0.15s;
 }
-.icon-btn:hover{background:var(--surface2);color:var(--text2);}
+.icon-btn:hover{background:var(--surface2);color:var(--text);}
 .icon-btn.delete:hover{background:var(--red-bg);color:var(--red);}
 
 /* ── TABS ────────────────────────────────────────── */
@@ -150,20 +218,25 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .tab:not(.active):hover{color:var(--text);}
 
 /* ── STAT CARDS ──────────────────────────────────── */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
 .stat-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:16px 18px;
-  box-shadow:var(--shadow-xs);
+  border-radius:var(--radius);padding:20px 24px;
+  box-shadow:var(--shadow-xs);transition:all 0.2s;
 }
-.stat-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
-.stat-value{font-size:24px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1;letter-spacing:-0.02em;color:var(--text);}
-.stat-sub{font-size:12px;color:var(--text3);margin-top:4px;}
+.stat-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.screenshot-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;transition:all 0.2s;}
+.screenshot-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.changelog-entry{transition:all 0.2s;}
+.changelog-entry:hover{box-shadow:var(--shadow-xs);}
+.stat-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.stat-value{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1.1;letter-spacing:-0.03em;color:var(--text);}
+.stat-sub{font-size:13px;color:var(--text3);margin-top:6px;}
 
 /* ── PHASE CARDS ─────────────────────────────────── */
 .phase-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);margin-bottom:8px;overflow:hidden;
+  border-radius:var(--radius);margin-bottom:10px;overflow:hidden;
   box-shadow:var(--shadow-xs);transition:box-shadow 0.15s;
 }
 .phase-card:hover{box-shadow:var(--shadow);}
@@ -226,29 +299,36 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .kanban-card-phase{font-size:10px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace;}
 
 /* ── IDEAS ───────────────────────────────────────── */
-.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px;margin-top:14px;}
+.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:18px;}
 .idea-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:14px 16px;position:relative;transition:box-shadow 0.15s,transform 0.15s;
+  padding:18px 20px;position:relative;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
   box-shadow:var(--shadow-xs);
 }
-.idea-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
-.idea-text{font-size:13px;color:var(--text);line-height:1.55;padding-right:18px;}
-.idea-meta{display:flex;align-items:center;gap:7px;margin-top:10px;}
-.tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;white-space:nowrap;letter-spacing:0.01em;}
+.idea-card:hover{box-shadow:var(--shadow);transform:translateY(-3px);}
+.idea-text{font-size:14px;color:var(--text);line-height:1.6;padding-right:20px;}
+.idea-meta{display:flex;align-items:center;gap:8px;margin-top:14px;}
+.tag{display:inline-block;font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;white-space:nowrap;letter-spacing:0.02em;}
 .tag-mech{background:var(--blue-bg);color:var(--blue);}
 .tag-art{background:var(--purple-bg);color:var(--purple);}
 .tag-sound{background:var(--amber-bg);color:var(--amber);}
 .tag-story{background:var(--green-bg);color:var(--green);}
 .tag-other{background:var(--surface2);color:var(--text2);}
 .idea-del{
-  position:absolute;top:10px;right:10px;width:22px;height:22px;
-  border:none;background:none;cursor:pointer;border-radius:4px;
+  position:absolute;top:12px;right:12px;width:24px;height:24px;
+  border:none;background:none;cursor:pointer;border-radius:6px;
   display:flex;align-items:center;justify-content:center;
   font-size:13px;color:var(--text3);opacity:0;transition:all 0.1s;
 }
-.idea-card:hover .idea-del{opacity:1;}
+.idea-edit{
+  position:absolute;top:10px;right:36px;width:22px;height:22px;
+  border:none;background:none;cursor:pointer;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--text3);opacity:0;transition:all 0.1s;
+}
+.idea-card:hover .idea-del, .idea-card:hover .idea-edit{opacity:1;}
 .idea-del:hover{background:var(--red-bg);color:var(--red);}
+.idea-edit:hover{background:var(--accent-bg);color:var(--accent);}
 
 /* ── ASSETS TABLE ────────────────────────────────── */
 .asset-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;width:100%;box-shadow:var(--shadow-xs);}
@@ -258,9 +338,41 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.06em;
   text-transform:uppercase;border-bottom:1px solid var(--border);
 }
-.asset-table td{padding:10px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle;}
+.asset-table td{padding:8px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle;}
 .asset-table tr:last-child td{border-bottom:none;}
 .asset-table tr:hover td{background:var(--surface2);}
+
+/* inline editable name */
+.asset-name-cell{
+  display:flex;align-items:center;gap:6px;
+}
+.asset-name-text{
+  font-weight:500;flex:1;cursor:text;border-radius:5px;
+  padding:2px 5px;margin:-2px -5px;
+  transition:background .15s;outline:none;
+}
+.asset-name-text:hover{background:var(--surface2);}
+.asset-name-text:focus{
+  background:var(--surface2);
+  box-shadow:0 0 0 2px var(--accent);
+}
+
+/* who-input field */
+.asset-who-input{
+  width:100%;min-width:90px;max-width:140px;
+  border:1.5px solid var(--border2);
+  border-radius:7px;padding:4px 9px;
+  font-size:12px;color:var(--text);
+  background:var(--surface2);
+  outline:none;transition:border-color .15s, box-shadow .15s;
+  font-family:inherit;
+}
+.asset-who-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  background:var(--surface);
+}
+.asset-who-input::placeholder{color:var(--text3);}
 .status-badge{
   display:inline-flex;align-items:center;gap:4px;font-size:11.5px;
   padding:3px 9px;border-radius:20px;font-weight:500;cursor:pointer;
@@ -271,7 +383,132 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .status-done{background:var(--green-bg);color:var(--green);}
 .status-review{background:var(--blue-bg);color:var(--blue);}
 
-/* ── STEAM CHECKLIST ─────────────────────────────── */
+/* status dropdown */
+.asset-status-wrap{position:relative;display:inline-block;}
+.asset-status-menu{
+  display:none;position:fixed;z-index:9999;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:10px;box-shadow:var(--shadow);
+  padding:4px;min-width:150px;
+}
+.asset-status-menu.open{display:block;}
+.asset-status-opt{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;
+  transition:background .1s;
+}
+.asset-status-opt:hover{background:var(--surface2);}
+
+/* collapsible group row */
+.asset-group-header{cursor:pointer;user-select:none;}
+.asset-group-header:hover td{background:var(--border)!important;}
+.asset-group-chevron{
+  display:inline-block;font-size:10px;margin-right:6px;
+  transition:transform .2s;transform:rotate(0deg);
+}
+.asset-group-chevron.collapsed{transform:rotate(-90deg);}
+
+/* ── MOODBOARD ───────────────────────────────────── */
+.mb-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0;gap:10px;flex-wrap:wrap;
+}
+.mb-chip{
+  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  border:1.5px solid var(--border2);background:var(--surface2);
+  color:var(--text2);cursor:pointer;transition:all .15s;
+}
+.mb-chip:hover{border-color:var(--accent);color:var(--accent);}
+.mb-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.mb-size-btn{
+  width:30px;height:30px;border-radius:7px;font-size:14px;
+  border:1.5px solid var(--border2);background:var(--surface2);
+  color:var(--text2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.mb-size-btn:hover{border-color:var(--accent);color:var(--accent);}
+.mb-size-btn.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);}
+.mb-board{
+  flex:1;overflow-y:auto;padding:16px;
+  columns:4 220px;column-gap:12px;
+  position:relative;
+}
+.mb-board.sz-s{columns:6 160px;}
+.mb-board.sz-m{columns:4 220px;}
+.mb-board.sz-l{columns:2 320px;}
+.mb-card{
+  break-inside:avoid;margin-bottom:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;position:relative;
+  cursor:grab;transition:box-shadow .15s,transform .1s,opacity .15s;
+  display:inline-block;width:100%;
+}
+.mb-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.mb-card.mb-drag-over{
+  border:2px dashed var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent);
+  transform:scale(0.97);
+}
+.mb-card img{
+  width:100%;display:block;object-fit:cover;
+  background:var(--surface2);
+}
+.mb-card-footer{
+  padding:7px 10px;display:flex;align-items:center;
+  justify-content:space-between;gap:6px;
+}
+.mb-card-cat{
+  font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:10px;
+  letter-spacing:.03em;
+}
+.mb-cat-ref    {background:#e8f0ff;color:#3b6ce0;}
+.mb-cat-palette{background:#fff0e8;color:#d06030;}
+.mb-cat-char   {background:#e8ffe8;color:#2a8a2a;}
+.mb-cat-env    {background:#f0e8ff;color:#7030c0;}
+.mb-cat-ui     {background:#e8f8ff;color:#1090b0;}
+.mb-cat-music  {background:#fff8e8;color:#b07010;}
+.mb-cat-other  {background:var(--surface2);color:var(--text3);}
+.mb-card-note{font-size:11px;color:var(--text2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mb-card-del{
+  opacity:0;width:22px;height:22px;border-radius:5px;border:none;
+  background:var(--red-bg,#ffe8e8);color:#c0392b;cursor:pointer;
+  font-size:12px;display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s;flex-shrink:0;
+}
+.mb-card:hover .mb-card-del{opacity:1;}
+.mb-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;min-height:300px;color:var(--text3);
+}
+.mb-drop-overlay{
+  display:none;position:absolute;inset:0;z-index:100;
+  background:rgba(91,82,245,.15);border:3px dashed var(--accent);
+  border-radius:12px;flex-direction:column;align-items:center;
+  justify-content:center;color:var(--accent);font-size:14px;font-weight:600;
+  pointer-events:none;
+}
+#page-moodboard{position:relative;}
+/* lightbox */
+.mb-lightbox{
+  position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.88);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:zoom-out;
+}
+.mb-lightbox img{max-width:90vw;max-height:84vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5);cursor:default;}
+.mb-lightbox-meta{
+  display:flex;align-items:center;gap:12px;
+  margin-top:14px;padding:8px 18px;
+  background:rgba(0,0,0,.5);border-radius:20px;
+  max-width:80vw;flex-wrap:wrap;
+}
+/* dark mode cat badges */
+[data-theme="dark"] .mb-cat-ref    {background:#1a2a4a;color:#6090f0;}
+[data-theme="dark"] .mb-cat-palette{background:#3a1800;color:#e08050;}
+[data-theme="dark"] .mb-cat-char   {background:#0a2a0a;color:#50c050;}
+[data-theme="dark"] .mb-cat-env    {background:#200a40;color:#b060e0;}
+[data-theme="dark"] .mb-cat-ui     {background:#002a38;color:#30c0e0;}
+[data-theme="dark"] .mb-cat-music  {background:#2a1800;color:#e0a030;}
+[data-theme="dark"] .mb-cat-other  {background:var(--surface2);color:var(--text3);}
 .checklist-section{
   background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);overflow:hidden;margin-bottom:10px;
@@ -366,29 +603,29 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,0.18);z-index:100;
   display:flex;align-items:center;justify-content:center;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  opacity:0;pointer-events:none;transition:opacity 0.18s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;pointer-events:none;transition:opacity 0.25s cubic-bezier(0.4,0,0.2,1);
 }
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;box-shadow:var(--shadow-lg);
-  padding:24px;width:440px;max-width:92vw;
-  transform:translateY(12px) scale(0.98);transition:transform 0.18s;
+  border-radius:20px;box-shadow:var(--shadow-lg);
+  padding:28px;width:480px;max-width:94vw;
+  transform:translateY(16px) scale(0.96);transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
 }
 .modal-overlay.open .modal{transform:translateY(0) scale(1);}
-.modal-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:18px;letter-spacing:-0.01em;}
-.form-group{margin-bottom:13px;}
-.form-label{display:block;font-size:11.5px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:0.01em;}
+.modal-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-0.02em;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;letter-spacing:0.01em;}
 .form-input,.form-select,.form-textarea{
-  width:100%;padding:9px 11px;border:1.5px solid var(--border2);
-  border-radius:var(--radius-sm);background:var(--surface);color:var(--text);
-  font-family:'Inter',sans-serif;font-size:13.5px;outline:none;transition:border-color 0.12s;
+  width:100%;padding:10px 14px;border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);background:var(--bg);color:var(--text);
+  font-family:var(--font-sans);font-size:14px;outline:none;transition:all 0.15s;
 }
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,82,245,0.12);}
-.form-textarea{resize:vertical;min-height:70px;}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.form-textarea{resize:vertical;min-height:80px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
 /* ── FILTERS ─────────────────────────────────────── */
 .filter-row{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
@@ -399,6 +636,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 }
 .filter-chip:hover{border-color:var(--accent);color:var(--accent);}
 .filter-chip.active{background:var(--accent);color:white;border-color:var(--accent);}
+
+/* ── SEARCH ───────────────────────────────────────── */
+.search-result-item{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+  border-radius:var(--radius-sm);cursor:pointer;transition:background 0.1s;
+}
+.search-result-item:hover{background:var(--surface2);}
+.search-icon{font-size:14px;flex-shrink:0;margin-top:2px;}
+.search-text{flex:1;font-size:13px;color:var(--text);line-height:1.4;}
+.search-meta{color:var(--text3);font-size:12px;}
 
 /* ── MISC ────────────────────────────────────────── */
 .ring-bg{fill:none;stroke:var(--surface3);}
@@ -439,9 +686,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   min-width:96px;max-width:220px;text-align:center;
   line-height:1.5;word-break:break-word;
   box-shadow:var(--shadow-xs);
+  overflow:visible;
+  z-index:1;
 }
-.mm-node:hover{box-shadow:var(--shadow);}
+.mm-node:hover{box-shadow:var(--shadow);z-index:10;}
 .mm-node:hover .mm-anchors{opacity:1;}
+.mm-anchors:hover{opacity:1;}
 .mm-node.dragging{cursor:grabbing;box-shadow:var(--shadow-md);}
 .mm-node.selected{outline:2.5px solid var(--accent);outline-offset:3px;}
 .mm-node.edge-target{outline:2.5px solid #10b981;outline-offset:3px;}
@@ -450,28 +700,34 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   font-size:inherit;font-weight:inherit;color:inherit;
   width:100%;text-align:center;outline:none;resize:none;display:block;line-height:1.5;
 }
-/* anchor points — 4 sides */
-.mm-anchors{
-  position:absolute;inset:0;pointer-events:none;
-  opacity:0;transition:opacity 0.15s;
-}
-.mm-anchor{
+/* Anchor dots — rendered inside mm-layer in world coords */
+.mm-anc{
   position:absolute;
-  width:10px;height:10px;border-radius:50%;
-  background:white;border:2px solid var(--accent);
-  cursor:crosshair;pointer-events:all;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:var(--accent);
+  border:3px solid white;
   transform:translate(-50%,-50%);
-  transition:transform 0.1s,box-shadow 0.1s;
-  z-index:5;
+  cursor:crosshair;
+  opacity:0;
+  transition:opacity .12s, transform .1s;
+  box-shadow:0 0 0 2px var(--accent);
+  z-index:100;
+  box-sizing:border-box;
 }
-.mm-anchor:hover{transform:translate(-50%,-50%) scale(1.4);box-shadow:0 0 0 3px rgba(91,82,245,0.2);}
-.mm-anchor[data-side="top"]   {top:0;   left:50%;}
-.mm-anchor[data-side="right"] {top:50%; left:100%;}
-.mm-anchor[data-side="bottom"]{top:100%;left:50%;}
-.mm-anchor[data-side="left"]  {top:50%; left:0;}
-
+.mm-anc.vis { opacity:1; }
+.mm-anc:hover {
+  transform:translate(-50%,-50%) scale(1.4);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent);
+}
+.mm-anc.snap {
+  transform:translate(-50%,-50%) scale(1.6);
+  background:white;
+  border-color:var(--accent);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 40%,transparent);
+}
 /* ghost edge while dragging */
-.mm-ghost{stroke:var(--accent);stroke-width:1.8;stroke-dasharray:5 3;fill:none;pointer-events:none;}
+.mm-ghost{stroke:var(--accent);stroke-width:2;stroke-dasharray:6 3;fill:none;pointer-events:none;}
 
 .mm-node-badges{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:6px;}
 .mm-badge{
@@ -524,6 +780,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   position:fixed;background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);box-shadow:var(--shadow-md);padding:16px;z-index:200;width:272px;
 }
+.pm-item:hover{background:var(--surface2);color:var(--text)!important;}
+.project-select-wrap select:hover{background:var(--surface)!important;box-shadow:0 4px 12px rgba(0,0,0,0.12)!important;}
+.project-select-wrap select:focus{box-shadow:0 0 0 3px var(--accent),0 4px 16px rgba(99,102,241,0.25)!important;outline:none;}
+#project-menu button:hover{background:var(--surface2);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.color-option:hover{transform:translateX(4px);}
 .mm-link-title{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:11px;display:flex;justify-content:space-between;align-items:center;}
 .mm-edge-hit{pointer-events:stroke;cursor:pointer;stroke:transparent;stroke-width:12;fill:none;}
 </style>
@@ -532,52 +793,143 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="app">
 
 <!-- SIDEBAR -->
-<nav class="sidebar">
+<nav class="sidebar" id="main-sidebar">
   <div class="sidebar-logo">
-    <div class="logo-title"><span class="logo-emoji">⚡</span><div><div>Punk Platformer</div><div class="logo-sub">dev tracker v3</div></div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="logo-title"><span class="logo-emoji">🎮</span><div><div>Game Dev Tracker</div></div></div>
+      <button onclick="toggleSidebar()" title="Свернуть/развернуть" style="width:24px;height:24px;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--text3);display:flex;align-items:center;justify-content:center;border-radius:4px;">◀</button>
+    </div>
+  </div>
+  <div style="padding:14px;border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Проект</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="project-color-indicator" style="width:14px;height:14px;border-radius:50%;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+      <div class="project-select-wrap" style="position:relative;flex:1;">
+        <select id="project-select" onchange="onProjectSelectChanged(this.value)" style="width:100%;padding:10px 14px;padding-right:32px;border:none;border-radius:var(--radius-sm);font-size:13px;background:var(--surface2);color:var(--text);cursor:pointer;font-weight:500;appearance:none;-webkit-appearance:none;-moz-appearance:none;box-shadow:0 1px 3px rgba(0,0,0,0.08);outline:none;">
+        </select>
+        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text3);font-size:10px;">▼</span>
+      </div>
+    </div>
+    <button onclick="openProjectMenu()" style="width:100%;margin-top:8px;padding:8px 12px;border:none;background:var(--surface);border-radius:var(--radius-sm);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);box-shadow:0 1px 3px rgba(0,0,0,0.05);transition:all 0.15s;">
+      ⚙️ Управление проектом
+    </button>
+  </div>
+  <div id="project-menu" style="display:none;position:fixed;z-index:9999;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);padding:8px;min-width:220px;">
+    <div class="pm-item" onclick="openAddProjectModal()" style="padding:12px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:12px;transition:all 0.15s;">
+      <span style="font-size:16px;">➕</span> Новый проект
+    </div>
+    <div class="pm-item" onclick="renameCurrentProject()" style="padding:12px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:12px;transition:all 0.15s;">
+      <span style="font-size:16px;">✏️</span> Переименовать
+    </div>
+    <div class="pm-item" onclick="changeProjectColor()" style="padding:12px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:12px;transition:all 0.15s;">
+      <span style="font-size:16px;">🎨</span> Цвет проекта
+    </div>
+    <div style="height:1px;background:var(--border);margin:8px 4px;"></div>
+    <div class="pm-item" onclick="deleteCurrentProject()" style="padding:12px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--red);display:flex;align-items:center;gap:12px;transition:all 0.15s;">
+      <span style="font-size:16px;">🗑️</span> Удалить проект
+    </div>
   </div>
   <div class="sidebar-nav">
     <div class="nav-section">
-      <div class="nav-label">Работа</div>
-      <div class="nav-item active" id="nav-roadmap" onclick="goTo('roadmap',this)">
-        <span class="nav-icon">🗺</span>Roadmap<span class="nav-badge" id="nb-roadmap">—</span>
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('work')">
+        Работа <span id="chevron-work" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
       </div>
-      <div class="nav-item" id="nav-assets" onclick="goTo('assets',this)">
-        <span class="nav-icon">🎨</span>Ассеты<span class="nav-badge" id="nb-assets">—</span>
-      </div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-label">Документы</div>
-      <div id="sidebar-docs"></div>
-      <div class="nav-item" onclick="createDoc()" style="color:var(--text3);font-size:12px;padding:5px 10px;">
-        <span class="nav-icon">＋</span>Новый документ
+      <div id="nav-work">
+        <div class="nav-item active" id="nav-roadmap" onclick="goTo('roadmap',this)">
+          <span class="nav-icon">🗺</span>Roadmap<span class="nav-badge" id="nb-roadmap">—</span>
+        </div>
+        <div class="nav-item" id="nav-assets" onclick="goTo('assets',this)">
+          <span class="nav-icon">🎨</span>Ассеты<span class="nav-badge" id="nb-assets">—</span>
+        </div>
       </div>
     </div>
     <div class="nav-section">
-      <div class="nav-label">Идеи</div>
-      <div class="nav-item" id="nav-ideas" onclick="goTo('ideas',this)">
-        <span class="nav-icon">💡</span>Банк идей<span class="nav-badge" id="nb-ideas">—</span>
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('docs')">
+        Документы <span id="chevron-docs" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
+      </div>
+      <div id="nav-docs">
+        <div id="sidebar-docs"></div>
+        <div class="nav-item" onclick="createDoc()" style="color:var(--text3);font-size:12px;padding:5px 10px;">
+          <span class="nav-icon">＋</span>Новый документ
+        </div>
       </div>
     </div>
     <div class="nav-section">
-      <div class="nav-label">Планирование</div>
-      <div class="nav-item" id="nav-mindmap" onclick="goTo('mindmap',this)">
-        <span class="nav-icon">🧠</span>Майндмап
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('ideas')">
+        Идеи <span id="chevron-ideas" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
+      </div>
+      <div id="nav-ideas-section">
+        <div class="nav-item" id="nav-ideas" onclick="goTo('ideas',this)">
+          <span class="nav-icon">💡</span>Банк идей<span class="nav-badge" id="nb-ideas">—</span>
+        </div>
       </div>
     </div>
     <div class="nav-section">
-      <div class="nav-label">Релиз</div>
-      <div class="nav-item" id="nav-steam" onclick="goTo('steam',this)">
-        <span class="nav-icon">🚀</span>Steam<span class="nav-badge" id="nb-steam">—</span>
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('planning')">
+        Планирование <span id="chevron-planning" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
+      </div>
+      <div id="nav-planning">
+        <div class="nav-item" id="nav-mindmap" onclick="goTo('mindmap',this)">
+          <span class="nav-icon">🧠</span>Майндмап
+        </div>
+        <div class="nav-item" id="nav-moodboard" onclick="goTo('moodboard',this)">
+          <span class="nav-icon">🖼</span>Мудборд
+        </div>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('release')">
+        Релиз <span id="release-chevron" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
+      </div>
+      <div id="release-items">
+        <div class="nav-item" id="nav-steam" onclick="goTo('steam',this)">
+          <span class="nav-icon">🚀</span>Steam<span class="nav-badge" id="nb-steam">—</span>
+        </div>
+        <div class="nav-item" onclick="goTo('screenshots',this)">
+          <span class="nav-icon">📸</span>Скриншоты
+        </div>
+        <div class="nav-item" onclick="goTo('trailer',this)">
+          <span class="nav-icon">🎬</span>Трейлер
+        </div>
+        <div class="nav-item" onclick="goTo('changelog',this)">
+          <span class="nav-icon">📋</span>Обновления
+        </div>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="toggleSection('tools')">
+        Инструменты <span id="chevron-tools" style="font-size:8px;transition:transform 0.2s;transform:rotate(90deg);">▶</span>
+      </div>
+      <div id="nav-tools">
+        <div class="nav-item" onclick="openSearchModal()">
+          <span class="nav-icon">🔍</span>Поиск<span class="nav-badge">Ctrl+K</span>
+        </div>
+        <div class="nav-item" onclick="exportData()">
+          <span class="nav-icon">📤</span>Экспорт
+        </div>
+        <div class="nav-item" onclick="importDataTrigger()">
+          <span class="nav-icon">📥</span>Импорт
+        </div>
       </div>
     </div>
   </div>
-  <div class="sidebar-footer">
-    <div class="progress-mini">
-      <span style="font-size:11px;color:var(--text3)">Прогресс</span>
-      <div class="progress-track"><div class="progress-fill" id="global-progress" style="width:0%"></div></div>
-      <span style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2)" id="global-pct">0%</span>
+  <div class="sidebar-footer collapsed-footer" style="padding:12px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:11px;color:var(--text3)">Тема</span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+        <span class="theme-light">☀️</span>
+        <span class="theme-dark">🌙</span>
+</button>
     </div>
+    <div class="progress-mini" style="cursor:pointer" onclick="togglePhaseProgress()">
+      <span style="font-size:11px;color:var(--text3)">Прогресс</span>
+      <div class="progress-track" style="flex:1"><div class="progress-fill" id="global-progress" style="width:0%"></div></div>
+      <span style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2)" id="global-pct">0%</span>
+      <span id="progress-chevron" style="color:var(--text3);font-size:10px;margin-left:4px">▶</span>
+    </div>
+    <div id="phase-progress-chart" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);"></div>
   </div>
 </nav>
 
@@ -587,6 +939,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="topbar-left">
       <div class="page-title" id="page-title">Roadmap</div>
     </div>
+    <div id="current-project-name" style="flex:1;text-align:center;font-size:20px;font-weight:600;color:var(--accent);"></div>
     <div class="topbar-actions" id="topbar-actions"></div>
   </div>
 
@@ -628,6 +981,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       <div id="steam-content"></div>
     </div>
 
+    <!-- SCREENSHOTS -->
+    <div class="page" id="page-screenshots">
+      <div id="screenshots-content"></div>
+    </div>
+
+    <!-- TRAILER -->
+    <div class="page" id="page-trailer">
+      <div id="trailer-content"></div>
+    </div>
+
+    <!-- CHANGELOG -->
+    <div class="page" id="page-changelog">
+      <div id="changelog-content"></div>
+    </div>
+
   </div>
 
   <!-- DOCUMENT EDITOR (full height, separate) -->
@@ -642,6 +1010,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           </div>
         </div>
         <input type="file" id="file-import-input" style="display:none" accept=".md,.txt,.html,.htm,.docx,.pdf" onchange="handleFileImport(this)">
+        <input type="file" id="import-json-input" style="display:none" accept=".json" onchange="handleImportData(this)">
         <div class="docs-list-body" id="docs-list-body"></div>
       </div>
       <div class="doc-editor-area">
@@ -668,6 +1037,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           <button class="tb-btn" onclick="insertLink()" title="Ссылка">🔗</button>
           <div class="tb-sep"></div>
           <button class="tb-btn" onclick="execFmt('removeFormat')" title="Очистить форматирование" style="font-size:11px">✕fmt</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="openExportModal()" title="Сохранить как .txt или .md" style="font-size:11px;padding:0 10px;color:var(--accent);font-weight:600;margin-left:19px">↓ Сохранить</button>
         </div>
         <div id="doc-editor-wrap" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;">
           <div id="doc-empty" class="doc-empty">
@@ -687,12 +1058,43 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
   </div>
 
+  <!-- MOODBOARD (full height) -->
+  <div class="page full-h" id="page-moodboard" style="display:none;flex-direction:column;overflow:hidden;background:var(--bg)">
+    <div class="mb-toolbar">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <button class="mb-chip active" id="mb-filter-all" onclick="mbFilter('all',this)">Все</button>
+        <button class="mb-chip" onclick="mbFilter('ref',this)"    >🎨 Референс</button>
+        <button class="mb-chip" onclick="mbFilter('palette',this)">🎨 Палитра</button>
+        <button class="mb-chip" onclick="mbFilter('char',this)"   >🧍 Персонаж</button>
+        <button class="mb-chip" onclick="mbFilter('env',this)"    >🏙 Окружение</button>
+        <button class="mb-chip" onclick="mbFilter('ui',this)"     >📐 UI</button>
+        <button class="mb-chip" onclick="mbFilter('music',this)"  >🎵 Музыка</button>
+        <button class="mb-chip" onclick="mbFilter('other',this)"  >📦 Другое</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span style="font-size:11px;color:var(--text3)">Размер:</span>
+        <button class="mb-size-btn" id="mb-sz-s" onclick="mbSetSize('s',this)" title="Мелкие">S</button>
+        <button class="mb-size-btn active" id="mb-sz-m" onclick="mbSetSize('m',this)" title="Средние">M</button>
+        <button class="mb-size-btn" id="mb-sz-l" onclick="mbSetSize('l',this)" title="Крупные">L</button>
+      </div>
+    </div>
+    <div style="flex:1;position:relative;overflow:hidden;">
+      <div class="mb-board" id="mb-board"></div>
+      <div class="mb-drop-overlay" id="mb-drop-overlay">
+        <div style="font-size:52px">📎</div>
+        <div style="font-size:18px;font-weight:700;margin-top:14px">Отпусти картинки сюда</div>
+        <div style="font-size:13px;opacity:.7;margin-top:6px">поддерживаются jpg, png, gif, webp</div>
+      </div>
+    </div>
+    <input type="file" id="mb-file-input" style="display:none;position:fixed" accept="image/*" multiple onchange="mbHandleFiles(this.files)">
+  </div>
+
   <!-- MINDMAP (full height) -->
-  <div class="page full-h" id="page-mindmap">
+  <div class="page full-h" id="page-mindmap" style="display:none">
     <div class="mm-wrap" id="mm-wrap">
       <svg class="mm-svg" id="mm-svg"></svg>
       <div class="mm-layer" id="mm-layer"></div>
-      <div class="mm-hint" id="mm-hint">Двойной клик на холсте — новый узел · Наведи на узел → тяни от точки — связь · ПКМ — меню</div>
+      <div class="mm-hint" id="mm-hint">Двойной клик на холсте — новый узел · Тяни от якоря — связь · ПКМ — меню</div>
       <div class="mm-toolbar">
         <button class="mm-btn" onclick="mmZoomIn()">＋</button>
         <button class="mm-btn" onclick="mmZoomOut()">−</button>
@@ -706,7 +1108,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </main>
 </div>
 
-<!-- MODAL -->
+<!-- INFO BUTTON -->
+<div id="info-btn" onclick="toggleInfo()" title="О трекере (версия)" style="
+  position:fixed;bottom:18px;right:18px;z-index:9000;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:14px;font-weight:700;
+  color:var(--accent);
+  box-shadow:var(--shadow);
+  transition:all .15s;
+  user-select:none;font-family:'Inter',sans-serif;
+">?</div>
+
+<div id="info-popup" style="
+  display:none;position:fixed;bottom:52px;right:18px;z-index:9000;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:12px;padding:16px 18px;
+  box-shadow:var(--shadow);min-width:200px;
+  font-family:'Inter',sans-serif;
+">
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text3);margin-bottom:10px;text-transform:uppercase">О трекере</div>
+  <div style="display:flex;flex-direction:column;gap:7px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <span style="font-size:12px;color:var(--text2)">Версия</span>
+      <span style="font-size:12px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace" id="version-display"></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <span style="font-size:12px;color:var(--text2)">Строк кода</span>
+      <span style="font-size:12px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace" id="line-count">—</span>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-title" id="modal-title">Добавить</div>
@@ -719,6 +1153,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </div>
 
 <script>
+function toggleInfo() {
+  const popup = document.getElementById('info-popup');
+  const btn   = document.getElementById('info-btn');
+  const open  = popup.style.display === 'flex';
+  popup.style.display = open ? 'none' : 'flex';
+  popup.style.flexDirection = 'column';
+  btn.style.borderColor = open ? 'var(--border2)' : 'var(--accent)';
+  btn.style.color       = open ? 'var(--text3)'   : 'var(--accent)';
+}
+
+// ============================================================
+// VERSION — increase after each update
+// ============================================================
+const VERSION = '5.7.0';
+
 // ============================================================
 // DATA DEFINITIONS
 // ============================================================
@@ -779,7 +1228,8 @@ const PHASES_DEF = [
   ]},
 ];
 
-const ASSET_TYPES = ['Спрайт','Тайл','Звук','UI','Анимация','Фон','Другое'];
+const ASSET_TYPES = ['Спрайт','Анимация','Тайл','Фон','UI','Музыка','Звук','Комикс','Шейдер','Другое'];
+const ASSET_TYPE_ICONS = {Спрайт:'🖼',Анимация:'🎞',Тайл:'🧱',Фон:'🌆',UI:'📐',Музыка:'🎵',Звук:'🔊',Комикс:'📖',Шейдер:'✨',Другое:'📦'};
 const ASSET_STATUSES = ['todo','wip','review','done'];
 const ASSET_STATUS_LABELS = {todo:'Не начато',wip:'В работе',review:'На проверке',done:'Готово'};
 const ASSET_STATUS_CLASSES = {todo:'status-todo',wip:'status-wip',review:'status-review',done:'status-done'};
@@ -843,35 +1293,130 @@ const GDD_CONTENT = `<h1>Punk Platformer — Game Design Document</h1>
 // ============================================================
 // STATE
 // ============================================================
-function loadState() {
-  try {
-    const raw = localStorage.getItem('punk_tracker_v3');
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
+function defaultAssets() {
+  return [
+      // ── ПЕРСОНАЖ ──────────────────────────────────────────────
+      {id:'as_p1', name:'Игрок — idle',                    type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p2', name:'Игрок — run',                     type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p3', name:'Игрок — jump / fall',             type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p4', name:'Игрок — атака (мувсет, 3 фазы)',  type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p5', name:'Игрок — хит / смерть',            type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      {id:'as_p6', name:'Игрок — нажатие педали',          type:'Анимация', size:'28×44px',    who:'', status:'todo'},
+      // ── ВРАГИ ─────────────────────────────────────────────────
+      {id:'as_e1', name:'Walker — idle / walk / атака / смерть',   type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e2', name:'Shooter — idle / shoot / смерть',         type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e3', name:'Heavy — idle / walk / атака / смерть',    type:'Анимация', size:'40×48px', who:'', status:'todo'},
+      {id:'as_e4', name:'Manager — idle / бафф / смерть',          type:'Анимация', size:'24×32px', who:'', status:'todo'},
+      {id:'as_e5', name:'Drone — idle / полёт / атака / смерть',   type:'Анимация', size:'24×24px', who:'', status:'todo'},
+      // ── БОССЫ ─────────────────────────────────────────────────
+      {id:'as_b1', name:'Boss 1 — Riot Mech (все фазы + смерть)',  type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      {id:'as_b2', name:'Boss 2 — Trash King (все фазы + смерть)', type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      {id:'as_b3', name:'Boss 3 — Corporate Tyrant (все фазы)',    type:'Анимация', size:'96×96px', who:'', status:'todo'},
+      // ── ГИТАРЫ (спрайты в руках + иконки магазина) ────────────
+      {id:'as_g1', name:'Гитара — Stratocaster',           type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g2', name:'Гитара — Telecaster',             type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g3', name:'Гитара — Les Paul',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g4', name:'Гитара — SG',                     type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g5', name:'Гитара — Iceman',                 type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g6', name:'Гитара — Superstrat',             type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g7', name:'Гитара — Flying V',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g8', name:'Гитара — Explorer',               type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g9', name:'Гитара — Jaguar',                 type:'Спрайт',   size:'24×40px',    who:'', status:'todo'},
+      {id:'as_g10',name:'Гитара — DIY Punk Guitar (эндгейм)', type:'Спрайт',size:'24×40px',   who:'', status:'todo'},
+      // ── ПЕДАЛИ (спрайт педали на полу + иконка) ───────────────
+      {id:'as_pd1',name:'Педаль — Distortion (спрайт + FX волна)', type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd2',name:'Педаль — Reverb (3 волны FX)',            type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd3',name:'Педаль — Overdrive (FX)',                  type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      {id:'as_pd4',name:'Педаль — Wah (FX пробивания)',             type:'Спрайт',  size:'16×12px', who:'', status:'todo'},
+      // ── ПРЕДМЕТЫ / ПИКАПЫ ─────────────────────────────────────
+      {id:'as_i1', name:'Пивная банка — обычная',          type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      {id:'as_i2', name:'Пивная банка — золотая (HP)',     type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      {id:'as_i3', name:'Пивная банка — токсичная',        type:'Спрайт',   size:'10×16px',    who:'', status:'todo'},
+      // ── ТАЙЛСЕТЫ ──────────────────────────────────────────────
+      {id:'as_t1', name:'Тайлсет — Уровень 1 (поля, гаражи, сараи, транспорт)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t2', name:'Тайлсет — Уровень 2 (пятиэтажки, крыши, заборы, прожекторы)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t3', name:'Тайлсет — Уровень 3 (свалка, мусор, рекламные экраны)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t4', name:'Тайлсет — Уровень 4 (трубы, канализация, токсичные ёмкости)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      {id:'as_t5', name:'Тайлсет — Уровень 5 (стекло, неон, корпоративный офис)', type:'Тайл', size:'32×32px', who:'', status:'todo'},
+      // ── ФОНЫ ──────────────────────────────────────────────────
+      {id:'as_bg1',name:'Фон — Уровень 1: окраина, поля (параллакс 2–3 слоя)',   type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg2',name:'Фон — Уровень 2: советские пятиэтажки, ночное небо',    type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg3',name:'Фон — Уровень 3: свалка, рекламные билборды',           type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg4',name:'Фон — Уровень 4: канализация, тёмные трубы, пар',       type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg5',name:'Фон — Уровень 5: корпоративная башня, неон, стерильность', type:'Фон', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_bg6',name:'Фон — Ночная остановка (перекрёсток)',                  type:'Фон',  size:'1920×1080px', who:'', status:'todo'},
+      // ── СПЕЦЭФФЕКТЫ УРОВНЯ ────────────────────────────────────
+      {id:'as_vfx1',name:'VFX — токсичная струя (вверх/вниз, таймингованная)', type:'Анимация', size:'16×64px', who:'', status:'todo'},
+      {id:'as_vfx2',name:'VFX — искажение экрана (токсичная банка)',            type:'Шейдер',  size:'—',       who:'', status:'todo'},
+      {id:'as_vfx3',name:'VFX — удар (хит-эффект на враге)',                    type:'Анимация', size:'32×32px', who:'', status:'todo'},
+      {id:'as_vfx4',name:'VFX — звуковая волна (Flying V, Reverb-педаль)',      type:'Анимация', size:'96×32px', who:'', status:'todo'},
+      {id:'as_vfx5',name:'VFX — пробивание щита (Wah)',                         type:'Анимация', size:'32×32px', who:'', status:'todo'},
+      // ── ПЕРСОНАЖИ КАТ-СЦЕН ────────────────────────────────────
+      {id:'as_cs1',name:'Загадочная девушка — спрайт (ночная остановка)',       type:'Спрайт',  size:'28×44px', who:'', status:'todo'},
+      // ── UI ────────────────────────────────────────────────────
+      {id:'as_ui1',name:'HUD — полоса HP',                type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui2',name:'HUD — счётчик пивных банок',     type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui3',name:'HUD — слот гитары + иконка',     type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui4',name:'HUD — слот педали + кулдаун',    type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui5',name:'Экран магазина (между уровнями)',  type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui6',name:'Экран паузы (смена гитары/педали)', type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui7',name:'Экран Game Over',                 type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui8',name:'Экран победы над боссом',         type:'UI', size:'—', who:'', status:'todo'},
+      {id:'as_ui9',name:'Экран выбора (перекрёсток)',      type:'UI', size:'—', who:'', status:'todo'},
+      // ── КОМИКС-СЛАЙДЫ ─────────────────────────────────────────
+      {id:'as_cm1',name:'Комикс — вступление (до Уровня 1)',        type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm2',name:'Комикс — переход Уровень 1 → 2',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm3',name:'Комикс — переход Уровень 2 → 3',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm4',name:'Комикс — переход Уровень 3 → 4',           type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm5',name:'Комикс — перекрёсток (встреча с девушкой)',  type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm6',name:'Комикс — концовка A: Семья',                type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm7',name:'Комикс — концовка B: Остался панком',       type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      {id:'as_cm8',name:'Комикс — концовка C: Внутри системы',       type:'Комикс', size:'1920×1080px', who:'', status:'todo'},
+      // ── МУЗЫКА ────────────────────────────────────────────────
+      {id:'as_m1', name:'Музыка — Уровень 1: меланхоличный гаражный панк', type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m2', name:'Музыка — Уровень 2: уличный панк + industrial',    type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m3', name:'Музыка — Уровень 3: noisy industrial punk',        type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m4', name:'Музыка — Уровень 4: dark synth / drone',           type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m5', name:'Музыка — Уровень 5: cold corporate techno',        type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m6', name:'Музыка — тема магазина',                           type:'Музыка', size:'1–2 мин', who:'', status:'todo'},
+      {id:'as_m7', name:'Музыка — тема босса (Riot Mech)',                  type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m8', name:'Музыка — тема босса (Trash King)',                 type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m9', name:'Музыка — тема босса (Corporate Tyrant)',           type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      {id:'as_m10',name:'Музыка — финальные титры',                         type:'Музыка', size:'2–3 мин', who:'', status:'todo'},
+      // ── ЗВУКИ (SFX) ───────────────────────────────────────────
+      {id:'as_sfx1', name:'SFX — прыжок',                    type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx2', name:'SFX — приземление',               type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx3', name:'SFX — удар гитарой (базовый)',    type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx4', name:'SFX — подбор пивной банки',       type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx5', name:'SFX — подбор золотой банки (HP)', type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx6', name:'SFX — токсичная банка (эффект)',  type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx7', name:'SFX — урон по игроку',            type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx8', name:'SFX — смерть игрока',             type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx9', name:'SFX — смерть врага',              type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx10',name:'SFX — педаль Distortion (BUM)',   type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx11',name:'SFX — педаль Reverb (3 волны)',   type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx12',name:'SFX — педаль Overdrive',          type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx13',name:'SFX — педаль Wah',                type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx14',name:'SFX — выстрел Shooter',           type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx15',name:'SFX — токсичная струя (Уровень 4)', type:'Звук', size:'~2с', who:'', status:'todo'},
+      {id:'as_sfx16',name:'SFX — покупка в магазине',        type:'Звук', size:'<1с', who:'', status:'todo'},
+      {id:'as_sfx17',name:'SFX — смена гитары/педали',       type:'Звук', size:'<1с', who:'', status:'todo'},
+    ];
+}
+
+function createProjectData(name) {
   const gddId = 'doc_gdd_' + Date.now();
   return {
+    name: name,
+    color: '#6366f1',
     tasks: {},
     customTasks: [],
-    taskLinks: {}, // taskId -> [{type:'url'|'doc', label, href, docId?}]
-    assets: [
-      {id:'as1',name:'Спрайт игрока (idle)',type:'Спрайт',size:'28×44px',who:'',status:'todo'},
-      {id:'as2',name:'Спрайт игрока (run, jump)',type:'Анимация',size:'28×44px',who:'',status:'todo'},
-      {id:'as3',name:'Спрайт робота',type:'Спрайт',size:'28×28px',who:'',status:'todo'},
-      {id:'as4',name:'Тайлсет земли',type:'Тайл',size:'32×32px',who:'',status:'todo'},
-      {id:'as5',name:'Тайлсет платформ',type:'Тайл',size:'32×32px',who:'',status:'todo'},
-      {id:'as6',name:'Фон: здания',type:'Фон',size:'1920×1080px',who:'',status:'todo'},
-      {id:'as7',name:'Фон: звёзды',type:'Фон',size:'1920×1080px',who:'',status:'todo'},
-      {id:'as8',name:'Иконки сердец HUD',type:'UI',size:'25×22px',who:'',status:'todo'},
-      {id:'as9',name:'Пивная банка',type:'Спрайт',size:'10×16px',who:'',status:'todo'},
-      {id:'as10',name:'Флаг победы',type:'Спрайт',size:'56×130px',who:'',status:'todo'},
-      {id:'as11',name:'10 гитар',type:'Спрайт',size:'24×40px',who:'',status:'todo'},
-      {id:'as12',name:'Звук: прыжок',type:'Звук',size:'300+400Hz',who:'',status:'todo'},
-      {id:'as13',name:'Звук: монета',type:'Звук',size:'600+800Hz',who:'',status:'todo'},
-      {id:'as14',name:'Звук: убийство',type:'Звук',size:'420+480Hz',who:'',status:'todo'},
-    ],
+    taskLinks: {},
+    assets: defaultAssets(),
     customAssets: [],
     ideas: [],
     steam: {},
+    moodboard: [],
     docs: [
       {id: gddId, title:'GDD — Game Design Document', content: GDD_CONTENT, created: Date.now(), updated: Date.now()}
     ],
@@ -879,19 +1424,562 @@ function loadState() {
   };
 }
 
+function createEmptyProjectData(name) {
+  return {
+    name: name,
+    color: '#6366f1',
+    tasks: {},
+    customTasks: [],
+    taskLinks: {},
+    assets: [],
+    customAssets: [],
+    ideas: [],
+    steam: {},
+    moodboard: [],
+    docs: [],
+    activeDocId: null,
+    isEmpty: true,
+  };
+}
+
+function isProjectEmpty() {
+  return P && P.isEmpty === true;
+}
+
+function loadState() {
+  const STORAGE_KEY = 'punk_tracker_v4';
+
+  const freshState = () => ({
+    meta: {
+      activeProjectId: 'default',
+      theme: 'light'
+    },
+    projects: {
+      default: createProjectData('Мой проект')
+    }
+  });
+
+  // Try loading v5 (with projects support)
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Check if new structure with projects
+      if (parsed.projects && parsed.meta) {
+        return parsed;
+      }
+      // Old v4 format — migrate to new structure
+      if (parsed.tasks !== undefined) {
+        console.log('[Tracker] Migrating from v4 to v5 (multi-project)...');
+        const state = freshState();
+        state.projects.default = {
+          name: 'Мой проект',
+          tasks: parsed.tasks || {},
+          customTasks: parsed.customTasks || [],
+          taskLinks: parsed.taskLinks || {},
+          assets: parsed.assets || defaultAssets(),
+          customAssets: parsed.customAssets || [],
+          ideas: parsed.ideas || [],
+          steam: parsed.steam || {},
+          moodboard: parsed.moodboard || [],
+          docs: parsed.docs || [],
+          activeDocId: parsed.activeDocId || null
+        };
+        state.meta.theme = parsed.theme || 'light';
+        state.meta.activeProjectId = 'default';
+        return state;
+      }
+    }
+  } catch(e) {}
+
+  // Try loading v3
+  try {
+    const raw = localStorage.getItem('punk_tracker_v3');
+    if (raw) {
+      const old = JSON.parse(raw);
+      if (typeof old !== 'object' || old === null) throw new Error('bad v3');
+      const state = freshState();
+      state.projects.default = {
+        name: 'Мой проект',
+        tasks: old.tasks || {},
+        customTasks: old.customTasks || [],
+        taskLinks: old.taskLinks || {},
+        assets: defaultAssets(),
+        customAssets: old.customAssets || [],
+        ideas: old.ideas || [],
+        steam: old.steam || {},
+        moodboard: [],
+        docs: old.docs || [],
+        activeDocId: old.activeDocId || null
+      };
+      console.log('[Tracker] Migrated from v3 → v5');
+      return state;
+    }
+  } catch(e) {}
+
+  return freshState();
+}
+
 function saveState() {
-  localStorage.setItem('punk_tracker_v3', JSON.stringify(STATE));
+  localStorage.setItem('punk_tracker_v4', JSON.stringify(STATE));
+  updateBadges();
+  updateGlobalProgress();
+  renderSidebarDocs();
+  renderProjectSelector();
+  updateProjectNameDisplay();
+}
+
+let _saveStateTimer = null;
+function scheduleSaveState() {
+  clearTimeout(_saveStateTimer);
+  _saveStateTimer = setTimeout(saveState, 300);
+}
+
+function getActiveProject() {
+  return STATE.projects[STATE.meta.activeProjectId];
+}
+
+function setActiveProject(projectId) {
+  if (STATE.projects[projectId]) {
+    STATE.meta.activeProjectId = projectId;
+    P = STATE.projects[projectId]; // update shortcut
+    saveState();
+    renderRoadmap();
+    renderAssets();
+    renderIdeas();
+    renderSteam();
+    renderScreenshots();
+    renderTrailer();
+    renderChangelog();
+    renderDocEditor();
+    renderMoodboard();
+    updateBadges();
+    updateGlobalProgress();
+    renderSidebarDocs();
+  }
+}
+
+function createProject(name) {
+  const id = 'proj_' + Date.now();
+  STATE.projects[id] = createEmptyProjectData(name);
+  STATE.meta.activeProjectId = id;
+  P = STATE.projects[id];
+  saveState();
+  renderProjectSelector();
+  renderRoadmap();
+  renderAssets();
+  renderIdeas();
+  renderSteam();
+  renderScreenshots();
+  renderTrailer();
+  renderChangelog();
+  renderDocEditor();
+  renderMoodboard();
+  updateBadges();
+  updateGlobalProgress();
+  renderSidebarDocs();
+  return id;
+}
+
+function deleteProject(projectId) {
+  if (Object.keys(STATE.projects).length <= 1) {
+    alert('Нельзя удалить последний проект');
+    return;
+  }
+  if (!confirm('Удалить проект "' + STATE.projects[projectId].name + '"? Все данные будут потеряны.')) return;
+  delete STATE.projects[projectId];
+  if (STATE.meta.activeProjectId === projectId) {
+    STATE.meta.activeProjectId = Object.keys(STATE.projects)[0];
+  }
+  saveState();
+  renderRoadmap();
+  renderProjectSelector();
+}
+
+function renderProjectSelector() {
+  const sel = document.getElementById('project-select');
+  if (!sel) return;
+  const currentId = STATE.meta.activeProjectId;
+  sel.innerHTML = Object.entries(STATE.projects).map(([id, proj]) => {
+    const color = proj.color || '#6366f1';
+    return `<option value="${id}" ${id === currentId ? 'selected' : ''}>${escHtml(proj.name)}</option>`;
+  }).join('');
+  updateProjectNameDisplay();
+}
+
+function updateProjectNameDisplay() {
+  const el = document.getElementById('current-project-name');
+  const colorIndicator = document.getElementById('project-color-indicator');
+  if (el && P) {
+    const color = P.color || '#6366f1';
+    el.textContent = P.name;
+    el.style.color = color;
+    el.style.textShadow = `0 0 20px ${color}40`;
+    if (colorIndicator) {
+      colorIndicator.style.background = color;
+      colorIndicator.style.boxShadow = `0 0 8px ${color}60`;
+    }
+  }
+}
+
+function onProjectSelectChanged(projectId) {
+  setActiveProject(projectId);
+}
+
+function openAddProjectModal() {
+  closeProjectMenu();
+  const name = prompt('Название нового проекта:');
+  if (!name || !name.trim()) return;
+  createProject(name.trim());
+}
+
+function renameCurrentProject() {
+  closeProjectMenu();
+  const currentId = STATE.meta.activeProjectId;
+  const currentName = STATE.projects[currentId].name;
+  const newName = prompt('Название проекта:', currentName);
+  if (!newName || !newName.trim()) return;
+  STATE.projects[currentId].name = newName.trim();
+  saveState();
+}
+
+const PROJECT_COLORS = [
+  {name:'Фиолетовый',value:'#6366f1'},
+  {name:'Синий',value:'#3b82f6'},
+  {name:'Зелёный',value:'#10b981'},
+  {name:'Жёлтый',value:'#f59e0b'},
+  {name:'Оранжевый',value:'#f97316'},
+  {name:'Розовый',value:'#ec4899'},
+  {name:'Красный',value:'#ef4444'},
+  {name:'Бирюзовый',value:'#14b8a6'},
+  {name:'Индиго',value:'#6366f1'},
+  {name:'Лавандовый',value:'#8b5cf6'},
+];
+
+function changeProjectColor() {
+  closeProjectMenu();
+  const currentId = STATE.meta.activeProjectId;
+  const currentColor = STATE.projects[currentId].color || '#6366f1';
+  
+  let optionsHtml = '';
+  PROJECT_COLORS.forEach((c, i) => {
+    const isActive = c.value === currentColor;
+    optionsHtml += `<div class="color-option" data-value="${c.value}" onclick="selectProjectColor('${c.value}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;cursor:pointer;margin-bottom:6px;transition:all 0.2s;background:${isActive ? 'var(--accent-bg)' : 'var(--surface2)'};border:2px solid ${isActive ? c.value : 'transparent'};">
+      <div style="width:28px;height:28px;border-radius:50%;background:${c.value};box-shadow:0 3px 12px ${c.value}80;"></div>
+      <span style="font-size:14px;font-weight:500;color:${isActive ? c.value : 'var(--text)'};">${c.name}</span>
+      ${isActive ? '<span style="margin-left:auto;font-size:18px;color:' + c.value + ';">✓</span>' : ''}
+    </div>`;
+  });
+  const options = optionsHtml;
+  
+  document.getElementById('modal-title').textContent = '🎨 Цвет проекта';
+  document.getElementById('modal-body').innerHTML = `<div style="display:flex;flex-direction:column;gap:4px;">${options}</div>`;
+  document.getElementById('modal-confirm').textContent = 'Готово';
+  document.getElementById('modal-confirm').onclick = closeModal;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function selectProjectColor(color) {
+  const currentId = STATE.meta.activeProjectId;
+  STATE.projects[currentId].color = color;
+  saveState();
+  closeModal();
+  renderProjectSelector();
+}
+
+function deleteCurrentProject() {
+  closeProjectMenu();
+  const currentId = STATE.meta.activeProjectId;
+  const currentName = STATE.projects[currentId].name;
+  if (Object.keys(STATE.projects).length <= 1) {
+    alert('Нельзя удалить последний проект');
+    return;
+  }
+  const confirmWord = prompt('Для удаления проекта "' + currentName + '" введите "punk":\n\nВсе данные будут потеряны.');
+  if (confirmWord !== 'punk') {
+    if (confirmWord !== null) alert('Неверное кодовое слово. Проект не удалён.');
+    return;
+  }
+  delete STATE.projects[currentId];
+  STATE.meta.activeProjectId = Object.keys(STATE.projects)[0];
+  P = STATE.projects[STATE.meta.activeProjectId];
+  saveState();
+  renderProjectSelector();
+  renderRoadmap();
+  renderAssets();
+  renderIdeas();
+  renderSteam();
+  renderScreenshots();
+  renderTrailer();
+  renderChangelog();
+  renderDocEditor();
+  renderMoodboard();
   updateBadges();
   updateGlobalProgress();
   renderSidebarDocs();
 }
 
+function openProjectMenu(e) {
+  if (e) e.stopPropagation();
+  closeProjectMenu();
+  const menu = document.getElementById('project-menu');
+  const btn = document.querySelector('button[onclick="openProjectMenu()"]');
+  const rect = btn.getBoundingClientRect();
+  menu.style.display = 'block';
+  menu.style.top = (rect.bottom + 8) + 'px';
+  menu.style.left = rect.left + 'px';
+  setTimeout(() => document.addEventListener('click', closeProjectMenu, {once:true}), 0);
+}
+
+function closeProjectMenu() {
+  const menu = document.getElementById('project-menu');
+  if (menu) menu.style.display = 'none';
+}
+
 let STATE = loadState();
+let P = STATE.projects[STATE.meta.activeProjectId]; // active project data shortcut
+
+function refreshProjectData() {
+  P = STATE.projects[STATE.meta.activeProjectId];
+}
 let roadmapView = 'list';
 let activeIdeasFilter = 'all';
 let currentPage = 'roadmap';
 let phaseFilter = 'all';
 let docSaveTimer = null;
+
+// ============================================================
+// THEME
+// ============================================================
+function initTheme() {
+  const saved = STATE.theme || 'light';
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    STATE.theme = 'light';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    STATE.theme = 'dark';
+  }
+  saveState();
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('main-sidebar');
+  const btn = sidebar.querySelector('button[onclick="toggleSidebar()"]');
+  sidebar.classList.toggle('collapsed');
+  if (sidebar.classList.contains('collapsed')) {
+    btn.innerHTML = '▶';
+    btn.title = 'Развернуть';
+  } else {
+    btn.innerHTML = '◀';
+    btn.title = 'Свернуть';
+  }
+}
+
+function toggleSection(id) {
+  let elId = 'nav-' + id;
+  if (id === 'release') elId = 'release-items';
+  if (id === 'ideas') elId = 'nav-ideas-section';
+  
+  const el = document.getElementById(elId);
+  const chevron = document.getElementById(id === 'release' ? 'release-chevron' : 'chevron-' + id);
+  if (!el) return;
+  
+  const isCollapsed = el.getAttribute('data-collapsed') === 'true';
+  if (isCollapsed) {
+    el.removeAttribute('data-collapsed');
+    if (chevron) chevron.style.transform = 'rotate(90deg)';
+  } else {
+    el.setAttribute('data-collapsed', 'true');
+    if (chevron) chevron.style.transform = 'rotate(0deg)';
+  }
+}
+
+// ============================================================
+// EXPORT DATA
+// ============================================================
+function exportData() {
+  const data = {
+    exportDate: new Date().toISOString(),
+    version: 'Game Dev Tracker v4',
+    state: STATE
+  };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `punk-tracker-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importDataTrigger() {
+  document.getElementById('import-json-input').click();
+}
+
+function handleImportData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.state) {
+        alert('Неверный формат файла');
+        return;
+      }
+      
+      if (confirm('Это заменит ВСЕ текущие данные. Продолжить?')) {
+        STATE = data.state;
+        saveState();
+        
+        initTheme();
+        updateBadges();
+        updateGlobalProgress();
+        renderSidebarDocs();
+        renderRoadmap();
+        renderIdeas();
+        renderAssets();
+        
+        alert('Данные успешно импортированы!');
+      }
+    } catch (err) {
+      alert('Ошибка при чтении файла: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function openSearchModal() {
+  document.getElementById('modal-title').textContent = '🔍 Поиск';
+  document.getElementById('modal-body').innerHTML = `
+    <input class="form-input" id="search-input" placeholder="Поиск по задачам, документам, идеям..." 
+           style="margin-bottom:12px;font-size:14px;padding:10px 12px" autofocus>
+    <div id="search-results" style="max-height:350px;overflow-y:auto"></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);text-align:center">
+      Enter — перейти · Esc — закрыть
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-confirm').style.display = 'none';
+  
+  const input = document.getElementById('search-input');
+  let _searchTimer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(_searchTimer);
+    _searchTimer = setTimeout(performSearch, 150);
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter') {
+      const first = document.querySelector('#search-results .search-result-item');
+      if (first) first.click();
+    }
+  });
+  
+  setTimeout(() => input.focus(), 50);
+}
+
+function performSearch() {
+  const query = document.getElementById('search-input').value.toLowerCase().trim();
+  const results = document.getElementById('search-results');
+  if (!query) { results.innerHTML = ''; return; }
+  
+  let html = '';
+  
+  // Search tasks
+  PHASES_DEF.forEach(phase => {
+    phase.tasks.forEach(task => {
+      if (task.name.toLowerCase().includes(query) || (task.note && task.note.toLowerCase().includes(query))) {
+        html += `<div class="search-result-item" onclick="goToSearchResult('task','${phase.id}','${task.id}')">
+          <span class="search-icon">☑️</span>
+          <span class="search-text"><b>${escapeHtml(task.name)}</b><span class="search-meta"> — ${phase.name}</span></span>
+        </div>`;
+      }
+    });
+  });
+  (P.customTasks || []).forEach(task => {
+    if (task.name.toLowerCase().includes(query)) {
+      html += `<div class="search-result-item" onclick="goToSearchResult('task','custom','${task.id}')">
+        <span class="search-icon">☑️</span>
+        <span class="search-text"><b>${escapeHtml(task.name)}</b><span class="search-meta"> — Кастомная задача</span></span>
+      </div>`;
+    }
+  });
+  
+  // Search docs
+  (P.docs || []).forEach(doc => {
+    if ((doc.title && doc.title.toLowerCase().includes(query)) || 
+        (doc.body && doc.body.toLowerCase().includes(query))) {
+      html += `<div class="search-result-item" onclick="goToSearchResult('doc','${doc.id}')">
+        <span class="search-icon">📄</span>
+        <span class="search-text"><b>${escapeHtml(doc.title || 'Без названия')}</b><span class="search-meta"> — Документ</span></span>
+      </div>`;
+    }
+  });
+  
+  // Search ideas
+  (P.ideas || []).forEach(idea => {
+    if (idea.text.toLowerCase().includes(query)) {
+      html += `<div class="search-result-item" onclick="goToSearchResult('idea','${idea.id}')">
+        <span class="search-icon">💡</span>
+        <span class="search-text"><b>${escapeHtml(idea.text)}</b><span class="search-meta"> — Идея</span></span>
+      </div>`;
+    }
+  });
+  
+  // Search mindmap nodes
+  (STATE.mindmap?.nodes || []).forEach(node => {
+    if (node.text.toLowerCase().includes(query)) {
+      html += `<div class="search-result-item" onclick="goToSearchResult('mindmap','${node.id}')">
+        <span class="search-icon">🧠</span>
+        <span class="search-text"><b>${escapeHtml(node.text)}</b><span class="search-meta"> — Майндмап</span></span>
+      </div>`;
+    }
+  });
+  
+  if (!html) html = '<div style="text-align:center;color:var(--text3);padding:20px">Ничего не найдено</div>';
+  results.innerHTML = html;
+}
+
+function goToSearchResult(type, phaseId, taskId) {
+  closeModal();
+  if (type === 'task') {
+    goTo('roadmap', document.getElementById('nav-roadmap'));
+    phaseFilter = phaseId;
+    renderRoadmap();
+    setTimeout(() => {
+      const el = document.getElementById('task-' + taskId);
+      if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 100);
+  } else if (type === 'doc') {
+    openDoc(phaseId);
+  } else if (type === 'idea') {
+    goTo('ideas', document.getElementById('nav-ideas'));
+    renderIdeas();
+    setTimeout(() => {
+      const el = document.getElementById('idea-' + phaseId);
+      if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 100);
+  } else if (type === 'mindmap') {
+    goTo('mindmap', document.getElementById('nav-mindmap'));
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 // ============================================================
 // NAVIGATION
@@ -907,7 +1995,7 @@ function goTo(page, el) {
   });
   const mc = document.getElementById('main-content');
 
-  if (page === 'doc' || page === 'mindmap') {
+  if (page === 'doc' || page === 'mindmap' || page === 'moodboard') {
     mc.style.display = 'none';
     const dp = document.getElementById('page-' + page);
     dp.style.display = 'flex';
@@ -919,7 +2007,7 @@ function goTo(page, el) {
     if (pg) pg.classList.add('active');
   }
 
-  const titles = {roadmap:'Roadmap',assets:'Ассеты',ideas:'Банк идей',steam:'Steam Checklist',doc:'Документы',mindmap:'Майндмап'};
+  const titles = {roadmap:'Roadmap',assets:'Ассеты',ideas:'Банк идей',steam:'Steam',screenshots:'Скриншоты',trailer:'Трейлер',changelog:'Обновления',doc:'Документы',mindmap:'Майндмап',moodboard:'Мудборд'};
   document.getElementById('page-title').textContent = titles[page] || page;
   currentPage = page;
   updateTopbarActions(page);
@@ -927,8 +2015,12 @@ function goTo(page, el) {
   else if (page === 'assets') renderAssets();
   else if (page === 'ideas') renderIdeas();
   else if (page === 'steam') renderSteam();
+  else if (page === 'screenshots') renderScreenshots();
+  else if (page === 'trailer') renderTrailer();
+  else if (page === 'changelog') renderChangelog();
   else if (page === 'doc') renderDocEditor();
   else if (page === 'mindmap') { setTimeout(initMindmap, 30); }
+  else if (page === 'moodboard') { renderMoodboard(); initMoodboardDrop(); }
 }
 
 function updateTopbarActions(page) {
@@ -938,6 +2030,7 @@ function updateTopbarActions(page) {
   else if (page === 'ideas') el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAddIdeaModal()">+ Идея</button>`;
   else if (page === 'doc') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="triggerImport()" title="Импорт .md .txt .html .docx">↑ Импорт</button><button class="btn btn-primary btn-sm" onclick="createDoc()">+ Документ</button>`;
   else if (page === 'mindmap') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="mmFitAll()">↔ Вписать</button>`;
+  else if (page === 'moodboard') el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="mbTriggerUpload()">↑ Загрузить</button><button class="btn btn-primary btn-sm" onclick="mbOpenUrl()">+ URL</button>`;
   else el.innerHTML = '';
 }
 
@@ -946,9 +2039,9 @@ function updateTopbarActions(page) {
 // ============================================================
 function renderSidebarDocs() {
   const el = document.getElementById('sidebar-docs');
-  if (!STATE.docs || STATE.docs.length === 0) { el.innerHTML = ''; return; }
-  el.innerHTML = STATE.docs.map(d => `
-    <div class="nav-doc-item ${STATE.activeDocId === d.id ? 'active' : ''}" onclick="openDoc('${d.id}')">
+  if (!P.docs || P.docs.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = P.docs.map(d => `
+    <div class="nav-doc-item ${P.activeDocId === d.id ? 'active' : ''}" onclick="openDoc('${d.id}')">
       <span style="font-size:13px;flex-shrink:0">📄</span>
       <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px">${d.title || 'Без названия'}</span>
       <button class="nav-doc-del" onclick="event.stopPropagation();deleteDoc('${d.id}')" title="Удалить">✕</button>
@@ -957,7 +2050,7 @@ function renderSidebarDocs() {
 }
 
 function openDoc(id) {
-  STATE.activeDocId = id;
+  P.activeDocId = id;
   // nav highlight
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   goTo('doc', null);
@@ -966,16 +2059,16 @@ function openDoc(id) {
 
 function createDoc() {
   const id = 'doc_' + Date.now();
-  STATE.docs.push({id, title:'Новый документ', content:'', created: Date.now(), updated: Date.now()});
-  STATE.activeDocId = id;
+  P.docs.push({id, title:'Новый документ', content:'', created: Date.now(), updated: Date.now()});
+  P.activeDocId = id;
   saveState();
   goTo('doc', null);
 }
 
 function deleteDoc(id) {
   if (!confirm('Удалить документ?')) return;
-  STATE.docs = STATE.docs.filter(d => d.id !== id);
-  if (STATE.activeDocId === id) STATE.activeDocId = STATE.docs.length > 0 ? STATE.docs[0].id : null;
+  P.docs = P.docs.filter(d => d.id !== id);
+  if (P.activeDocId === id) P.activeDocId = P.docs.length > 0 ? P.docs[0].id : null;
   saveState();
   renderDocEditor();
 }
@@ -986,16 +2079,16 @@ function deleteDoc(id) {
 function renderDocEditor() {
   renderSidebarDocs();
   const listBody = document.getElementById('docs-list-body');
-  if (!STATE.docs) STATE.docs = [];
-  listBody.innerHTML = STATE.docs.map(d => `
-    <div class="doc-list-item ${STATE.activeDocId === d.id ? 'active' : ''}" onclick="selectDoc('${d.id}')">
+  if (!P.docs) P.docs = [];
+  listBody.innerHTML = P.docs.map(d => `
+    <div class="doc-list-item ${P.activeDocId === d.id ? 'active' : ''}" onclick="selectDoc('${d.id}')">
       <span class="doc-list-item-icon">📄</span>
       <span class="doc-list-item-name">${d.title || 'Без названия'}</span>
       <button class="doc-list-item-del" onclick="event.stopPropagation();deleteDoc('${d.id}')">✕</button>
     </div>
   `).join('') || '<div style="font-size:12px;color:var(--text3);padding:12px 10px;">Нет документов</div>';
 
-  const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+  const doc = P.docs.find(d => d.id === P.activeDocId);
   const empty = document.getElementById('doc-empty');
   const active = document.getElementById('doc-active');
 
@@ -1015,7 +2108,7 @@ function renderDocEditor() {
 }
 
 function selectDoc(id) {
-  STATE.activeDocId = id;
+  P.activeDocId = id;
   saveState();
   renderDocEditor();
 }
@@ -1023,7 +2116,7 @@ function selectDoc(id) {
 function scheduleDocSave() {
   clearTimeout(docSaveTimer);
   docSaveTimer = setTimeout(() => {
-    const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+    const doc = P.docs.find(d => d.id === P.activeDocId);
     if (doc) {
       doc.content = document.getElementById('doc-body').innerHTML;
       doc.updated = Date.now();
@@ -1036,7 +2129,7 @@ function scheduleDocSave() {
 }
 
 function saveDocTitle() {
-  const doc = STATE.docs.find(d => d.id === STATE.activeDocId);
+  const doc = P.docs.find(d => d.id === P.activeDocId);
   if (doc) {
     doc.title = document.getElementById('doc-title-input').value;
     doc.updated = Date.now();
@@ -1056,10 +2149,12 @@ function insertHR() {
 }
 
 function insertLink() {
-  const url = prompt('Введи URL ссылки:');
+  let url = prompt('Введи URL ссылки:');
   if (!url) return;
+  url = url.trim();
+  if (!/^https?:\/\//i.test(url)) { alert('URL должен начинаться с http:// или https://'); return; }
   const text = window.getSelection().toString() || url;
-  execFmt('insertHTML', `<a href="${url}" target="_blank">${text}</a>`);
+  execFmt('insertHTML', `<a href="${escHtml(url)}" target="_blank">${escHtml(text)}</a>`);
 }
 
 // ============================================================
@@ -1067,17 +2162,19 @@ function insertLink() {
 // ============================================================
 function allTasks() {
   const tasks = [];
-  PHASES_DEF.forEach(p => p.tasks.forEach(t => tasks.push({...t, phaseId:p.id, phaseName:p.name})));
-  STATE.customTasks.forEach(t => tasks.push(t));
+  if (!isProjectEmpty()) {
+    PHASES_DEF.forEach(p => p.tasks.forEach(t => tasks.push({...t, phaseId:p.id, phaseName:p.name})));
+  }
+  P.customTasks.forEach(t => tasks.push(t));
   return tasks;
 }
 
 function isTaskDone(id, def) {
-  return STATE.tasks[id] !== undefined ? STATE.tasks[id].done : (def || false);
+  return P.tasks[id] !== undefined ? P.tasks[id].done : (def || false);
 }
 
 function toggleTask(id, def) {
-  STATE.tasks[id] = {done: !isTaskDone(id, def)};
+  P.tasks[id] = {done: !isTaskDone(id, def)};
   saveState();
   renderRoadmap();
 }
@@ -1094,12 +2191,18 @@ function renderStats() {
   const done = tasks.filter(t => isTaskDone(t.id, t.done)).length;
   const total = tasks.length;
   const pct = total > 0 ? Math.round(done/total*100) : 0;
-  const current = PHASES_DEF.find(p => p.tasks.some(t => !isTaskDone(t.id, t.done)));
+  let currentPhase;
+  if (isProjectEmpty()) {
+    currentPhase = total > 0 ? null : 'Добавь задачи';
+  } else {
+    currentPhase = PHASES_DEF.find(p => p.tasks.some(t => !isTaskDone(t.id, t.done)));
+  }
+  const remaining = total - done;
   document.getElementById('stats-row').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Выполнено</div><div class="stat-value">${done}</div><div class="stat-sub">из ${total} задач</div></div>
-    <div class="stat-card"><div class="stat-label">Прогресс</div><div class="stat-value">${pct}%</div><div class="stat-sub">до релиза</div></div>
-    <div class="stat-card"><div class="stat-label">Текущий этап</div><div class="stat-value" style="font-size:13px;line-height:1.3;padding-top:5px">${current ? current.name : '🎉 Готово!'}</div></div>
-    <div class="stat-card"><div class="stat-label">Осталось</div><div class="stat-value">${total - done}</div><div class="stat-sub">задач</div></div>`;
+    <div class="stat-card"><div class="stat-label">Выполнено</div><div class="stat-value" style="color:#10b981;text-shadow:0 2px 8px rgba(16,185,129,0.3);">${done}</div><div class="stat-sub">из ${total} задач</div></div>
+    <div class="stat-card"><div class="stat-label">Прогресс</div><div class="stat-value" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${pct}%</div><div class="stat-sub">до релиза</div></div>
+    <div class="stat-card"><div class="stat-label">Текущий этап</div><div class="stat-value" style="font-size:13px;line-height:1.3;padding-top:5px">${currentPhase ? currentPhase.name : '🎉 Готово!'}</div></div>
+    <div class="stat-card"><div class="stat-label">Осталось</div><div class="stat-value" style="color:#f59e0b;text-shadow:0 2px 8px rgba(245,158,11,0.3);">${remaining}</div><div class="stat-sub">задач</div></div>`;
 }
 
 function renderPhaseFilter() {
@@ -1120,8 +2223,10 @@ function setRoadmapView(view, el) {
 function renderRoadmapList() {
   const container = document.getElementById('roadmap-content');
   const phases = phaseFilter === 'all' ? PHASES_DEF : PHASES_DEF.filter(p => p.id === phaseFilter);
+  const empty = isProjectEmpty();
   container.innerHTML = phases.map(phase => {
-    const all = [...phase.tasks, ...STATE.customTasks.filter(t => t.phaseId === phase.id)];
+    const defaultTasks = empty ? [] : phase.tasks;
+    const all = [...defaultTasks, ...P.customTasks.filter(t => t.phaseId === phase.id)];
     const done = all.filter(t => isTaskDone(t.id, t.done)).length;
     const pct = all.length > 0 ? Math.round(done/all.length*100) : 0;
     const r = 11, circ = 2*Math.PI*r;
@@ -1136,8 +2241,8 @@ function renderRoadmapList() {
           <text x="15" y="15" text-anchor="middle" dominant-baseline="central" font-size="7" font-family="DM Mono" fill="var(--text2)">${pct}%</text>
         </svg>
         <div class="phase-info">
-          <div class="phase-name">${phase.name}</div>
-          <div class="phase-meta">${phase.sub} · ${done}/${all.length}</div>
+          <div class="phase-name">${escHtml(phase.name)}</div>
+          <div class="phase-meta">${escHtml(phase.sub)} · ${done}/${all.length}</div>
         </div>
         <span class="phase-chevron open" id="chev-${phase.id}">▼</span>
       </div>
@@ -1150,17 +2255,23 @@ function renderRoadmapList() {
 
 function renderTaskRow(t) {
   const done = isTaskDone(t.id, t.done);
-  const links = STATE.taskLinks[t.id] || [];
-  const linksHtml = links.length > 0 ? `<div class="task-links">${links.map((l,i) =>
-    l.type === 'doc'
-      ? `<button class="task-link doc-link" onclick="openDoc('${l.docId}')">📄 ${l.label}<span class="task-link-del" onclick="event.stopPropagation();removeTaskLink('${t.id}',${i})">✕</span></button>`
-      : `<a class="task-link" href="${l.href}" target="_blank">🔗 ${l.label}<span class="task-link-del" onclick="event.stopPropagation();event.preventDefault();removeTaskLink('${t.id}',${i})">✕</span></a>`
-  ).join('')}</div>` : '';
+  const links = P.taskLinks[t.id] || [];
+  const linksHtml = links.length > 0 ? `<div class="task-links">${links.map((l,i) => {
+    const icon = getLinkIcon(l);
+    if (l.type === 'doc')
+      return `<button class="task-link doc-link" onclick="openDoc('${escHtml(l.docId)}')">
+        ${icon} ${escHtml(l.label)}<span class="task-link-del" onclick="event.stopPropagation();removeTaskLink('${t.id}',${i})">✕</span></button>`;
+    if (l.type === 'page')
+      return `<button class="task-link doc-link" style="background:var(--accent-bg);color:var(--accent)" onclick="goTo('${l.pageId}',document.getElementById('nav-${l.pageId}'))">
+        ${icon} ${escHtml(l.label)}<span class="task-link-del" onclick="event.stopPropagation();removeTaskLink('${t.id}',${i})">✕</span></button>`;
+    return `<a class="task-link" href="${l.href ? escHtml(l.href) : '#'}" target="_blank">
+      ${icon} ${escHtml(l.label)}<span class="task-link-del" onclick="event.stopPropagation();event.preventDefault();removeTaskLink('${t.id}',${i})">✕</span></a>`;
+  }).join('')}</div>` : '';
   return `<div class="task-row">
     <div class="task-checkbox ${done?'checked':''}" onclick="toggleTask('${t.id}',${t.done||false})"></div>
     <div class="task-content">
-      <div class="task-name ${done?'done':''}">${t.name}</div>
-      ${t.note ? `<div class="task-note">${t.note}</div>` : ''}
+      <div class="task-name ${done?'done':''}">${escHtml(t.name)}</div>
+      ${t.note ? `<div class="task-note">${escHtml(t.note)}</div>` : ''}
       ${linksHtml}
     </div>
     <div class="task-actions">
@@ -1188,22 +2299,22 @@ function renderKanban() {
   container.innerHTML = `<div class="kanban" style="grid-template-columns:1fr 1fr;">` +
     statuses.map(s => `<div class="kanban-col">
       <div class="kanban-header"><div class="kanban-title"><div class="status-dot" style="background:${s.color}"></div>${s.label}</div><div class="kanban-count">${cols[s.key].length}</div></div>
-      <div class="kanban-body">${cols[s.key].length === 0 ? '<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px 0">Пусто</div>' :
-        cols[s.key].map(t => `<div class="kanban-card">${t.name}<div class="kanban-card-phase">${PHASES_DEF.find(p=>p.id===t.phaseId)?.name||''}</div></div>`).join('')}
+      <div class="kanban-body">${cols[s.key].length === 0 ? '<div style="font-size:12px;color:var(--text3);text-align:center;padding:24px 10px">Пусто</div>' :
+        cols[s.key].map(t => `<div class="kanban-card">${escHtml(t.name)}<div class="kanban-card-phase">${escHtml(PHASES_DEF.find(p=>p.id===t.phaseId)?.name||'')}</div></div>`).join('')}
       </div></div>`).join('') + `</div>`;
 }
 
 function deleteTask(id) {
-  STATE.customTasks = STATE.customTasks.filter(t => t.id !== id);
-  delete STATE.tasks[id];
-  delete STATE.taskLinks[id];
+  P.customTasks = P.customTasks.filter(t => t.id !== id);
+  delete P.tasks[id];
+  delete P.taskLinks[id];
   saveState();
   renderPage(currentPage);
 }
 
 function removeTaskLink(taskId, idx) {
-  if (!STATE.taskLinks[taskId]) return;
-  STATE.taskLinks[taskId].splice(idx, 1);
+  if (!P.taskLinks[taskId]) return;
+  P.taskLinks[taskId].splice(idx, 1);
   saveState();
   renderRoadmap();
 }
@@ -1211,46 +2322,190 @@ function removeTaskLink(taskId, idx) {
 // ============================================================
 // ASSETS
 // ============================================================
-function allAssets() { return [...STATE.assets, ...STATE.customAssets]; }
+function allAssets() { return [...P.assets, ...P.customAssets]; }
+
+let assetTypeFilter = 'all';
+const collapsedGroups = new Set(); // stores collapsed type names
 
 function renderAssets() {
   const assets = allAssets();
   const done = assets.filter(a => a.status === 'done').length;
+  const wip  = assets.filter(a => a.status === 'wip').length;
+  const todo = assets.filter(a => a.status === 'todo').length;
+
+  const typesInData = ['all', ...ASSET_TYPES.filter(t => assets.some(a => a.type === t))];
+  const filtered = assetTypeFilter === 'all' ? assets : assets.filter(a => a.type === assetTypeFilter);
+
+  const groups = {};
+  filtered.forEach(a => {
+    if (!groups[a.type]) groups[a.type] = [];
+    groups[a.type].push(a);
+  });
+
+  const tabsHtml = typesInData.map(t => {
+    const count = t === 'all' ? assets.length : assets.filter(a => a.type === t).length;
+    const active = assetTypeFilter === t ? 'style="background:var(--accent);color:#fff;border-color:var(--accent)"' : '';
+    const icon = t === 'all' ? '📦' : (ASSET_TYPE_ICONS[t] || '');
+    return `<button class="filter-chip" ${active} onclick="setAssetFilter('${t}')">${icon} ${t === 'all' ? 'Все' : t} <span style="opacity:.7;font-size:11px">${count}</span></button>`;
+  }).join('');
+
+  const STATUS_DOT = {todo:'⬜',wip:'🟡',review:'🔵',done:'🟢'};
+
+  const rowsHtml = Object.entries(groups).map(([type, list]) => {
+    const gdone = list.filter(a=>a.status==='done').length;
+    const pct = Math.round(gdone/list.length*100);
+    const collapsed = collapsedGroups.has(type);
+    const chevronCls = collapsed ? 'asset-group-chevron collapsed' : 'asset-group-chevron';
+
+    const dataRows = collapsed ? '' : list.map(a => `<tr class="asset-data-row" data-group="${type}">
+      <td style="padding-left:24px">
+        <div class="asset-name-cell">
+          <span class="asset-name-text" contenteditable="true"
+            onblur="updateAssetName('${a.id}',this)"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}"
+            title="Нажми для редактирования"
+          >${escHtml(a.name)}</span>
+        </div>
+      </td>
+      <td style="color:var(--text2);font-size:12px">${ASSET_TYPE_ICONS[a.type]||''} ${a.type}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">${a.size||'—'}</td>
+      <td>
+        <input class="asset-who-input" type="text" value="${escHtml(a.who||'')}" placeholder="не назначен"
+          onblur="updateAssetWho('${a.id}',this.value)"
+          onkeydown="if(event.key==='Enter')this.blur()">
+      </td>
+      <td>
+        <div class="asset-status-wrap">
+          <div class="status-badge ${ASSET_STATUS_CLASSES[a.status]}" onclick="showStatusMenu(event,'${a.id}')">
+            ${STATUS_DOT[a.status]} ${ASSET_STATUS_LABELS[a.status]} <span style="font-size:9px;opacity:.6">▾</span>
+          </div>
+        </div>
+      </td>
+      <td><button class="icon-btn delete" onclick="deleteAsset('${a.id}')">✕</button></td>
+    </tr>`).join('');
+
+    return `<tr class="asset-group-header" onclick="toggleAssetGroup('${type}')">
+      <td colspan="6" style="padding:8px 14px;font-weight:600;font-size:12px;color:var(--text2);letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--surface2)">
+        <span class="${chevronCls}">▶</span>
+        <span style="margin-right:10px">${ASSET_TYPE_ICONS[type]||''} ${type.toUpperCase()}</span>
+        <span style="font-weight:400;color:var(--text3)">${gdone}/${list.length}</span>
+        <span style="display:inline-block;width:80px;height:5px;background:var(--border2);border-radius:3px;margin-left:10px;vertical-align:middle;overflow:hidden">
+          <span style="display:block;height:100%;width:${pct}%;background:${pct===100?'var(--green)':'var(--accent)'};border-radius:3px"></span>
+        </span>
+      </td>
+    </tr>${dataRows}`;
+  }).join('');
+
   document.getElementById('assets-content').innerHTML = `
-    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;">
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
       <div class="stat-card"><div class="stat-label">Всего</div><div class="stat-value">${assets.length}</div></div>
       <div class="stat-card"><div class="stat-label">Готово</div><div class="stat-value" style="color:var(--green)">${done}</div></div>
-      <div class="stat-card"><div class="stat-label">В работе</div><div class="stat-value" style="color:var(--amber)">${assets.filter(a=>a.status==='wip').length}</div></div>
-      <div class="stat-card"><div class="stat-label">Не начато</div><div class="stat-value" style="color:var(--text3)">${assets.filter(a=>a.status==='todo').length}</div></div>
+      <div class="stat-card"><div class="stat-label">В работе</div><div class="stat-value" style="color:var(--amber)">${wip}</div></div>
+      <div class="stat-card"><div class="stat-label">Не начато</div><div class="stat-value" style="color:var(--text3)">${todo}</div></div>
     </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">${tabsHtml}</div>
     <div class="asset-table"><table>
       <thead><tr><th>Название</th><th>Тип</th><th>Размер</th><th>Кто делает</th><th>Статус</th><th></th></tr></thead>
-      <tbody>${assets.map(a => `<tr>
-        <td style="font-weight:500">${a.name}</td>
-        <td style="color:var(--text2)">${a.type}</td>
-        <td style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text3)">${a.size||'—'}</td>
-        <td><span contenteditable="true" style="min-width:50px;display:inline-block;font-size:12.5px;color:var(--text2);" onblur="updateAssetWho('${a.id}',this.textContent)">${a.who||''}</span></td>
-        <td><div class="status-badge ${ASSET_STATUS_CLASSES[a.status]}" onclick="cycleAssetStatus('${a.id}')">${ASSET_STATUS_LABELS[a.status]}</div></td>
-        <td><button class="icon-btn delete" onclick="deleteAsset('${a.id}')">✕</button></td>
-      </tr>`).join('')}</tbody>
+      <tbody>${rowsHtml}</tbody>
     </table></div>`;
 }
+
+function toggleAssetGroup(type) {
+  if (collapsedGroups.has(type)) collapsedGroups.delete(type);
+  else collapsedGroups.add(type);
+  renderAssets();
+}
+
+function setAssetFilter(type) {
+  assetTypeFilter = type;
+  renderAssets();
+}
+
+// ── Status dropdown ──────────────────────────────────────────
+let _statusMenuId = null;
+
+function showStatusMenu(e, assetId) {
+  e.stopPropagation();
+  closeStatusMenu();
+
+  _statusMenuId = assetId;
+  const STATUS_DOT = {todo:'⬜',wip:'🟡',review:'🔵',done:'🟢'};
+  const rect = e.currentTarget.getBoundingClientRect();
+
+  const menu = document.createElement('div');
+  menu.className = 'asset-status-menu open';
+  menu.id = 'asset-status-menu';
+  menu.style.top  = (rect.bottom + 4) + 'px';
+  menu.style.left = rect.left + 'px';
+
+  menu.innerHTML = ASSET_STATUSES.map(s => `
+    <div class="asset-status-opt" onclick="setAssetStatus('${assetId}','${s}')">
+      <span class="status-badge ${ASSET_STATUS_CLASSES[s]}" style="pointer-events:none">
+        ${STATUS_DOT[s]} ${ASSET_STATUS_LABELS[s]}
+      </span>
+    </div>`).join('');
+
+  document.body.appendChild(menu);
+
+  // reposition if overflows viewport
+  const mb = menu.getBoundingClientRect();
+  const pad = 8;
+  if (mb.bottom > window.innerHeight - pad) {
+    menu.style.top = (rect.top - mb.height - 4) + 'px';
+  }
+  if (mb.top < pad) {
+    menu.style.top = (rect.bottom + 4) + 'px';
+  }
+  if (mb.right > window.innerWidth - pad) {
+    menu.style.left = (rect.right - mb.width) + 'px';
+  }
+  if (mb.left < pad) {
+    menu.style.left = rect.left + 'px';
+  }
+}
+
+function closeStatusMenu() {
+  const m = document.getElementById('asset-status-menu');
+  if (m) m.remove();
+  _statusMenuId = null;
+}
+
+function setAssetStatus(id, status) {
+  const a = P.assets.find(x=>x.id===id) || P.customAssets.find(x=>x.id===id);
+  if (a) { a.status = status; saveState(); }
+  closeStatusMenu();
+  renderAssets();
+}
+
+// Close menu on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('#asset-status-menu') && !e.target.closest('.asset-status-wrap')) {
+    closeStatusMenu();
+  }
+});
 
 function cycleAssetStatus(id) {
   const a = allAssets().find(x => x.id === id); if (!a) return;
   const next = ASSET_STATUSES[(ASSET_STATUSES.indexOf(a.status)+1)%ASSET_STATUSES.length];
-  (STATE.assets.find(x=>x.id===id)||STATE.customAssets.find(x=>x.id===id)).status = next;
+  (P.assets.find(x=>x.id===id)||P.customAssets.find(x=>x.id===id)).status = next;
   saveState(); renderAssets();
 }
 
+function updateAssetName(id, el) {
+  const val = el.textContent.trim();
+  if (!val) { el.textContent = allAssets().find(x=>x.id===id)?.name || ''; return; }
+  const a = P.assets.find(x=>x.id===id) || P.customAssets.find(x=>x.id===id);
+  if (a && a.name !== val) { a.name = val; saveState(); }
+}
+
 function updateAssetWho(id, val) {
-  const a = STATE.assets.find(x=>x.id===id)||STATE.customAssets.find(x=>x.id===id);
+  const a = P.assets.find(x=>x.id===id)||P.customAssets.find(x=>x.id===id);
   if (a) { a.who = val.trim(); saveState(); }
 }
 
 function deleteAsset(id) {
-  STATE.assets = STATE.assets.filter(a => a.id !== id);
-  STATE.customAssets = STATE.customAssets.filter(a => a.id !== id);
+  P.assets = P.assets.filter(a => a.id !== id);
+  P.customAssets = P.customAssets.filter(a => a.id !== id);
   saveState(); renderAssets();
 }
 
@@ -1258,17 +2513,18 @@ function deleteAsset(id) {
 // IDEAS
 // ============================================================
 function renderIdeas() {
-  const filtered = activeIdeasFilter==='all' ? STATE.ideas : STATE.ideas.filter(i => i.cat===activeIdeasFilter);
+  const filtered = activeIdeasFilter==='all' ? P.ideas : P.ideas.filter(i => i.cat===activeIdeasFilter);
   const el = document.getElementById('ideas-content');
   if (filtered.length === 0) {
-    el.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--text3)"><div style="font-size:32px;margin-bottom:12px">💡</div><div style="font-size:14px;color:var(--text2);font-weight:500">Нет идей${activeIdeasFilter!=='all'?' в этой категории':''}</div><div style="font-size:13px;margin-top:4px">Нажми «+ Идея»</div></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:64px 32px;color:var(--text3)"><div style="font-size:40px;margin-bottom:16px">💡</div><div style="font-size:15px;color:var(--text2);font-weight:500;margin-bottom:8px">Нет идей${activeIdeasFilter!=='all'?' в этой категории':''}</div><div style="font-size:13px;color:var(--text3)">Нажми «+ Идея»</div></div>`;
     return;
   }
   el.innerHTML = `<div class="ideas-grid">${filtered.map(i => `
-    <div class="idea-card">
-      <div class="idea-text">${i.text}</div>
+    <div class="idea-card" id="idea-${i.id}">
+      <div class="idea-text" id="idea-text-${i.id}">${escapeHtml(i.text)}</div>
       <div class="idea-meta"><span class="tag ${IDEA_TAG_CLASSES[i.cat]}">${IDEA_CATS[i.cat]}</span><span style="font-size:11px;color:var(--text3);margin-left:auto">${i.date||''}</span></div>
-      <button class="idea-del" onclick="deleteIdea('${i.id}')">✕</button>
+      <button class="idea-del" onclick="deleteIdea('${i.id}')" title="Удалить">✕</button>
+      <button class="idea-edit" onclick="editIdea('${i.id}')" title="Редактировать">✏️</button>
     </div>`).join('')}</div>`;
 }
 
@@ -1279,14 +2535,44 @@ function filterIdeas(cat, el) {
   renderIdeas();
 }
 
-function deleteIdea(id) { STATE.ideas = STATE.ideas.filter(i => i.id !== id); saveState(); renderIdeas(); }
+function editIdea(id) {
+  const idea = P.ideas.find(i => i.id === id);
+  if (!idea) return;
+  
+  const card = document.getElementById('idea-' + id);
+  const textEl = document.getElementById('idea-text-' + id);
+  
+  const textarea = document.createElement('textarea');
+  textarea.value = idea.text;
+  textarea.className = 'idea-edit-textarea';
+  textarea.style.cssText = 'width:100%;min-height:60px;padding:8px;border:1.5px solid var(--accent);border-radius:8px;font-family:inherit;font-size:13px;background:var(--surface);color:var(--text);outline:none;resize:vertical;';
+  textarea.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { renderIdeas(); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveIdeaEdit(id, textarea.value); }
+  });
+  textarea.addEventListener('blur', () => saveIdeaEdit(id, textarea.value));
+  
+  textEl.replaceWith(textarea);
+  setTimeout(() => textarea.focus(), 10);
+}
+
+function saveIdeaEdit(id, newText) {
+  const idea = P.ideas.find(i => i.id === id);
+  if (idea && newText.trim()) {
+    idea.text = newText.trim();
+    saveState();
+  }
+  renderIdeas();
+}
+
+function deleteIdea(id) { P.ideas = P.ideas.filter(i => i.id !== id); saveState(); renderIdeas(); }
 
 // ============================================================
 // STEAM
 // ============================================================
 function renderSteam() {
   const all = STEAM_SECTIONS.flatMap(s => s.items);
-  const done = all.filter(i => STATE.steam[i.id]).length;
+  const done = all.filter(i => P.steam[i.id]).length;
   document.getElementById('steam-content').innerHTML = `
     <div class="stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px;">
       <div class="stat-card"><div class="stat-label">Выполнено</div><div class="stat-value">${done}/${all.length}</div></div>
@@ -1294,21 +2580,132 @@ function renderSteam() {
       <div class="stat-card"><div class="stat-label">Осталось</div><div class="stat-value">${all.length-done}</div></div>
     </div>
     ${STEAM_SECTIONS.map(section => {
-      const sd = section.items.filter(i => STATE.steam[i.id]).length;
+      const sd = section.items.filter(i => P.steam[i.id]).length;
       return `<div class="checklist-section">
         <div class="checklist-header"><div class="checklist-title">${section.title}</div><span style="font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--text3)">${sd}/${section.items.length}</span></div>
         ${section.items.map(item => `<div class="check-item" onclick="toggleSteam('${item.id}')">
-          <div class="task-checkbox ${STATE.steam[item.id]?'checked':''}"></div>
+          <div class="task-checkbox ${P.steam[item.id]?'checked':''}"></div>
           <div class="task-content">
-            <div class="task-name ${STATE.steam[item.id]?'done':''}">${item.text}</div>
-            ${item.note?`<div class="check-item-note">${item.note}</div>`:''}
+            <div class="task-name ${P.steam[item.id]?'done':''}">${escHtml(item.text)}</div>
+            ${item.note?`<div class="check-item-note">${escHtml(item.note)}</div>`:''}
           </div>
         </div>`).join('')}
       </div>`;
     }).join('')}`;
 }
 
-function toggleSteam(id) { STATE.steam[id] = !STATE.steam[id]; saveState(); renderSteam(); }
+function toggleSteam(id) { P.steam[id] = !P.steam[id]; saveState(); renderSteam(); }
+
+// ============================================================
+// SCREENSHOTS
+// ============================================================
+function renderScreenshots() {
+  const ss = STATE.screenshots || [];
+  document.getElementById('screenshots-content').innerHTML = `
+    <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="addScreenshot()">+ Добавить скриншот</button>
+      <span style="font-size:12px;color:var(--text3)">${ss.length} изображений</span>
+    </div>
+    ${ss.length === 0 ? '<div style="text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:40px;margin-bottom:16px">📸</div><div style="font-size:14px;color:var(--text2)">Нет скриншотов</div><div style="font-size:13px;margin-top:8px">Добавь первые изображения для магазина</div></div>' : 
+      `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
+        ${ss.map((s, i) => `<div class="screenshot-card">
+          <img src="${escHtml(s.url)}" alt="Screenshot ${i+1}" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius-sm);" onerror="this.style.display='none'">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+            <input type="text" value="${escHtml(s.caption || '')}" placeholder="Подпись..." class="form-input" style="flex:1;padding:6px 10px;font-size:12px;" onchange="updateScreenshotCaption(${i}, this.value)">
+            <button class="icon-btn delete" onclick="deleteScreenshot(${i})" title="Удалить">✕</button>
+          </div>
+        </div>`).join('')}
+      </div>`}
+  `;
+}
+
+function addScreenshot() {
+  const url = prompt('Введите URL изображения:');
+  if (url) {
+    if (!STATE.screenshots) STATE.screenshots = [];
+    STATE.screenshots.push({ url, caption: '' });
+    saveState();
+    renderScreenshots();
+  }
+}
+
+function deleteScreenshot(index) {
+  if (confirm('Удалить этот скриншот?')) {
+    STATE.screenshots.splice(index, 1);
+    saveState();
+    renderScreenshots();
+  }
+}
+
+function updateScreenshotCaption(index, caption) {
+  if (STATE.screenshots[index]) {
+    STATE.screenshots[index].caption = caption;
+    saveState();
+  }
+}
+
+// ============================================================
+// TRAILER
+// ============================================================
+function renderTrailer() {
+  const t = STATE.trailer || { url: '', title: '' };
+  const embedUrl = t.url && /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(t.url) ? t.url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/') : '';
+  document.getElementById('trailer-content').innerHTML = `
+    <div class="stat-card" style="max-width:500px;margin-bottom:24px;">
+      <div class="stat-label">Ссылка на трейлер</div>
+      <input type="text" class="form-input" value="${escHtml(t.url)}" placeholder="https://youtube.com/..." style="margin-top:8px;" onchange="STATE.trailer={...STATE.trailer,url:this.value};saveState()">
+    </div>
+    ${embedUrl ? `<div style="aspect-ratio:16/9;max-width:800px;background:var(--surface2);border-radius:var(--radius);overflow:hidden;">
+      <iframe src="${escHtml(embedUrl)}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>
+    </div>` : '<div style="text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-size:14px;color:var(--text2)">Нет трейлера</div><div style="font-size:13px;margin-top:8px">Добавь ссылку на YouTube</div></div>'}
+  `;
+}
+
+// ============================================================
+// CHANGELOG
+// ============================================================
+function renderChangelog() {
+  const cl = STATE.changelog || [];
+  document.getElementById('changelog-content').innerHTML = `
+    <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="addChangelogEntry()">+ Добавить запись</button>
+      <span style="font-size:12px;color:var(--text3)">${cl.length} записей</span>
+    </div>
+    ${cl.length === 0 ? '<div style="text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:40px;margin-bottom:16px">📋</div><div style="font-size:14px;color:var(--text2)">Нет записей</div><div style="font-size:13px;margin-top:8px">Добавь историю обновлений игры</div></div>' : 
+      `<div style="display:flex;flex-direction:column;gap:16px;max-width:700px;">
+        ${cl.map((entry, i) => `<div class="changelog-entry" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px;">
+            <input type="text" value="${escHtml(entry.version || '')}" placeholder="Версия (напр. v1.0)" class="form-input" style="width:100px;padding:6px 10px;font-size:13px;font-weight:600;" onchange="updateChangelog(${i}, 'version', this.value)">
+            <input type="date" value="${entry.date || ''}" class="form-input" style="width:140px;padding:6px 10px;font-size:13px;" onchange="updateChangelog(${i}, 'date', this.value)">
+            <button class="icon-btn delete" onclick="deleteChangelogEntry(${i})" title="Удалить">✕</button>
+          </div>
+          <textarea class="form-textarea" placeholder="Список изменений..." style="min-height:80px;" onchange="updateChangelog(${i}, 'text', this.value)">${escHtml(entry.text || '')}</textarea>
+        </div>`).join('')}
+      </div>`}
+  `;
+}
+
+function addChangelogEntry() {
+  if (!STATE.changelog) STATE.changelog = [];
+  STATE.changelog.unshift({ version: '', date: new Date().toISOString().split('T')[0], text: '' });
+  saveState();
+  renderChangelog();
+}
+
+function deleteChangelogEntry(index) {
+  if (confirm('Удалить эту запись?')) {
+    STATE.changelog.splice(index, 1);
+    saveState();
+    renderChangelog();
+  }
+}
+
+function updateChangelog(index, field, value) {
+  if (STATE.changelog[index]) {
+    STATE.changelog[index][field] = value;
+    saveState();
+  }
+}
 
 // ============================================================
 // MODALS
@@ -1325,7 +2722,7 @@ function openAddTaskModal() {
     const name = document.getElementById('m-task-name').value.trim();
     if (!name) return;
     const phaseId = document.getElementById('m-task-phase').value;
-    STATE.customTasks.push({id:'ct_'+Date.now(), phaseId, name, note: document.getElementById('m-task-note').value.trim(), done:false, phaseName: PHASES_DEF.find(p=>p.id===phaseId)?.name});
+    P.customTasks.push({id:'ct_'+Date.now(), phaseId, name, note: document.getElementById('m-task-note').value.trim(), done:false, phaseName: PHASES_DEF.find(p=>p.id===phaseId)?.name});
     saveState(); closeModal(); renderRoadmap();
   };
   openModal();
@@ -1344,7 +2741,7 @@ function openAddAssetModal() {
   document.getElementById('modal-confirm').onclick = () => {
     const name = document.getElementById('m-an').value.trim();
     if (!name) return;
-    STATE.customAssets.push({id:'ca_'+Date.now(), name, type:document.getElementById('m-at').value, size:document.getElementById('m-as').value.trim(), who:document.getElementById('m-aw').value.trim(), status:'todo'});
+    P.customAssets.push({id:'ca_'+Date.now(), name, type:document.getElementById('m-at').value, size:document.getElementById('m-as').value.trim(), who:document.getElementById('m-aw').value.trim(), status:'todo'});
     saveState(); closeModal(); renderAssets();
   };
   openModal();
@@ -1360,51 +2757,103 @@ function openAddIdeaModal() {
     const text = document.getElementById('m-it').value.trim();
     if (!text) return;
     const now = new Date();
-    STATE.ideas.push({id:'id_'+Date.now(), text, cat:document.getElementById('m-ic').value, date:now.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})});
+    P.ideas.push({id:'id_'+Date.now(), text, cat:document.getElementById('m-ic').value, date:now.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})});
     saveState(); closeModal(); renderIdeas();
   };
   openModal();
 }
 
+const INTERNAL_PAGES = [
+  {id:'roadmap',  label:'Roadmap',       icon:'🗺'},
+  {id:'assets',   label:'Ассеты',        icon:'🎨'},
+  {id:'ideas',    label:'Банк идей',     icon:'💡'},
+  {id:'mindmap',  label:'Майндмап',      icon:'🧠'},
+  {id:'moodboard',label:'Мудборд',       icon:'🖼'},
+  {id:'steam',    label:'Steam Checklist',icon:'🚀'},
+  {id:'doc',      label:'Документы',     icon:'📄'},
+];
+
+function getLinkIcon(l) {
+  if (l.type === 'page') return INTERNAL_PAGES.find(p=>p.id===l.pageId)?.icon || '📌';
+  if (l.type === 'doc')  return '📄';
+  return '🔗';
+}
+
 function openAddLinkModal(taskId) {
-  document.getElementById('modal-title').textContent = 'Прикрепить ссылку';
-  const docs = STATE.docs || [];
+  document.getElementById('modal-title').textContent = '🔗 Прикрепить ссылку';
+  const docs = P.docs || [];
+
   document.getElementById('modal-body').innerHTML = `
-    <div class="form-group">
-      <label class="form-label">Тип</label>
-      <select class="form-select" id="m-lt" onchange="toggleLinkType()">
-        <option value="url">Внешняя ссылка (URL)</option>
-        <option value="doc">Документ из трекера</option>
-      </select>
-    </div>
-    <div id="m-url-group" class="form-group">
-      <label class="form-label">URL</label>
-      <input type="text" class="form-input" id="m-lurl" placeholder="https://...">
-    </div>
-    <div id="m-doc-group" class="form-group" style="display:none">
-      <label class="form-label">Документ</label>
-      <select class="form-select" id="m-ldoc">
-        ${docs.length > 0 ? docs.map(d=>`<option value="${d.id}">${d.title||'Без названия'}</option>`).join('') : '<option value="">Нет документов</option>'}
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Подпись (необязательно)</label>
-      <input type="text" class="form-input" id="m-llabel" placeholder="Например: Референс, GDD, Туториал...">
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Тип</label>
+        <select class="form-select" id="m-lt" onchange="toggleLinkType()">
+          <option value="page">📌 Раздел трекера</option>
+          <option value="doc">📄 Документ из трекера</option>
+          <option value="url">🔗 Внешняя ссылка (URL)</option>
+        </select>
+      </div>
+
+      <div id="m-page-group" class="form-group">
+        <label class="form-label">Раздел</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          ${INTERNAL_PAGES.map(p=>`
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;font-size:13px;transition:border-color .15s" class="link-page-opt">
+              <input type="radio" name="m-lpage" value="${p.id}" style="accent-color:var(--accent)">
+              <span>${p.icon} ${p.label}</span>
+            </label>`).join('')}
+        </div>
+      </div>
+
+      <div id="m-doc-group" class="form-group" style="display:none">
+        <label class="form-label">Документ</label>
+        <select class="form-select" id="m-ldoc">
+          ${docs.length > 0 ? docs.map(d=>`<option value="${d.id}">${escHtml(d.title||'Без названия')}</option>`).join('') : '<option value="">Нет документов</option>'}
+        </select>
+      </div>
+
+      <div id="m-url-group" class="form-group" style="display:none">
+        <label class="form-label">URL</label>
+        <input type="text" class="form-input" id="m-lurl" placeholder="https://...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Подпись <span style="color:var(--text3);font-weight:400">(необязательно)</span></label>
+        <input type="text" class="form-input" id="m-llabel" placeholder="Оставь пустым — подставится автоматически">
+      </div>
     </div>`;
+
+  // Highlight selected radio
+  document.querySelectorAll('input[name="m-lpage"]').forEach(r => {
+    r.addEventListener('change', () => {
+      document.querySelectorAll('.link-page-opt').forEach(o => o.style.borderColor = 'var(--border2)');
+      r.closest('.link-page-opt').style.borderColor = 'var(--accent)';
+    });
+  });
+  // Pre-select first
+  const first = document.querySelector('input[name="m-lpage"]');
+  if (first) { first.checked = true; first.closest('.link-page-opt').style.borderColor = 'var(--accent)'; }
+
   document.getElementById('modal-confirm').textContent = 'Прикрепить';
   document.getElementById('modal-confirm').onclick = () => {
-    const type = document.getElementById('m-lt').value;
+    const type  = document.getElementById('m-lt').value;
     const label = document.getElementById('m-llabel').value.trim();
-    if (!STATE.taskLinks[taskId]) STATE.taskLinks[taskId] = [];
-    if (type === 'url') {
-      const href = document.getElementById('m-lurl').value.trim();
-      if (!href) return;
-      STATE.taskLinks[taskId].push({type:'url', label: label || href, href});
-    } else {
+    if (!P.taskLinks[taskId]) P.taskLinks[taskId] = [];
+
+    if (type === 'page') {
+      const pageId = document.querySelector('input[name="m-lpage"]:checked')?.value;
+      if (!pageId) return;
+      const page = INTERNAL_PAGES.find(p=>p.id===pageId);
+      P.taskLinks[taskId].push({type:'page', pageId, label: label || `${page.icon} ${page.label}`});
+    } else if (type === 'doc') {
       const docId = document.getElementById('m-ldoc').value;
       if (!docId) return;
-      const doc = STATE.docs.find(d => d.id === docId);
-      STATE.taskLinks[taskId].push({type:'doc', label: label || (doc?.title||'Документ'), docId});
+      const doc = P.docs.find(d=>d.id===docId);
+      P.taskLinks[taskId].push({type:'doc', label: label || (doc?.title||'Документ'), docId});
+    } else {
+      const href = document.getElementById('m-lurl').value.trim();
+      if (!href) return;
+      P.taskLinks[taskId].push({type:'url', label: label || href, href});
     }
     saveState(); closeModal(); renderRoadmap();
   };
@@ -1413,13 +2862,27 @@ function openAddLinkModal(taskId) {
 
 function toggleLinkType() {
   const type = document.getElementById('m-lt').value;
-  document.getElementById('m-url-group').style.display = type === 'url' ? '' : 'none';
-  document.getElementById('m-doc-group').style.display = type === 'doc' ? '' : 'none';
+  document.getElementById('m-page-group').style.display = type === 'page' ? '' : 'none';
+  document.getElementById('m-doc-group').style.display  = type === 'doc'  ? '' : 'none';
+  document.getElementById('m-url-group').style.display  = type === 'url'  ? '' : 'none';
 }
 
 function openModal() { document.getElementById('modal-overlay').classList.add('open'); setTimeout(() => document.querySelector('#modal-body input, #modal-body textarea')?.focus(), 100); }
-function closeModal(e) { if (e && e.target !== document.getElementById('modal-overlay')) return; document.getElementById('modal-overlay').classList.remove('open'); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open'); });
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  const ov = document.getElementById('modal-overlay');
+  ov.classList.remove('open');
+  ov.classList.remove('active');
+  document.getElementById('modal-confirm').style.display = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const ov = document.getElementById('modal-overlay');
+    ov.classList.remove('open');
+    ov.classList.remove('active');
+    document.getElementById('modal-confirm').style.display = '';
+  }
+});
 
 // ============================================================
 // BADGES & PROGRESS
@@ -1430,9 +2893,9 @@ function updateBadges() {
   document.getElementById('nb-roadmap').textContent = `${done}/${tasks.length}`;
   const assets = allAssets();
   document.getElementById('nb-assets').textContent = `${assets.filter(a=>a.status==='done').length}/${assets.length}`;
-  document.getElementById('nb-ideas').textContent = STATE.ideas.length;
+  document.getElementById('nb-ideas').textContent = P.ideas.length;
   const steamAll = STEAM_SECTIONS.flatMap(s=>s.items);
-  document.getElementById('nb-steam').textContent = `${steamAll.filter(i=>STATE.steam[i.id]).length}/${steamAll.length}`;
+  document.getElementById('nb-steam').textContent = `${steamAll.filter(i=>P.steam[i.id]).length}/${steamAll.length}`;
 }
 
 function updateGlobalProgress() {
@@ -1441,6 +2904,43 @@ function updateGlobalProgress() {
   const pct = tasks.length > 0 ? Math.round(done/tasks.length*100) : 0;
   document.getElementById('global-progress').style.width = pct + '%';
   document.getElementById('global-pct').textContent = pct + '%';
+  
+  renderPhaseProgress();
+}
+
+function renderPhaseProgress() {
+  const container = document.getElementById('phase-progress-chart');
+  let html = '';
+  PHASES_DEF.forEach(phase => {
+    const phaseTasks = phase.tasks;
+    const doneCount = phaseTasks.filter(t => isTaskDone(t.id, t.done)).length;
+    const totalCount = phaseTasks.length;
+    const pct = totalCount > 0 ? Math.round(doneCount / totalCount * 100) : 0;
+    const isComplete = doneCount === totalCount && totalCount > 0;
+    html += `
+      <div class="phase-progress-row" title="${escHtml(phase.name)}: ${doneCount}/${totalCount}" style="margin-bottom:6px;">
+        <span class="phase-progress-label" style="max-width:100px;">${escHtml(phase.name)}</span>
+        <div style="flex:1;min-width:50px;">
+          <div class="phase-progress-bar-mini">
+            <div class="phase-progress-fill-mini" style="width:${pct}%;background:${isComplete ? 'var(--green)' : phase.color}"></div>
+          </div>
+        </div>
+        <span class="phase-progress-pct">${doneCount}/${totalCount}</span>
+      </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function togglePhaseProgress() {
+  const el = document.getElementById('phase-progress-chart');
+  const chevron = document.getElementById('progress-chevron');
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    chevron.style.transform = 'rotate(90deg)';
+  } else {
+    el.style.display = 'none';
+    chevron.style.transform = 'rotate(0deg)';
+  }
 }
 
 function renderPage(page) {
@@ -1487,8 +2987,8 @@ async function handleFileImport(input) {
       alert('Формат не поддерживается.\nПоддерживаются: .md, .txt, .html, .docx, .pdf'); return;
     }
     const id = 'doc_import_' + Date.now();
-    STATE.docs.push({id, title, content, created: Date.now(), updated: Date.now(), imported: true});
-    STATE.activeDocId = id;
+    P.docs.push({id, title, content, created: Date.now(), updated: Date.now(), imported: true});
+    P.activeDocId = id;
     saveState();
     goTo('doc', null);
   } catch(e) { alert('Ошибка при чтении файла: ' + e.message); }
@@ -1740,6 +3240,8 @@ function mmOnMove(e) {
       node.y = pos.y - mmDrag.oy;
       const el = document.getElementById('mmn-'+mmDrag.id);
       if (el) { el.style.left=node.x+'px'; el.style.top=node.y+'px'; }
+      // update anchor positions if this node's anchors are shown
+      if (mmAnchorNodeId === node.id) mmShowAnchors(node.id);
       mmDrawEdges();
     }
   }
@@ -1747,13 +3249,32 @@ function mmOnMove(e) {
     const pos = mmClientToWorld(e.clientX, e.clientY);
     mmEdgeDrag.gx = pos.x;
     mmEdgeDrag.gy = pos.y;
-    // highlight target node under cursor
+
+    // Find nearest anchor in world space (SNAP_W = snap radius in world units)
+    const SNAP_W = 30 / mmVP.scale;
+    let snapNodeId = null, snapSide = null, bestD = SNAP_W;
+
     document.querySelectorAll('.mm-node.edge-target').forEach(el=>el.classList.remove('edge-target'));
-    const hit = mmNodeAtWorld(pos.x, pos.y);
-    if (hit && hit!==mmEdgeDrag.fromId) {
-      const el = document.getElementById('mmn-'+hit);
-      if (el) el.classList.add('edge-target');
+    document.querySelectorAll('.mm-anc').forEach(a=>a.classList.remove('snap'));
+
+    for (const node of mm.nodes) {
+      if (node.id === mmEdgeDrag.fromId) continue;
+      const pts = mmAnchorPoints(node);
+      for (const [side, p] of Object.entries(pts)) {
+        const d = Math.hypot(pos.x - p.x, pos.y - p.y);
+        if (d < bestD) { bestD = d; snapNodeId = node.id; snapSide = side; }
+      }
     }
+
+    if (snapNodeId) {
+      const el = document.getElementById('mmn-'+snapNodeId);
+      if (el) el.classList.add('edge-target');
+      // Highlight the snap anchor dot
+      document.querySelectorAll('.mm-anc').forEach(a => {
+        if (a.dataset.nodeId === snapNodeId && a.dataset.side === snapSide) a.classList.add('snap');
+      });
+    }
+
     mmDrawEdges();
   }
 }
@@ -1767,34 +3288,61 @@ function mmOnUp(e) {
   }
   if (mmEdgeDrag) {
     const pos = mmClientToWorld(e.clientX, e.clientY);
-    const targetId = mmNodeAtWorld(pos.x, pos.y);
-    if (targetId && targetId!==mmEdgeDrag.fromId) {
-      const exists = mm.edges.some(ed=>
-        (ed.from===mmEdgeDrag.fromId&&ed.to===targetId)||
-        (ed.from===targetId&&ed.to===mmEdgeDrag.fromId)
+    const SNAP_W = 40 / mmVP.scale; // slightly larger on mouseup
+    let targetId = null, toSide = null, bestD = SNAP_W;
+
+    for (const node of mm.nodes) {
+      if (node.id === mmEdgeDrag.fromId) continue;
+      const pts = mmAnchorPoints(node);
+      for (const [side, p] of Object.entries(pts)) {
+        const d = Math.hypot(pos.x - p.x, pos.y - p.y);
+        if (d < bestD) { bestD = d; targetId = node.id; toSide = side; }
+      }
+    }
+
+    // Wider fallback: drop on node body
+    if (!targetId) {
+      for (const node of mm.nodes) {
+        if (node.id === mmEdgeDrag.fromId) continue;
+        const {hw,hh} = mmNodeHalfSize(node.id);
+        if (Math.abs(pos.x-node.x)<=hw && Math.abs(pos.y-node.y)<=hh) {
+          targetId = node.id;
+          toSide   = mmBestAnchor(node, pos.x, pos.y);
+          break;
+        }
+      }
+    }
+
+    if (targetId && toSide) {
+      const exists = mm.edges.some(ed =>
+        (ed.from===mmEdgeDrag.fromId && ed.to===targetId) ||
+        (ed.from===targetId && ed.to===mmEdgeDrag.fromId)
       );
       if (!exists) {
-        const toSide = mmBestAnchor(mm.nodes.find(n=>n.id===targetId), mmEdgeDrag.gx, mmEdgeDrag.gy);
         mm.edges.push({
           id: mmGenId(),
           from: mmEdgeDrag.fromId, fromSide: mmEdgeDrag.fromSide,
-          to:   targetId,          toSide:   toSide,
+          to:   targetId,          toSide,
         });
         mmPersist();
       }
     }
+
     document.querySelectorAll('.mm-node.edge-target').forEach(el=>el.classList.remove('edge-target'));
     mmEdgeDrag = null;
+    mmHideAnchors();
     mmDrawEdges();
   }
 }
 
 // ---- HIT TEST ----
-function mmNodeAtWorld(wx, wy) {
-  // Find node whose bounding box contains the world point
+function mmNodeAtWorld(wx, wy, expand=0) {
+  // Find node whose bounding box (optionally expanded) contains the world point
   for (const node of mm.nodes) {
     const {hw,hh} = mmNodeHalfSize(node.id);
-    if (wx>=node.x-hw && wx<=node.x+hw && wy>=node.y-hh && wy<=node.y+hh) return node.id;
+    const ehw = hw + expand/mmVP.scale;
+    const ehh = hh + expand/mmVP.scale;
+    if (wx>=node.x-ehw && wx<=node.x+ehw && wy>=node.y-ehh && wy<=node.y+ehh) return node.id;
   }
   return null;
 }
@@ -1831,26 +3379,18 @@ function mmDrawNodes() {
       el.appendChild(bd);
     }
 
-    // anchor points — 4 sides
-    const anchors = document.createElement('div');
-    anchors.className = 'mm-anchors';
-    ['top','right','bottom','left'].forEach(side => {
-      const a = document.createElement('div');
-      a.className = 'mm-anchor';
-      a.dataset.side = side;
-      a.title = 'Потяни чтобы создать связь';
-      a.addEventListener('mousedown', e => {
-        e.stopPropagation();
-        const pos = mmClientToWorld(e.clientX, e.clientY);
-        mmEdgeDrag = { fromId: node.id, fromSide: side, gx: pos.x, gy: pos.y };
-      });
-      anchors.appendChild(a);
+    // Show anchors on hover
+    el.addEventListener('mouseenter', () => mmShowAnchors(node.id));
+    el.addEventListener('mouseleave', e => {
+      // Don't hide if cursor is moving onto an anchor dot or still within hover range
+      if (mmEdgeDrag) return;
+      const rel = e.relatedTarget;
+      if (rel && rel.classList && rel.classList.contains('mm-anc')) return;
+      mmScheduleHideAnchors(node.id);
     });
-    el.appendChild(anchors);
 
-    // node events
+    // node drag / select
     el.addEventListener('mousedown', e => {
-      if (e.target.classList.contains('mm-anchor')) return;
       e.stopPropagation();
       mmCloseCtx();
       if (e.button!==0) return;
@@ -1859,7 +3399,6 @@ function mmDrawNodes() {
       mmDrag = {id:node.id, ox:pos.x-node.x, oy:pos.y-node.y};
     });
     el.addEventListener('dblclick', e => {
-      if (e.target.classList.contains('mm-anchor')) return;
       e.stopPropagation();
       mmStartEdit(node.id, el);
     });
@@ -1872,6 +3411,94 @@ function mmDrawNodes() {
   });
 
   mmApplyVP();
+  mmRefreshAnchorLayer(); // reposition any visible anchors
+}
+
+// ---- ANCHOR LAYER ----
+let mmAnchorNodeId = null;
+let _mmHideTimer = null;
+
+function mmScheduleHideAnchors(nodeId) {
+  clearTimeout(_mmHideTimer);
+  _mmHideTimer = setTimeout(() => {
+    // Check if cursor is now over an anchor dot
+    if (mmEdgeDrag) return;
+    const hovered = document.querySelector('.mm-anc:hover');
+    if (hovered) return;
+    // Check if cursor is over the same node
+    const nodeEl = document.getElementById('mmn-'+nodeId);
+    if (nodeEl && nodeEl.matches(':hover')) return;
+    mmHideAnchors();
+  }, 80);
+}
+
+// Anchor world positions for a node (using half-sizes from DOM)
+function mmAnchorPoints(node) {
+  const {hw, hh} = mmNodeHalfSize(node.id);
+  return {
+    top:    { x: node.x,      y: node.y - hh },
+    right:  { x: node.x + hw, y: node.y      },
+    bottom: { x: node.x,      y: node.y + hh },
+    left:   { x: node.x - hw, y: node.y      },
+  };
+}
+
+function mmRenderAnchors(nodeIds, fromId, fromSide) {
+  // Remove old anchors
+  document.querySelectorAll('.mm-anc').forEach(a => a.remove());
+  const layer = document.getElementById('mm-layer');
+  if (!layer) return;
+
+  nodeIds.forEach(nodeId => {
+    const node = mm.nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    const pts = mmAnchorPoints(node);
+    const isFrom = nodeId === fromId;
+
+    ['top','right','bottom','left'].forEach(side => {
+      if (isFrom && side !== fromSide) return; // source: only show the used anchor
+      const p = pts[side];
+      const dot = document.createElement('div');
+      dot.className = 'mm-anc vis';
+      dot.dataset.nodeId = nodeId;
+      dot.dataset.side   = side;
+      // position in mm-layer world coords
+      dot.style.left = p.x + 'px';
+      dot.style.top  = p.y + 'px';
+
+      dot.addEventListener('mouseenter', () => clearTimeout(_mmHideTimer));
+      dot.addEventListener('mouseleave', e => {
+        if (mmEdgeDrag) return;
+        const rel = e.relatedTarget;
+        // If moving back to node or another anchor — don't hide
+        if (rel && (rel.classList.contains('mm-node') || rel.classList.contains('mm-anc') ||
+            rel.closest('.mm-node'))) return;
+        mmScheduleHideAnchors(mmAnchorNodeId);
+      });
+
+      dot.addEventListener('mousedown', e => {
+        e.stopPropagation();
+        e.preventDefault();
+        const pos = mmClientToWorld(e.clientX, e.clientY);
+        mmEdgeDrag = { fromId: nodeId, fromSide: side, gx: pos.x, gy: pos.y };
+        // Show all nodes' anchors for target selection
+        mmRenderAnchors(mm.nodes.map(n=>n.id), nodeId, side);
+      });
+
+      layer.appendChild(dot);
+    });
+  });
+}
+
+function mmShowAnchors(nodeId) {
+  mmAnchorNodeId = nodeId;
+  mmRenderAnchors([nodeId], null, null);
+}
+
+function mmHideAnchors() {
+  if (mmEdgeDrag) return; // don't hide while dragging
+  mmAnchorNodeId = null;
+  document.querySelectorAll('.mm-anc').forEach(a => a.remove());
 }
 
 // ---- DRAW EDGES ----
@@ -2063,8 +3690,8 @@ function mmCloseCtx() { if(mmCtxMenu){mmCtxMenu.remove();mmCtxMenu=null;} }
 // ---- LINK PANEL ----
 function mmOpenLinkPanel(id, cx, cy) {
   mmCloseLinkPanel();
-  const docs=STATE.docs||[];
-  const tasks=[...PHASES_DEF.flatMap(p=>p.tasks.map(t=>({...t,phaseName:p.name}))),...STATE.customTasks];
+  const docs=P.docs||[];
+  const tasks=[...PHASES_DEF.flatMap(p=>p.tasks.map(t=>({...t,phaseName:p.name}))),...P.customTasks];
   const node=mm.nodes.find(n=>n.id===id);
   const panel=document.createElement('div');
   panel.className='mm-link-panel'; panel.id='mm-link-panel';
@@ -2093,11 +3720,11 @@ function mmApplyLink(id) {
   const docId=document.getElementById('mm-lp-doc').value;
   const taskId=document.getElementById('mm-lp-task').value;
   if (docId&&!node.links.find(l=>l.type==='doc'&&l.docId===docId)) {
-    const doc=STATE.docs.find(d=>d.id===docId);
+    const doc=P.docs.find(d=>d.id===docId);
     node.links.push({type:'doc',docId,label:doc?.title||'Документ'});
   }
   if (taskId&&!node.links.find(l=>l.type==='task'&&l.taskId===taskId)) {
-    const task=[...PHASES_DEF.flatMap(p=>p.tasks),...STATE.customTasks].find(t=>t.id===taskId);
+    const task=[...PHASES_DEF.flatMap(p=>p.tasks),...P.customTasks].find(t=>t.id===taskId);
     node.links.push({type:'task',taskId,label:task?.name||'Задача'});
   }
   mmPersist(); mmCloseLinkPanel(); mmDrawNodes();
@@ -2111,15 +3738,548 @@ function goToTask(taskId) {
 }
 
 // ============================================================
+// EXPORT DOCUMENT (.txt / .md)
+// ============================================================
+
+function htmlToMarkdown(html) {
+  // Use a temp element to parse
+  const el = document.createElement('div');
+  el.innerHTML = html;
+
+  function nodeToMd(node) {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+    const tag = node.tagName.toLowerCase();
+    const inner = Array.from(node.childNodes).map(nodeToMd).join('');
+
+    switch(tag) {
+      case 'h1': return `# ${inner}\n\n`;
+      case 'h2': return `## ${inner}\n\n`;
+      case 'h3': return `### ${inner}\n\n`;
+      case 'h4': return `#### ${inner}\n\n`;
+      case 'h5': return `##### ${inner}\n\n`;
+      case 'h6': return `###### ${inner}\n\n`;
+      case 'p':  return `${inner}\n\n`;
+      case 'br': return `\n`;
+      case 'strong': case 'b': return `**${inner}**`;
+      case 'em': case 'i':    return `*${inner}*`;
+      case 'u':               return `<u>${inner}</u>`;
+      case 's': case 'strike': case 'del': return `~~${inner}~~`;
+      case 'code': return `\`${inner}\``;
+      case 'pre':  return `\`\`\`\n${node.textContent}\n\`\`\`\n\n`;
+      case 'blockquote': return inner.split('\n').map(l => `> ${l}`).join('\n') + '\n\n';
+      case 'hr':  return `---\n\n`;
+      case 'a':   return `[${inner}](${node.getAttribute('href')||''})`; 
+      case 'ul': {
+        const items = Array.from(node.querySelectorAll(':scope > li'))
+          .map(li => `- ${Array.from(li.childNodes).map(nodeToMd).join('').trim()}`).join('\n');
+        return items + '\n\n';
+      }
+      case 'ol': {
+        const items = Array.from(node.querySelectorAll(':scope > li'))
+          .map((li, i) => `${i+1}. ${Array.from(li.childNodes).map(nodeToMd).join('').trim()}`).join('\n');
+        return items + '\n\n';
+      }
+      case 'li': return inner;
+      case 'div': case 'section': case 'article': return inner + (inner.endsWith('\n') ? '' : '\n');
+      case 'span': return inner;
+      default: return inner;
+    }
+  }
+
+  return Array.from(el.childNodes).map(nodeToMd).join('')
+    .replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+function htmlToPlainText(html) {
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  // Replace block elements with newlines
+  el.querySelectorAll('h1,h2,h3,h4,h5,h6,p,div,li,br,hr,blockquote,pre').forEach(n => {
+    const tag = n.tagName.toLowerCase();
+    if (tag === 'br' || tag === 'hr') {
+      n.replaceWith('\n');
+    } else if (tag === 'li') {
+      n.insertAdjacentText('afterbegin', '• ');
+      n.insertAdjacentText('beforeend', '\n');
+    } else {
+      n.insertAdjacentText('beforeend', '\n\n');
+    }
+  });
+  return el.textContent.replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+function openExportModal() {
+  const doc = P.docs.find(d => d.id === P.activeDocId);
+  if (!doc) { alert('Нет активного документа'); return; }
+
+  const safeName = (doc.title || 'document').replace(/[^\w\-а-яёА-ЯЁ ]/gi, '_').trim();
+
+  document.getElementById('modal-title').textContent = '↓ Сохранить документ';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Формат</label>
+        <div style="display:flex;gap:8px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;flex:1;transition:border-color .15s" id="fmt-md-wrap">
+            <input type="radio" name="export-fmt" value="md" id="fmt-md" checked onchange="updateExportPreview()">
+            <span style="font-weight:600">.md</span><span style="color:var(--text2);font-size:12px">Markdown</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;flex:1;transition:border-color .15s" id="fmt-txt-wrap">
+            <input type="radio" name="export-fmt" value="txt" id="fmt-txt" onchange="updateExportPreview()">
+            <span style="font-weight:600">.txt</span><span style="color:var(--text2);font-size:12px">Обычный текст</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Имя файла</label>
+        <input class="form-input" id="export-filename" value="${safeName}" placeholder="название файла">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px" id="export-filename-preview">${safeName}.md</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6">
+        <b style="color:var(--text)">Где сохранится файл?</b><br>
+        Браузер откроет диалог «Сохранить как» — ты сможешь выбрать любую папку.<br>
+        <span style="color:var(--text3)">(Если диалог не появился — файл скачается в папку загрузок)</span>
+      </div>
+    </div>`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-confirm').textContent = 'Сохранить';
+  document.getElementById('modal-confirm').onclick = () => doExport(doc);
+
+  // live preview of filename
+  document.getElementById('export-filename').addEventListener('input', updateExportPreview);
+  updateExportPreview();
+}
+
+function updateExportPreview() {
+  const fmt = document.querySelector('input[name="export-fmt"]:checked')?.value || 'md';
+  const name = document.getElementById('export-filename')?.value || 'document';
+  const prev = document.getElementById('export-filename-preview');
+  if (prev) prev.textContent = name + '.' + fmt;
+  // highlight selected radio card
+  document.getElementById('fmt-md-wrap').style.borderColor  = fmt==='md'  ? 'var(--accent)' : 'var(--border2)';
+  document.getElementById('fmt-txt-wrap').style.borderColor = fmt==='txt' ? 'var(--accent)' : 'var(--border2)';
+}
+
+async function doExport(doc) {
+  const fmt  = document.querySelector('input[name="export-fmt"]:checked')?.value || 'md';
+  const name = (document.getElementById('export-filename')?.value || 'document').trim() || 'document';
+  const filename = name + '.' + fmt;
+  const mime = fmt === 'md' ? 'text/markdown' : 'text/plain';
+
+  const content = fmt === 'md'
+    ? `# ${doc.title || ''}\n\n` + htmlToMarkdown(doc.content || '')
+    : (doc.title ? doc.title + '\n' + '='.repeat(doc.title.length) + '\n\n' : '') + htmlToPlainText(doc.content || '');
+
+  // Try File System Access API (shows native Save As dialog)
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{
+          description: fmt === 'md' ? 'Markdown файл' : 'Текстовый файл',
+          accept: { [mime]: ['.' + fmt] }
+        }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      closeModal();
+      return;
+    } catch(e) {
+      if (e.name === 'AbortError') { closeModal(); return; } // user cancelled
+      // fallback to download
+    }
+  }
+
+  // Fallback: trigger download
+  const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  closeModal();
+}
+
+// ============================================================
+// MOODBOARD
+// ============================================================
+const MB_CATS = {
+  ref:    {label:'Референс', icon:'🎨', cls:'mb-cat-ref'},
+  palette:{label:'Палитра',  icon:'🎨', cls:'mb-cat-palette'},
+  char:   {label:'Персонаж', icon:'🧍', cls:'mb-cat-char'},
+  env:    {label:'Окружение',icon:'🏙', cls:'mb-cat-env'},
+  ui:     {label:'UI',       icon:'📐', cls:'mb-cat-ui'},
+  music:  {label:'Музыка',   icon:'🎵', cls:'mb-cat-music'},
+  other:  {label:'Другое',   icon:'📦', cls:'mb-cat-other'},
+};
+let mbActiveFilter = 'all';
+let mbCardSize = 'm';
+
+function renderMoodboard() {
+  if (!P.moodboard) P.moodboard = [];
+  const board = document.getElementById('mb-board');
+  if (!board) return;
+  const all   = P.moodboard;
+  const items = mbActiveFilter === 'all' ? all : all.filter(i => i.cat === mbActiveFilter);
+
+  board.className = `mb-board sz-${mbCardSize}`;
+
+  if (all.length === 0) {
+    board.innerHTML = `<div class="mb-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;color:var(--text3)">
+      <div style="font-size:52px;margin-bottom:16px">🎨</div>
+      <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px">Мудборд пустой</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px;line-height:1.6;text-align:center;max-width:280px">
+        Перетащи картинки сюда, вставь <b>Ctrl+V</b>, загрузи файлы или добавь по ссылке
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button class="btn btn-ghost btn-sm" onclick="mbTriggerUpload()">↑ Загрузить файлы</button>
+        <button class="btn btn-primary btn-sm" onclick="mbOpenUrl()">+ По ссылке</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  if (items.length === 0) {
+    board.innerHTML = `<div style="padding:80px 40px;text-align:center;color:var(--text3);font-size:14px">Нет изображений в этой категории</div>`;
+    return;
+  }
+
+  board.innerHTML = items.map(item => {
+    const cat = MB_CATS[item.cat] || MB_CATS.other;
+    const safeId = item.id.replace(/[^a-z0-9_]/gi,'_');
+    return `<div class="mb-card" data-id="${item.id}" draggable="true"
+        ondragstart="mbDragStart(event,'${item.id}')"
+        ondragover="mbDragOver(event)"
+        ondragenter="mbDragEnter(event)"
+        ondragleave="mbDragLeave(event)"
+        ondrop="mbDropOnCard(event,'${item.id}')"
+        ondragend="mbDragEnd(event)">
+      <img src="${escHtml(item.src)}" alt="${escHtml(item.note||'')}"
+        loading="lazy"
+        onclick="mbOpenLightbox('${item.id}')"
+        onerror="this.style.display='none';document.getElementById('mberr_${safeId}').style.display='flex'">
+      <div id="mberr_${safeId}" style="display:none;height:80px;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:var(--text3);font-size:12px;background:var(--surface2)">
+        <span style="font-size:24px">🖼</span>Не загрузилось
+      </div>
+      <div class="mb-card-footer">
+        <span class="mb-card-cat ${cat.cls}" style="cursor:pointer" onclick="event.stopPropagation();mbEditCat('${item.id}',this)" title="Изменить категорию">${cat.icon} ${cat.label} ✎</span>
+        ${item.note ? `<span class="mb-card-note" title="${escHtml(item.note)}">${escHtml(item.note)}</span>` : '<span></span>'}
+        <button class="mb-card-del" onclick="event.stopPropagation();mbDelete('${item.id}')" title="Удалить">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function mbFilter(cat, el) {
+  mbActiveFilter = cat;
+  document.querySelectorAll('#page-moodboard .mb-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderMoodboard();
+}
+
+function mbSetSize(sz, el) {
+  mbCardSize = sz;
+  document.querySelectorAll('.mb-size-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mb-board').className = `mb-board sz-${sz}`;
+}
+
+function mbOpenUrl() {
+  const catOptions = Object.entries(MB_CATS).map(([k,v]) =>
+    `<option value="${k}"${mbActiveFilter===k?' selected':''}>${v.icon} ${v.label}</option>`).join('');
+
+  document.getElementById('modal-title').textContent = '🖼 Добавить изображение';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:4px">
+      <div class="form-group">
+        <label class="form-label">Ссылка на изображение</label>
+        <input class="form-input" id="mb-url-inp" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select class="form-input" id="mb-cat-inp">${catOptions}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка <span style="color:var(--text3);font-weight:400">(необязательно)</span></label>
+        <input class="form-input" id="mb-note-inp" placeholder="Источник, описание...">
+      </div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.6;background:var(--surface2);border-radius:8px;padding:10px 12px">
+        💡 Также: перетащи файл на страницу, вставь <b>Ctrl+V</b> из буфера или загрузи кнопкой в тулбаре
+      </div>
+    </div>`;
+  document.getElementById('modal-confirm').textContent = 'Добавить';
+  document.getElementById('modal-confirm').onclick = mbSubmitUrl;
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('mb-url-inp')?.focus(), 80);
+}
+
+function mbSubmitUrl() {
+  const url  = (document.getElementById('mb-url-inp')?.value || '').trim();
+  const cat  = document.getElementById('mb-cat-inp')?.value || 'ref';
+  const note = (document.getElementById('mb-note-inp')?.value || '').trim();
+  if (!url) { document.getElementById('mb-url-inp')?.focus(); return; }
+  mbAddItem(url, cat, note);
+  closeModal();
+}
+
+function mbAddItem(src, cat, note) {
+  if (!P.moodboard) P.moodboard = [];
+  P.moodboard.unshift({
+    id: 'mb_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    src, cat: cat || 'ref', note: note || ''
+  });
+  saveState();
+  renderMoodboard();
+}
+
+function mbDelete(id) {
+  P.moodboard = (P.moodboard||[]).filter(i => i.id !== id);
+  saveState();
+  renderMoodboard();
+}
+
+function mbOpenLightbox(id) {
+  const item = (P.moodboard||[]).find(i => i.id === id);
+  if (!item) return;
+  const cat = MB_CATS[item.cat] || MB_CATS.other;
+  const lb = document.createElement('div');
+  lb.className = 'mb-lightbox';
+  lb.innerHTML = `
+    <img src="${escHtml(item.src)}" alt="${escHtml(item.note||'')}">
+    <div class="mb-lightbox-meta">
+      <span class="mb-card-cat ${cat.cls}">${cat.icon} ${cat.label}</span>
+      ${item.note ? `<span style="font-size:13px;color:rgba(255,255,255,.8)">${escHtml(item.note)}</span>` : ''}
+      <span style="font-size:12px;color:rgba(255,255,255,.4);margin-left:auto">Esc / клик — закрыть</span>
+    </div>`;
+  lb.onclick = e => { if (e.target === lb || e.target.tagName === 'IMG') lb.remove(); };
+  document.body.appendChild(lb);
+}
+
+function mbEditCat(id, triggerEl) {
+  // Remove any existing cat menu
+  const existing = document.getElementById('mb-cat-menu');
+  if (existing) { existing.remove(); if (existing.dataset.for === id) return; }
+
+  const item = (P.moodboard||[]).find(i => i.id === id);
+  if (!item) return;
+
+  const menu = document.createElement('div');
+  menu.id = 'mb-cat-menu';
+  menu.dataset.for = id;
+  menu.style.cssText = `position:fixed;z-index:9999;background:var(--surface);
+    border:1px solid var(--border2);border-radius:10px;
+    box-shadow:var(--shadow);padding:4px;min-width:160px;`;
+
+  menu.innerHTML = Object.entries(MB_CATS).map(([k,v]) => `
+    <div class="asset-status-opt" onclick="mbSetCat('${id}','${k}')" style="${item.cat===k?'background:var(--surface2)':''}">
+      <span class="mb-card-cat ${v.cls}" style="pointer-events:none">${v.icon} ${v.label}</span>
+      ${item.cat===k ? '<span style="margin-left:auto;font-size:11px;color:var(--accent)">✓</span>' : ''}
+    </div>`).join('');
+
+  const rect = triggerEl.getBoundingClientRect();
+  menu.style.top  = (rect.bottom + 4) + 'px';
+  menu.style.left = rect.left + 'px';
+  document.body.appendChild(menu);
+
+  // flip up if overflows
+  const mb = menu.getBoundingClientRect();
+  if (mb.bottom > window.innerHeight - 8) menu.style.top = (rect.top - mb.height - 4) + 'px';
+
+  setTimeout(() => document.addEventListener('click', _mbCatMenuClose, {once:true}), 0);
+}
+
+function _mbCatMenuClose(e) {
+  const menu = document.getElementById('mb-cat-menu');
+  if (menu && !menu.contains(e.target)) menu.remove();
+}
+
+function mbSetCat(id, cat) {
+  const item = (P.moodboard||[]).find(i => i.id === id);
+  if (item) { item.cat = cat; saveState(); renderMoodboard(); }
+  document.getElementById('mb-cat-menu')?.remove();
+}
+
+function mbTriggerUpload() {
+  const inp = document.getElementById('mb-file-input');
+  if (inp) inp.click();
+}
+
+function mbHandleFiles(files) {
+  const cat = mbActiveFilter !== 'all' ? mbActiveFilter : 'ref';
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => mbAddItem(e.target.result, cat, file.name.replace(/\.[^.]+$/, ''));
+    reader.readAsDataURL(file);
+  });
+  const inp = document.getElementById('mb-file-input');
+  if (inp) inp.value = '';
+}
+
+// ── Drag-to-reorder карточек ─────────────────────────────────
+let _mbDragId = null;
+
+function mbDragStart(e, id) {
+  _mbDragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/mb-card-id', id); // custom type to detect internal drag
+  setTimeout(() => {
+    const el = document.querySelector(`.mb-card[data-id="${id}"]`);
+    if (el) el.style.opacity = '0.4';
+  }, 0);
+}
+
+function mbDragEnd(e) {
+  _mbDragId = null;
+  document.querySelectorAll('.mb-card').forEach(c => {
+    c.style.opacity = '';
+    c.classList.remove('mb-drag-over');
+  });
+}
+
+function mbDragEnter(e) {
+  if (!_mbDragId) return;
+  e.currentTarget.classList.add('mb-drag-over');
+}
+
+function mbDragLeave(e) {
+  e.currentTarget.classList.remove('mb-drag-over');
+}
+
+function mbDragOver(e) {
+  if (!_mbDragId) return; // not an internal card drag
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+
+function mbDropOnCard(e, targetId) {
+  e.preventDefault();
+  e.stopPropagation(); // prevent document drop handler from firing
+  e.currentTarget.classList.remove('mb-drag-over');
+  const fromId = _mbDragId;
+  if (!fromId || fromId === targetId) return;
+
+  const arr = P.moodboard;
+  const fromIdx = arr.findIndex(i => i.id === fromId);
+  const toIdx   = arr.findIndex(i => i.id === targetId);
+  if (fromIdx === -1 || toIdx === -1) return;
+
+  // Swap positions
+  const [moved] = arr.splice(fromIdx, 1);
+  arr.splice(toIdx, 0, moved);
+  saveState();
+  renderMoodboard();
+}
+
+let _mbDropInit = false;
+function initMoodboardDrop() {
+  if (_mbDropInit) return;
+  _mbDropInit = true;
+
+  const overlay = document.getElementById('mb-drop-overlay');
+
+  document.addEventListener('dragenter', e => {
+    if (currentPage !== 'moodboard') return;
+    // Ignore internal card reorder drags
+    if (_mbDragId) return;
+    if (e.dataTransfer && e.dataTransfer.types &&
+        (e.dataTransfer.types.includes('Files') || e.dataTransfer.types.includes('text/uri-list'))) {
+      e.preventDefault();
+      overlay.style.display = 'flex';
+    }
+  });
+
+  document.addEventListener('dragover', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return; // internal reorder — don't handle here
+    e.preventDefault();
+  });
+
+  document.addEventListener('dragleave', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return;
+    if (e.relatedTarget === null) overlay.style.display = 'none';
+  });
+
+  document.addEventListener('drop', e => {
+    if (currentPage !== 'moodboard') return;
+    if (_mbDragId) return; // internal card reorder — handled by mbDropOnCard
+    e.preventDefault();
+    overlay.style.display = 'none';
+
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (files.length) {
+      mbHandleFiles(files);
+      return;
+    }
+
+    const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim();
+    if (/^https?:\/\//.test(url)) {
+      mbAddItem(url, mbActiveFilter !== 'all' ? mbActiveFilter : 'ref', '');
+    }
+  });
+
+  // Paste: only images from clipboard, NOT plain-text URLs
+  // (URLs are added explicitly via the + URL button to avoid duplicates)
+  document.addEventListener('paste', e => {
+    if (currentPage !== 'moodboard') return;
+    // Ignore paste if modal is open (user typing URL in the form)
+    if (document.getElementById('modal-overlay').classList.contains('open')) return;
+    const imgItems = Array.from(e.clipboardData.items).filter(i => i.type.startsWith('image/'));
+    if (!imgItems.length) return; // don't handle text/URL paste — use the + URL button
+    imgItems.forEach(ci => {
+      const reader = new FileReader();
+      reader.onload = ev => mbAddItem(ev.target.result, mbActiveFilter !== 'all' ? mbActiveFilter : 'ref', 'из буфера');
+      reader.readAsDataURL(ci.getAsFile());
+    });
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const lb = document.querySelector('.mb-lightbox');
+    if (lb) lb.remove();
+  }
+  // Ctrl+K = search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearchModal();
+  }
+});
+
+// ============================================================
 // INIT
 // ============================================================
-const mc = document.getElementById('main-content');
-mc.style.display = '';
-updateBadges();
-updateGlobalProgress();
-renderSidebarDocs();
-renderRoadmap();
-updateTopbarActions('roadmap');
+(function init() {
+  refreshProjectData();
+  initTheme();
+  renderProjectSelector();
+  updateProjectNameDisplay();
+  updateBadges();
+  updateGlobalProgress();
+  renderSidebarDocs();
+  renderRoadmap();
+  updateTopbarActions('roadmap');
+  initMoodboardDrop();
+  // Count lines of code
+  const lc = document.getElementById('line-count');
+  if (lc) lc.textContent = (document.documentElement.outerHTML.match(/\n/g) || []).length.toLocaleString('ru');
+  // Set version display
+  const vd = document.getElementById('version-display');
+  if (vd) vd.textContent = 'v' + VERSION;
+  // Close info popup on outside click
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#info-btn') && !e.target.closest('#info-popup')) {
+      const p = document.getElementById('info-popup');
+      const b = document.getElementById('info-btn');
+      if (p) p.style.display = 'none';
+      if (b) { b.style.borderColor='var(--border2)'; b.style.color='var(--text3)'; }
+    }
+  });
+})();
 </script>
 </body>
 </html>
